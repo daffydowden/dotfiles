@@ -10,6 +10,8 @@ call vundle#rc()
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
 
+Bundle 'altercation/vim-colors-solarized'
+
 let mapleader = ","
 
 syntax enable                     " Turn on syntax highlighting.
