@@ -19,6 +19,19 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-rake'
 Bundle 'tpope/vim-endwise'
 Bundle 'tpope/vim-git'
+Bundle 'tpope/vim-ragtag'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-cucumber'
+Bundle 'tpope/vim-markdown'
+Bundle 'tpope/vim-liquid'
+Bundle 'scrooloose/nerdcommenter'
+
+" Snippets in vim
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "tomtom/tlib_vim"
+Bundle "honza/snipmate-snippets"
+Bundle "garbas/vim-snipmate"
+
 
 let mapleader = ","
 
