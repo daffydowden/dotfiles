@@ -18,6 +18,7 @@ Bundle 'kien/ctrlp.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-rake'
 Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-git'
 
 let mapleader = ","
 
