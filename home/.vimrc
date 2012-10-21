@@ -27,6 +27,8 @@ Bundle 'tpope/vim-cucumber'
 Bundle 'tpope/vim-markdown'
 Bundle 'tpope/vim-liquid'
 Bundle 'scrooloose/nerdcommenter'
+Bundle 'Lokaltog/vim-powerline'
+let g:Powerline_symbols = 'fancy'
 
 " Snippets in vim
 Bundle "MarcWeber/vim-addon-mw-utils"
