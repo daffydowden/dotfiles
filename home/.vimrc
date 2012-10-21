@@ -16,6 +16,7 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
 silent! nmap <silent> <Leader>p :NERDTreeToggle<CR>
 Bundle 'kien/ctrlp.vim'
+map ,b :CtrlPBuffer<CR>
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-rake'
 Bundle 'tpope/vim-endwise'
