@@ -14,6 +14,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'tpope/vim-fugitive'
 Bundle 'scrooloose/nerdtree'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
 map ,p :NERDTreeToggle<CR>
 Bundle 'kien/ctrlp.vim'
 map ,b :CtrlPBuffer<CR>
