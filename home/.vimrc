@@ -171,6 +171,11 @@ map <leader>tf :tabfirst<cr>
 map <leader>tl :tablast<cr>
 map <leader>tm :tabmove
 
+" Spell checking with ,s
+nmap <silent> <leader>s :set spell!<CR>
+" Set region to British English
+set spelllang=en_gb
+
 " Uncomment to use Jamis Buck's file opening plugin
 "map <Leader>t :FuzzyFinderTextMate<Enter>
 
