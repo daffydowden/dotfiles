@@ -31,6 +31,8 @@ Bundle 'tpope/vim-bundler'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'Lokaltog/vim-powerline'
 let g:Powerline_symbols = 'fancy'
+Bundle 'kien/rainbow_parentheses.vim'
+"autocmd VimEnter * RainbowParenthesesToggle
 
 " Snippets in vim
 Bundle "MarcWeber/vim-addon-mw-utils"
@@ -116,6 +118,12 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 let mapleader = ","
 
 syntax enable                     " Turn on syntax highlighting.
+" Toggle RainbowParenthese highlighting
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
 filetype plugin indent on         " Turn on file type detection.
 
 set showcmd                       " Display incomplete commands.
