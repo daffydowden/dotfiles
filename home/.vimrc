@@ -124,6 +124,9 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
+set autoread                      " Turn on autoread to watch for changes
+:au CursorHold * checktime        " Fires after you move the cursor and then let it sit still for updatetime
+
 filetype plugin indent on         " Turn on file type detection.
 
 set showcmd                       " Display incomplete commands.
