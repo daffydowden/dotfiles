@@ -27,7 +27,7 @@ ZSH_THEME="agnoster"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git git-flow github bundler heroku osx rails3 textmate vagrant cap brew ip rvm per-directory-history extract)
+plugins=(autojump git git-flow github bundler heroku osx rails3 textmate vagrant cap brew ip rvm per-directory-history extract)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -37,6 +37,6 @@ source ~/.cinderella.profile
 # export DYLD_LIBRARY_PATH="~/Developer/Cellar/mysql/5.5.19/lib:$DYLD_LIBRARY_PATH"
 
 # AutoJump
-if [ -f `brew --prefix`/etc/autojump ]; then
-  . `brew --prefix`/etc/autojump
-fi
+#if [ -f `brew --prefix`/etc/autojump ]; then
+  #. `brew --prefix`/etc/autojump
+#fi
