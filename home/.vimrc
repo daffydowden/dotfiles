@@ -43,6 +43,9 @@ Bundle "tomtom/tlib_vim"
 Bundle "honza/snipmate-snippets"
 Bundle "garbas/vim-snipmate"
 
+" Copy/Paste Mac
+Bundle "kana/vim-fakeclip"
+
 " Omincomplete
 Bundle 'Shougo/neocomplcache'
 " Disable AutoComplPop.
