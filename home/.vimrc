@@ -7,6 +7,9 @@ filetype off
 set rtp+=~/.vim/bundle/vundle
 call vundle#rc()
 
+" enable system clipboard
+set clipboard=unnamed
+
 " let Vundle manage Vundle
 Bundle 'gmarik/vundle'
 
