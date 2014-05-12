@@ -31,8 +31,6 @@ plugins=(autojump git git-flow github bundler heroku osx rails3 textmate vagrant
 
 source $ZSH/oh-my-zsh.sh
 
-source ~/.cinderella.profile
-
 # DYLD_LIBRARY_PATH - For mysql and mysql2 gem
 # export DYLD_LIBRARY_PATH="~/Developer/Cellar/mysql/5.5.19/lib:$DYLD_LIBRARY_PATH"
 
