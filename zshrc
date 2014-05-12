@@ -27,7 +27,7 @@ ZSH_THEME="agnoster"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump git git-flow github bundler heroku osx rails3 textmate vagrant cap brew ip rvm per-directory-history extract)
+plugins=(autojump git git-flow github bundler heroku osx rails npm textmate vagrant cap brew ip per-directory-history extract common-aliases tmux)
 
 source $ZSH/oh-my-zsh.sh
 
