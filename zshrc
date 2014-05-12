@@ -38,3 +38,6 @@ source $ZSH/oh-my-zsh.sh
 #if [ -f `brew --prefix`/etc/autojump ]; then
   #. `brew --prefix`/etc/autojump
 #fi
+
+# Correct path for homebrew
+export PATH=/usr/local/bin:$PATH
