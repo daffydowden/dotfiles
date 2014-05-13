@@ -27,17 +27,29 @@ ZSH_THEME="agnoster"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump git git-flow github bundler heroku osx rails npm textmate vagrant cap brew ip per-directory-history extract common-aliases tmux)
+plugins=(autojump git git-flow github bundler heroku osx rails npm textmate vagrant cap brew ip per-directory-history extract tmux)
 
 source $ZSH/oh-my-zsh.sh
+
+######################
+# User configuration #
+######################
 
 # DYLD_LIBRARY_PATH - For mysql and mysql2 gem
 # export DYLD_LIBRARY_PATH="~/Developer/Cellar/mysql/5.5.19/lib:$DYLD_LIBRARY_PATH"
 
+# Compilation flags
+# export ARCHFLAGS="-arch x86_64"
+
 # AutoJump
-#if [ -f `brew --prefix`/etc/autojump ]; then
-  #. `brew --prefix`/etc/autojump
-#fi
+if [ -f `brew --prefix`/etc/autojump ]; then
+  . `brew --prefix`/etc/autojump
+fi
+
+# ssh
+# export SSH_KEY_PATH="~/.ssh/dsa_id"
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Correct path for homebrew
 export PATH=/usr/local/bin:$PATH
