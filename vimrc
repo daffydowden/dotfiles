@@ -44,13 +44,13 @@ Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'markcornick/vim-vagrant'
 
 " Snippets in vim
-Plugin "MarcWeber/vim-addon-mw-utils"
-Plugin "tomtom/tlib_vim"
-Plugin "honza/snipmate-snippets"
-Plugin "garbas/vim-snipmate"
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'honza/snipmate-snippets'
+Plugin 'garbas/vim-snipmate'
 
 " Copy/Paste Mac
-Plugin "kana/vim-fakeclip"
+Plugin 'kana/vim-fakeclip'
 
 " Ack
 Plugin 'ack.vim'
