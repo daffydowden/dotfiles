@@ -52,4 +52,7 @@ fi
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # Correct path for homebrew
-export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:/Users/richarddowden/Library/Python/2.7/bin/:$PATH
+
+# Powerline config
+. ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh

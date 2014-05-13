@@ -35,8 +35,6 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'Lokaltog/vim-powerline'
-let g:Powerline_symbols = 'fancy'
 Plugin 'kien/rainbow_parentheses.vim'
 "autocmd VimEnter * RainbowParenthesesToggle
 
@@ -243,4 +241,7 @@ let g:solarized_contrast = "high"
 "colorscheme topfunky-light
 colorscheme solarized
 
-
+" Powerline
+python from powerline.vim import setup as powerline_setup
+python powerline_setup()
+python del powerline_setup
