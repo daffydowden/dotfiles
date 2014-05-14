@@ -36,6 +36,8 @@ Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'kien/rainbow_parentheses.vim'
+Plugin 'bling/vim-airline'
+let g:airline_powerline_fonts = 1
 "autocmd VimEnter * RainbowParenthesesToggle
 
 " Syntax highlighting
@@ -240,8 +242,3 @@ let g:solarized_contrast = "high"
 
 "colorscheme topfunky-light
 colorscheme solarized
-
-" Powerline
-python from powerline.vim import setup as powerline_setup
-python powerline_setup()
-python del powerline_setup
