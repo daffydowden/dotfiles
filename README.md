@@ -43,6 +43,16 @@ Open Vim and update the plugins
 
     :PluginInstall
     
+## Fonts
 
+Ensure the fonts submodule has been downloaded
+
+    git submodule update --init --recursive
+
+Enter the folder and install the fonts
+
+    cd fonts
+
+    ./install.sh
 
 
