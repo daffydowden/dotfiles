@@ -3,10 +3,15 @@
 ## Install via homebrew first...
 
 - git
-- zsh
 - tmux
 - vim
 - ack
+
+## ZSH
+
+Currently using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for my terminal - though this might change in the future. Install this with their auto script
+
+    curl -L http://install.ohmyz.sh | sh
 
 ## RCM
 
