@@ -6,6 +6,7 @@
 - zsh
 - tmux
 - vim
+- ack
 
 ## RCM
 
@@ -26,4 +27,22 @@ List the changes that will be made (Check they're sensible)
 Make the changes.
 
     rcup -v -d projects/dotfiles
+
+
+## VIM
+
+Ensure the Vundle vim plugin is installed by updating this repos submodules.
+
+    git submodule update --init --recursive
+    
+Run rcup again if needed. 
+
+    rcup -v -d projects/dotfiles
+   
+Open Vim and update the plugins
+
+    :PluginInstall
+    
+
+
 
