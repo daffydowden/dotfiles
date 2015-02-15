@@ -48,6 +48,12 @@ Open Vim and update the plugins
 
     :PluginInstall
     
+### VIM for Git commit messages
+
+Because we're using a custom build of Vim, rather than the default OSX build, the Git editor needs to be configured.
+
+    git config --global core.editor /usr/local/bin/vim
+    
 ## Fonts
 
 Ensure the fonts submodule has been downloaded
