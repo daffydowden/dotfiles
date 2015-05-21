@@ -46,6 +46,10 @@ let g:airline_powerline_fonts = 1
 
 " Syntax highlighting
 Plugin 'markcornick/vim-vagrant'
+Plugin 'mustache/vim-mustache-handlebars'
+
+Plugin 'elixir-lang/vim-elixir'
+autocmd BufNew,BufNewFile,BufRead *.ex :set filetype=elixir
 
 " Snippets in vim
 Plugin 'MarcWeber/vim-addon-mw-utils'
