@@ -144,8 +144,6 @@ au Syntax * RainbowParenthesesLoadBraces
 set autoread                      " Turn on autoread to watch for changes
 :au CursorHold * checktime        " Fires after you move the cursor and then let it sit still for updatetime
 
-filetype plugin indent on         " Turn on file type detection.
-
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
 
@@ -231,7 +229,8 @@ autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-filetype plugin indent on    " required
+filetype plugin indent on         " Turn on file type detection.
+
 
 " colorscheme
 syntax on
