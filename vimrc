@@ -18,7 +18,7 @@ if $TMUX == ''
 endif
 
 " let Vundle manage Vundle
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
