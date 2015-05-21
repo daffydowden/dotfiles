@@ -1,6 +1,10 @@
 " Example Vim configuration.
 " Copy or symlink to ~/.vimrc or ~/_vimrc.
 
+if $SHELL =~ 'bin/fish'
+  set shell=/bin/sh
+endif
+
 set nocompatible                  " Must come first because it changes other options.
 filetype off
 
