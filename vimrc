@@ -1,6 +1,10 @@
 " Example Vim configuration.
 " Copy or symlink to ~/.vimrc or ~/_vimrc.
 
+if $SHELL =~ 'bin/fish'
+  set shell=/bin/sh
+endif
+
 set nocompatible                  " Must come first because it changes other options.
 filetype off
 
@@ -14,7 +18,7 @@ if $TMUX == ''
 endif
 
 " let Vundle manage Vundle
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
@@ -42,6 +46,10 @@ let g:airline_powerline_fonts = 1
 
 " Syntax highlighting
 Plugin 'markcornick/vim-vagrant'
+Plugin 'mustache/vim-mustache-handlebars'
+
+Plugin 'elixir-lang/vim-elixir'
+autocmd BufNew,BufNewFile,BufRead *.ex :set filetype=elixir
 
 " Snippets in vim
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -144,8 +152,6 @@ au Syntax * RainbowParenthesesLoadBraces
 set autoread                      " Turn on autoread to watch for changes
 :au CursorHold * checktime        " Fires after you move the cursor and then let it sit still for updatetime
 
-filetype plugin indent on         " Turn on file type detection.
-
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
 
@@ -231,7 +237,8 @@ autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
-filetype plugin indent on    " required
+filetype plugin indent on         " Turn on file type detection.
+
 
 " colorscheme
 syntax on
