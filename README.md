@@ -1,6 +1,6 @@
 # dotfiles
 
-## Install via homebrew first...
+## Install via [homebrew](http://brew.sh) first...
 
 - git
 - tmux
