@@ -6,6 +6,7 @@
 - tmux
 - vim
 - ack
+- [cask](http://caskroom.io) `brew install caskroom/cask/brew-cask`
 
 ## ZSH
 
