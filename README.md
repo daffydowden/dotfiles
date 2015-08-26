@@ -1,12 +1,16 @@
 # dotfiles
 
-## Install via [homebrew](http://brew.sh) first...
+## Install 
+
+- [homebrew](http://brew.sh)
+- [cask](http://caskroom.io) - `brew install caskroom/cask/brew-cask`
+- [Brew Bundle](https://github.com/Homebrew/homebrew-bundle) - `brew tap Homebrew/bundle`
+- run `brew bundle`
 
 - git
 - tmux
 - vim
 - ack
-- [cask](http://caskroom.io) `brew install caskroom/cask/brew-cask`
 
 ## ZSH
 
