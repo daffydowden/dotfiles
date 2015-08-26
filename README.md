@@ -33,12 +33,6 @@ Currently using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for my te
 
 Uses [Thoughtbot's RCM](http://robots.thoughtbot.com/rcm-for-rc-files-in-dotfiles-repos) to manage the dotfiles.
 
-### Installing RCM
-
-    brew tap thoughtbot/formulae
-    brew install rcm
-    
-
 ### Linking to the dotfiles
 
 List the changes that will be made (Check they're sensible)

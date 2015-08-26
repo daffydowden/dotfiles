@@ -33,3 +33,8 @@ cask 'transmission'
 cask 'the-unarchiver'
 
 brew 'fish' # fish shell
+
+tap 'thoughtbot/formulae'
+brew 'rcm'
+
+brew 'vim'
