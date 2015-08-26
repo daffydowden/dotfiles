@@ -31,3 +31,5 @@ cask 'caffeine'
 cask 'transmission'
 
 cask 'the-unarchiver'
+
+brew 'fish' # fish shell

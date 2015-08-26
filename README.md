@@ -12,6 +12,17 @@
 - vim
 - ack
 
+## Oh-my-fish
+
+ - Install via the [automated install script](https://github.com/fish-shell/oh-my-fish#install)
+
+`curl -L git.io/omf | sh`
+
+- Set to be default shell
+
+`echo "/usr/local/bin/fish" | sudo tee -a /etc/shells`
+`chsh -s /usr/local/bin/fish`
+
 ## ZSH
 
 Currently using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for my terminal - though this might change in the future. Install this with their auto script
