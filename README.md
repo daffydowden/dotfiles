@@ -1,12 +1,27 @@
 # dotfiles
 
-## Install via [homebrew](http://brew.sh) first...
+## Install 
+
+- [homebrew](http://brew.sh)
+- [cask](http://caskroom.io) - `brew install caskroom/cask/brew-cask`
+- [Brew Bundle](https://github.com/Homebrew/homebrew-bundle) - `brew tap Homebrew/bundle`
+- run `brew bundle`
 
 - git
 - tmux
 - vim
 - ack
-- [cask](http://caskroom.io) `brew install caskroom/cask/brew-cask`
+
+## Oh-my-fish
+
+ - Install via the [automated install script](https://github.com/fish-shell/oh-my-fish#install)
+
+`curl -L git.io/omf | sh`
+
+- Set to be default shell
+
+`echo "/usr/local/bin/fish" | sudo tee -a /etc/shells`
+`chsh -s /usr/local/bin/fish`
 
 ## ZSH
 
@@ -17,12 +32,6 @@ Currently using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for my te
 ## RCM
 
 Uses [Thoughtbot's RCM](http://robots.thoughtbot.com/rcm-for-rc-files-in-dotfiles-repos) to manage the dotfiles.
-
-### Installing RCM
-
-    brew tap thoughtbot/formulae
-    brew install rcm
-    
 
 ### Linking to the dotfiles
 
