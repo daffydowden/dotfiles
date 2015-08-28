@@ -38,6 +38,9 @@ tap 'thoughtbot/formulae'
 brew 'rcm'
 
 brew 'vim'
+
+brew 'node'
+
 brew 'rbenv'
 brew 'ruby-install'
 
