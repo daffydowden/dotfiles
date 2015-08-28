@@ -18,6 +18,11 @@ set -g default_user richarddowden
 
 # Add local bin to path
 set PATH $PATH ~/bin
+set PATH $HOME/.rbenv/bin $PATH
+set PATH $HOME/.rbenv/shims $PATH
+
+rbenv rehash >/dev/null ^&1
+source ~/.rbenv/completions/rbenv.
 
 # Load oh-my-fish configuration.
 . $fish_path/oh-my-fish.fish

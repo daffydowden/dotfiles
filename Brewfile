@@ -38,3 +38,7 @@ tap 'thoughtbot/formulae'
 brew 'rcm'
 
 brew 'vim'
+brew 'rbenv'
+brew 'ruby-install'
+
+brew 'heroku-toolbelt'
