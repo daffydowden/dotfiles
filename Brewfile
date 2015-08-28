@@ -38,6 +38,8 @@ tap 'thoughtbot/formulae'
 brew 'rcm'
 
 brew 'vim'
+brew 'ack'
+brew 'ctags'
 
 brew 'node'
 
