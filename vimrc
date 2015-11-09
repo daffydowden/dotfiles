@@ -23,9 +23,9 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
+map ,p :NERDTreeToggle<CR>
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
-map ,p :NERDTreeToggle<CR>
 Plugin 'kien/ctrlp.vim'
 map ,b :CtrlPBuffer<CR>
 Plugin 'tpope/vim-rails'
