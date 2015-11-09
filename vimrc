@@ -217,6 +217,8 @@ let g:ctrlp_working_path_mode = 'ra'
 " Exclude the following:
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+set wildignore+=*/node_modules/* 
+set wildignore+=*/dist/* 
 
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
