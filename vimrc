@@ -39,6 +39,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
