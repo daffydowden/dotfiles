@@ -7,9 +7,9 @@
 - [homebrew](http://brew.sh)
 - [cask](http://caskroom.io) - `brew install caskroom/cask/brew-cask`
 - [Brew Bundle](https://github.com/Homebrew/homebrew-bundle) - `brew tap Homebrew/bundle`
+- Install git - `brew install git`
 - run `brew bundle`
 
-- git
 - tmux
 - vim
 - ack
