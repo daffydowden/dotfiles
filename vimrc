@@ -23,9 +23,9 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
+map ,p :NERDTreeToggle<CR>
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
-map ,p :NERDTreeToggle<CR>
 Plugin 'kien/ctrlp.vim'
 map ,b :CtrlPBuffer<CR>
 Plugin 'tpope/vim-rails'
@@ -39,6 +39,7 @@ Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
 Plugin 'scrooloose/nerdcommenter'
+Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
@@ -217,6 +218,8 @@ let g:ctrlp_working_path_mode = 'ra'
 " Exclude the following:
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+set wildignore+=*/node_modules/* 
+set wildignore+=*/dist/* 
 
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
