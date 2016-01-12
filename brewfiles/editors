@@ -1,0 +1,14 @@
+tap 'caskroom/cask'
+
+brew 'vim'
+
+cask 'sublime-text3'
+cask 'mou' # markdown editor
+
+cask 'sourcetree'
+cask 'paw' # http client
+cask 'vmware-fusion'
+
+brew 'ack'
+brew 'ctags'
+

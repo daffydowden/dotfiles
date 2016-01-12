@@ -1,0 +1,12 @@
+tap 'caskroom/cask'
+
+cask 'adobe-creative-cloud'
+#cask 'sketchup' # 3d modelling
+cask 'omnigraffle' 
+
+cask 'spotify'
+cask 'dropbox'
+
+cask 'skype'
+
+cask 'transmission'

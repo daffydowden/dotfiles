@@ -1,0 +1,12 @@
+tap 'caskroom/cask'
+
+brew 'postgresql'
+brew 'mongodb'
+brew 'redis'
+brew 'memcached'
+
+cask 'base' # sqlite db editor
+cask 'sequel-pro' # MySql gui
+cask 'robomongo' # Monogodb gui
+cask 'postico' # postgresql
+cask 'psequel' # postgresql

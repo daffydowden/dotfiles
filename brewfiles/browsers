@@ -1,0 +1,7 @@
+tap 'caskroom/cask'
+tap 'caskroom/versions'
+
+cask 'google-chrome'
+cask 'firefox'
+cask 'firefoxdeveloperedition'
+

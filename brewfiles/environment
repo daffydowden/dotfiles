@@ -1,0 +1,7 @@
+tap 'caskroom/cask'
+
+cask 'spectacle' # window manager
+cask 'caffeine'
+cask 'the-unarchiver'
+
+brew 'fish' # fish shell
