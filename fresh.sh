@@ -2,11 +2,14 @@
 
 echo -e "\n\nHomebrew\n"
 
+# Install command line tools
+xcode-select --install 
+
 # Check for Homebrew,
 # Install if we don't have it
 if test ! $(which brew); then
   echo "Installing homebrew..."
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 # Update homebrew recipes
@@ -43,6 +46,8 @@ brew cleanup
 #------------------------------------------------------------------------------
 
 echo -e "\n\nhomebrew-bundle\n"
+
+cask_args appdir: '/Applications'
 
 brew tap Homebrew/bundle
 
