@@ -1,5 +1,7 @@
 tap 'caskroom/cask'
 
+cask_args appdir: '/Applications'
+
 brew 'vim'
 
 cask 'sublime-text3'

@@ -1,5 +1,7 @@
 tap 'caskroom/cask'
 
+cask_args appdir: '/Applications'
+
 cask 'adobe-creative-cloud'
 #cask 'sketchup' # 3d modelling
 cask 'omnigraffle' 

@@ -60,8 +60,6 @@ brew cleanup
 
 echo -e "\n\nhomebrew-bundle\n"
 
-cask_args appdir: '/Applications'
-
 brew tap Homebrew/bundle
 
 #------------------------------------------------------------------------------
