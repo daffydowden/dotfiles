@@ -3,20 +3,20 @@
 echo -e "\n\nHomebrew\n"
 
 # Install command line tools
-xcode-select --install 
+if test ! $(xcode-select -p); then
+	echo "You must install xcode tools"
+	xcode-select --install 
 
-# Wait to download and install
-while true; do
-    read -p "Has the Xcode command line tools installation completed?" yn
-    case $yn in
-        [Yy]* ) break;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
-
-# Agree to license
-sudo xcodebuild -license
+	# Wait to download and install
+	while true; do
+			read -p "Has the Xcode command line tools installation completed?" yn
+			case $yn in
+					[Yy]* ) break;;
+					[Nn]* ) exit;;
+					* ) echo "Please answer yes or no.";;
+			esac
+	done
+fi
 
 # Check for Homebrew,
 # Install if we don't have it
