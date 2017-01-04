@@ -3,13 +3,13 @@
 	url = https://github.com/gmarik/Vundle.vim
 [submodule "vim/vim-haml"]
 	path = vim/vim-haml
-	url = git://github.com/tpope/vim-haml.git
+	url = https://github.com/tpope/vim-haml
 [submodule "fonts"]
 	path = fonts
-	url = git@github.com:powerline/fonts.git
+	url = https://github.com/powerline/fonts
 [submodule "solarized-osx-term"]
 	path = solarized-osx-term
-	url = git@github.com:tomislav/osx-terminal.app-colors-solarized.git
+	url = https://github.com/tomislav/osx-terminal.app-colors-solarized
 [submodule "dotbot"]
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
