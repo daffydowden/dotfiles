@@ -82,3 +82,6 @@ brew bundle -v --file=brewfiles/databases
 echo -e "\n\nmisc\n"
 brew bundle -v --file=brewfiles/misc
 
+# Install dotfiles
+echo -e "\n\nInstalling dotfiles using dotbot\n"
+./install
