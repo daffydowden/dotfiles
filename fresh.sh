@@ -95,13 +95,29 @@ while true; do
     esac
 done
 
-# Install mackup to restore app settings
+# Download and Install oh-my-fish dotfiles
 while true; do
-    read -p "\n\nSync application settings from icloud using mackup?" yn
+    read -p "\n\nInstall oh-my-fish?" yn
     case $yn in
         [Yy]* ) 
-          echo -e "\nInstalling mackup to restore app configs\n"
-          brew install mackup
+          echo -e "\nInstalling oh-my-fish"
+          curl -L http://get.oh-my.fish > install.fish
+          fish install.fish --noninteractive --yes
+          sudo sh -c 'echo /usr/local/bin/fish >> /etc/shells'
+          chsh -s /usr/local/bin/fish
+          break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
+# Install mackup to restore app settings
+echo -e "\n\nInstalling mackup to restore app configs\n"
+brew install mackup
+while true; do
+    read -p "\nSync application settings from icloud using mackup?" yn
+    case $yn in
+        [Yy]* ) 
           # Restore config from icloud
           mackup restore
           break;;
