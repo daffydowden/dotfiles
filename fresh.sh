@@ -84,10 +84,10 @@ brew bundle -v --file=brewfiles/misc
 
 # Install dotfiles
 while true; do
-    read -p "Install dotfiles using dotbot?" yn
+    read -p "\n\nInstall dotfiles using dotbot?" yn
     case $yn in
         [Yy]* ) 
-          echo -e "\n\nInstalling dotfiles using dotbot\n"
+          echo -e "\nInstalling dotfiles using dotbot\n"
           ./install
           break;;
         [Nn]* ) exit;;
@@ -97,10 +97,10 @@ done
 
 # Install mackup to restore app settings
 while true; do
-    read -p "Sync application settings from icloud using mackup?" yn
+    read -p "\n\nSync application settings from icloud using mackup?" yn
     case $yn in
         [Yy]* ) 
-          echo -e "\n\nInstalling mackup to restore app configs\n"
+          echo -e "\nInstalling mackup to restore app configs\n"
           brew install mackup
           # Restore config from icloud
           mackup restore
