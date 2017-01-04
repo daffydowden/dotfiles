@@ -251,4 +251,8 @@ let g:solarized_visibility = "high"
 let g:solarized_contrast = "high"
 
 "colorscheme topfunky-light
-colorscheme solarized
+try
+  colorscheme solarized
+catch /^Vim\%((\a\+)\)\=:E185/
+  " default
+endtry
