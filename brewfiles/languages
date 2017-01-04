@@ -6,3 +6,5 @@ brew 'ruby-install'
 brew 'elixir'
 
 brew 'heroku-toolbelt'
+
+cask 'java' # required for neo4j
