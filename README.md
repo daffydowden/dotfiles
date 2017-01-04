@@ -1,11 +1,21 @@
 # dotfiles
 
-## Installation Instructions
+## Installation 
+
+### Prerequistes
 
 - Xcode command line tools
 - `xcode-select --install`
 - `sudo xcodebuild -license`
-- ./fresh.sh
+
+### Installation Instructions
+
+- `./fresh.sh`
+  - Runs the following:
+  - homebrew installation and update 
+  - brew bundle 
+  - `./install` - in order to sync install dotfiles
+  - `mackup restore` - in order to sync application settings from icloud
 
 ### Installs 
 
@@ -29,23 +39,21 @@
 
 ## ZSH
 
-Currently using [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for my terminal - though this might change in the future. Install this with their auto script
+To use [oh-my-zsh](https://github.com/robbyrussell/oh-my-zsh) for the terminal, install this with their auto script
 
     curl -L http://install.ohmyz.sh | sh
 
-## RCM
+## Dotbot
 
-Uses [Thoughtbot's RCM](http://robots.thoughtbot.com/rcm-for-rc-files-in-dotfiles-repos) to manage the dotfiles.
+Uses [anishathalye's dotbot](https://github.com/anishathalye/dotbot) to manage the dotfiles.
 
 ### Linking to the dotfiles
 
-List the changes that will be made (Check they're sensible)
+To manually resync the dotfiles
 
-    lsrc -d ~/projects/dotfiles
+    ./install
   
-Make the changes.
-
-    rcup -v -d ~/projects/dotfiles
+Which will rerun the config in the `install.conf.yaml` file. This operation should be idempotent.
 
 
 ## VIM
@@ -54,13 +62,13 @@ Ensure the Vundle vim plugin is installed by updating this repos submodules.
 
     git submodule update --init --recursive
     
-Run rcup again if needed. 
-
-    rcup -v -d ~/projects/dotfiles
-   
 Open Vim and update the plugins
 
     :PluginInstall
+
+Or update them from the command line
+
+    vim +PluginInstall +qall
     
 ### VIM for Git commit messages
 
