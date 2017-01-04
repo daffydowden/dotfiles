@@ -18,7 +18,7 @@
         path: config
     ~/.gitignore:
     ~/.gitignore_global:
-    ~/.fonts:
 
 - shell: 
   - [git submodule update --init --recursive, Installing submodules]
+  - [./fonts/install.sh, Installing fonts]
