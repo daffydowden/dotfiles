@@ -18,6 +18,8 @@
         path: config
     ~/.gitignore:
     ~/.gitignore_global:
+    ~/.mackup.cfg:
+        path: mackup.cfg
 
 - shell: 
   - [git submodule update --init --recursive, Installing submodules]
