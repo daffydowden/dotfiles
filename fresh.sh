@@ -64,9 +64,6 @@ brew tap Homebrew/bundle
 
 #------------------------------------------------------------------------------
 
-echo -e "\n\nbrowsers\n"
-brew bundle -v --file=brewfiles/browsers
-
 echo -e "\n\nprogramming languages\n"
 brew bundle -v --file=brewfiles/languages
 
@@ -78,6 +75,9 @@ brew bundle -v --file=brewfiles/environment
 
 echo -e "\n\ndatabases\n"
 brew bundle -v --file=brewfiles/databases
+
+echo -e "\n\nbrowsers\n"
+brew bundle -v --file=brewfiles/browsers
 
 echo -e "\n\nmisc\n"
 brew bundle -v --file=brewfiles/misc

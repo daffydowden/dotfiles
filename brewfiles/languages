@@ -3,4 +3,6 @@ brew 'node'
 brew 'rbenv'
 brew 'ruby-install'
 
+brew 'elixir'
+
 brew 'heroku-toolbelt'

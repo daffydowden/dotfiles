@@ -1,9 +1,12 @@
 tap 'caskroom/cask'
+tap 'homebrew/services'
 
 brew 'postgresql'
 brew 'mongodb'
 brew 'redis'
 brew 'memcached'
+brew 'neo4j'
+
 
 cask_args appdir: '/Applications'
 

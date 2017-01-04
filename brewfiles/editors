@@ -4,7 +4,7 @@ cask_args appdir: '/Applications'
 
 brew 'vim'
 
-cask 'sublime-text3'
+cask 'sublime-text'
 cask 'mou' # markdown editor
 
 cask 'sourcetree'
