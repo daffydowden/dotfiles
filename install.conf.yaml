@@ -1,0 +1,27 @@
+- defaults: 
+    link:
+      create: true
+      relink: true
+
+- clean: ['~', '~/.config']
+
+- link: 
+    ~/.vim: 
+        force: true
+        path: vim
+    ~/.vimrc:
+    ~/.irbrc:
+    ~/.pryrc:
+    ~/.zshrc:
+    ~/.config: 
+        force: true
+        path: config
+    ~/.gitignore:
+    ~/.gitignore_global:
+    ~/.mackup.cfg:
+        path: mackup.cfg
+
+- shell: 
+  - [git submodule update --init --recursive, Installing submodules]
+  - [./fonts/install.sh, Installing fonts]
+  - [vim +PluginInstall +qall, Installing vim plugins]

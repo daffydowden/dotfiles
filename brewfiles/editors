@@ -1,0 +1,17 @@
+tap 'caskroom/cask'
+
+cask_args appdir: '/Applications'
+
+brew 'vim'
+
+cask 'sublime-text'
+cask 'mou' # markdown editor
+
+brew 'git'
+cask 'sourcetree'
+cask 'paw' # http client
+cask 'vmware-fusion'
+
+brew 'ack'
+brew 'ctags'
+

@@ -1,0 +1,18 @@
+tap 'caskroom/cask'
+
+cask_args appdir: '/Applications'
+
+cask 'charles'
+cask 'kaleidoscope'
+cask 'lastpass'
+
+cask 'adobe-creative-cloud'
+#cask 'sketchup' # 3d modelling
+cask 'omnigraffle' 
+
+cask 'spotify'
+cask 'dropbox'
+
+cask 'skype'
+
+cask 'transmission'

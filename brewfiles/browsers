@@ -1,0 +1,9 @@
+tap 'caskroom/cask'
+tap 'caskroom/versions'
+
+cask_args appdir: '/Applications'
+
+cask 'google-chrome'
+#cask 'firefox'
+#cask 'firefoxdeveloperedition'
+

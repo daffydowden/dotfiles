@@ -1,0 +1,10 @@
+tap 'caskroom/cask'
+
+cask_args appdir: '/Applications'
+
+cask 'spectacle' # window manager
+cask 'caffeine'
+cask 'flux'
+cask 'the-unarchiver'
+
+brew 'fish' # fish shell
