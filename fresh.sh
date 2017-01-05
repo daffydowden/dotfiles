@@ -85,6 +85,21 @@ while true; do
     esac
 done
 
+# Change Mac OS Settings
+echo -e "Configure Mac OSX Settings"
+brew install mackup
+while true; do
+    read -p "Change Mac OSX Settings?" yn
+    case $yn in
+        [Yy]* ) 
+          # Write settings from Osx config
+          ./macOS.conf
+          break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
 # Install mackup to restore app settings
 echo -e "\n\nInstalling mackup to restore app configs\n"
 brew install mackup
@@ -99,3 +114,4 @@ while true; do
         * ) echo "Please answer yes or no.";;
     esac
 done
+
