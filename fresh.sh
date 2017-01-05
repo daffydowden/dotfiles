@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+echo -e "Ready..."
+echo -e "May as well ask for sudo upfront"
+sudo -v
+
 echo -e "\n\nHomebrew\n"
 
 # Install command line tools
