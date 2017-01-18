@@ -16,6 +16,7 @@
     ~/.config: 
         force: true
         path: config
+    ~/.gitconfig:
     ~/.gitignore:
     ~/.gitignore_global:
     ~/.mackup.cfg:
