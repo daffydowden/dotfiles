@@ -6,5 +6,6 @@ cask 'spectacle' # window manager
 cask 'caffeine'
 cask 'flux'
 cask 'the-unarchiver'
+cask 'ngrok'
 
 brew 'fish' # fish shell
