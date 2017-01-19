@@ -8,6 +8,7 @@ cask 'flux'
 cask 'the-unarchiver'
 cask 'ngrok'
 
+brew 'jq'
 brew 'watchman'
 
 brew 'fish' # fish shell
