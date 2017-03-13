@@ -3,6 +3,7 @@ tap 'caskroom/cask'
 cask_args appdir: '/Applications'
 
 brew 'vim'
+brew 'neovim/neovim/neovim'
 
 cask 'sublime-text'
 cask 'mou' # markdown editor
@@ -13,5 +14,6 @@ cask 'paw' # http client
 cask 'vmware-fusion'
 
 brew 'ack'
+brew 'ag'
 brew 'ctags'
 
