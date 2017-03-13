@@ -21,6 +21,7 @@ endif
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'iCyMind/NeoSolarized'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 map ,p :NERDTreeToggle<CR>
@@ -43,6 +44,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
+Plugin 'edkolev/tmuxline.vim'
 "autocmd VimEnter * RainbowParenthesesToggle
 
 " Syntax highlighting
@@ -251,15 +253,24 @@ if executable('ag')
 endif
 
 " colorscheme
-syntax on
-set background=dark
-let g:solarized_termtrans = 1
-let g:solarized_visibility = "high"
-let g:solarized_contrast = "high"
+" check we're in iterm
+let terminal_program = $TERM_PROGRAM
 
-"colorscheme topfunky-light
-try
-  colorscheme solarized
-catch /^Vim\%((\a\+)\)\=:E185/
-  " default
-endtry
+if has("nvim") && terminal_program == "iTerm.app"
+  " has true colour support
+  set termguicolors
+  set background=dark
+  colorscheme NeoSolarized
+else
+  set background=dark
+  let g:solarized_termtrans = 1
+  let g:solarized_visibility = "high"
+  let g:solarized_contrast = "high"
+  "colorscheme topfunky-light
+  try
+    colorscheme solarized
+  catch /^Vim\%((\a\+)\)\=:E185/
+    " default
+  endtry
+endif
+
