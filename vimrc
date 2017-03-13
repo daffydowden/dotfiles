@@ -62,7 +62,7 @@ Plugin 'garbas/vim-snipmate'
 Plugin 'kana/vim-fakeclip'
 
 " Ack
-Plugin 'ack.vim'
+Plugin 'mileszs/ack.vim'
 
 " Omincomplete
 Plugin 'Shougo/neocomplcache'
@@ -242,6 +242,13 @@ autocmd BufNewFile,BufRead *_spec.rb compiler rspec
 call vundle#end()            " required
 filetype plugin indent on         " Turn on file type detection.
 
+" Search with ,a and don't open first result by default
+" https://github.com/mileszs/ack.vim/issues/59
+map <Leader>a :Ack! ''<Left>
+" Use Silver Searcher if available
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
 
 " colorscheme
 syntax on
