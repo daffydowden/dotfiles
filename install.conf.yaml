@@ -10,6 +10,8 @@
         force: true
         path: vim
     ~/.vimrc:
+    ~/.tmux:
+    ~/.tmux.conf:
     ~/.irbrc:
     ~/.pryrc:
     ~/.zshrc:
