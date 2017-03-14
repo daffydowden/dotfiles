@@ -3,6 +3,7 @@ require 'pp'
 # Make gems available
 require 'rubygems'
 
+
 # http://drnicutilities.rubyforge.org/map_by_method/
 require 'map_by_method'
 
@@ -10,7 +11,9 @@ require 'map_by_method'
 # http://redhanded.hobix.com/inspect/stickItInYourIrbrcMethodfinder.html
 require 'what_methods'
 
-require 'ap'
+# Awesome Print
+require 'awesome_print'
+AwesomePrint.irb!
 
 # Print information about any HTTP requests being made
 require 'net-http-spy'
