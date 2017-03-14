@@ -20,8 +20,15 @@ endif
 " let Vundle manage Vundle
 Plugin 'gmarik/Vundle.vim'
 
+" Colorschemes
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'iCyMind/NeoSolarized'
+Plugin 'whatyouhide/vim-gotham'
+Plugin 'morhetz/gruvbox'
+Plugin 'chriskempson/base16-vim'
+Plugin 'tomasr/molokai'
+Plugin 'fmoralesc/molokayo'
+
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 map ,p :NERDTreeToggle<CR>
