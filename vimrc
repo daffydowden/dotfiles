@@ -269,13 +269,21 @@ let terminal_program = $TERM_PROGRAM
 
 " 24bit Truecolor support
 
-"if has("nvim") && terminal_program == "iTerm.app"
-if terminal_program == "iTerm.app"
+if has("nvim") && terminal_program == "iTerm.app"
   " has true colour support
   set termguicolors
-  colorscheme NeoSolarized
+  "colorscheme NeoSolarized
   let $NVIM_TUI_ENABLE_TRUE_COLOR=1
   set background=dark
+  colorscheme base16-materia
+elseif terminal_program == "iTerm.app"
+  " has true colour support
+  set termguicolors
+  set background=dark
+  let g:solarized_termtrans = 1
+  let g:solarized_visibility = "high"
+  let g:solarized_contrast = "high"
+  colorscheme NeoSolarized
 else
   set background=dark
   set termguicolors
