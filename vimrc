@@ -32,9 +32,13 @@ Plugin 'fmoralesc/molokayo'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 map ,p :NERDTreeToggle<CR>
+map ,f :NERDTreeFind<CR>
+"au VimEnter *  NERDTree " open Nerdtree drawer by default
+let g:NERDTreeHijackNetrw=0
+
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 map ,b :CtrlPBuffer<CR>
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rake'
