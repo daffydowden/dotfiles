@@ -1,0 +1,79 @@
+tap 'caskroom/fonts' 
+
+# https://github.com/ryanoasis/nerd-fonts/
+# 
+# Contains the following fonts:
+# (* - Installed)
+# 
+# - 3270
+# - Anonymice
+# - Anonymous Pro*
+# - Aurulent Sans Mono
+# - Bitstream Vera Sans Mono
+# - Code New Roman
+# - DejaVu Sans Mono
+# - Droid Sans Mono
+# - Fantasque Sans
+# - Fura Code
+# - Fira
+# - Fura Mono
+# - Gohu
+# - Hasklug
+# - Heavy Data Mono
+# - Hermut
+# - Inconsolata
+# - Iosevka
+# - Knack
+# - Hack
+# - Lekton
+# - Literation Mono
+# - Meslo
+# - Monofur
+# - Monoid
+# - Mononoki
+# - M+ (MPlus)
+# - ProFont (Windows tweaked)
+# - ProFont (x11)
+# - ProggyClean
+# - Roboto Mono
+# - Sauce Code
+# - Shure Tech Mono
+# - Space Mono
+# - Terminess
+# - Terminus Font
+# - Ubuntu Mono derivative
+# - Ubuntu Mono
+# 
+
+cask 'font-3270-nerd-font-mono'
+cask 'font-firacode-nerd-font-mono'
+cask 'font-iosevka-nerd-font-mono'
+cask 'font-profont-nerd-font-mono'
+cask 'font-anonymouspro-nerd-font-mono'
+cask 'font-firamono-nerd-font-mono'
+cask 'font-lekton-nerd-font-mono'
+cask 'font-proggyclean-nerd-font-mono'
+cask 'font-aurulentsansmono-nerd-font-mono'
+cask 'font-gohu-nerd-font-mono'
+cask 'font-liberationmono-nerd-font-mono'
+cask 'font-robotomono-nerd-font-mono'
+cask 'font-bitstreamverasansmono-nerd-font-mono'
+cask 'font-hack-nerd-font-mono'
+cask 'font-meslo-nerd-font-mono'
+cask 'font-sharetechmono-nerd-font-mono'
+cask 'font-codenewroman-nerd-font-mono'
+cask 'font-hasklig-nerd-font-mono'
+cask 'font-monofur-nerd-font-mono'
+cask 'font-sourcecodepro-nerd-font-mono'
+cask 'font-dejavusansmono-nerd-font-mono'
+cask 'font-heavydata-nerd-font-mono'
+cask 'font-monoid-nerd-font-mono'
+cask 'font-spacemono-nerd-font-mono'
+cask 'font-droidsansmono-nerd-font-mono'
+cask 'font-hermit-nerd-font-mono'
+cask 'font-mononoki-nerd-font-mono'
+cask 'font-terminus-nerd-font-mono'
+cask 'font-fantasquesansmono-nerd-font-mono'
+cask 'font-inconsolata-nerd-font-mono'
+cask 'font-mplus-nerd-font-mono'
+cask 'font-ubuntumono-nerd-font-mono'
