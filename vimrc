@@ -20,13 +20,25 @@ endif
 " let Vundle manage Vundle
 Plugin 'gmarik/Vundle.vim'
 
+" Colorschemes
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'iCyMind/NeoSolarized'
+Plugin 'whatyouhide/vim-gotham'
+Plugin 'morhetz/gruvbox'
+Plugin 'chriskempson/base16-vim'
+Plugin 'tomasr/molokai'
+Plugin 'fmoralesc/molokayo'
+
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdtree'
 map ,p :NERDTreeToggle<CR>
+map ,f :NERDTreeFind<CR>
+"au VimEnter *  NERDTree " open Nerdtree drawer by default
+let g:NERDTreeHijackNetrw=0
+
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
-Plugin 'kien/ctrlp.vim'
+Plugin 'ctrlpvim/ctrlp.vim'
 map ,b :CtrlPBuffer<CR>
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rake'
@@ -43,6 +55,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
+Plugin 'edkolev/tmuxline.vim'
 "autocmd VimEnter * RainbowParenthesesToggle
 
 " Syntax highlighting
@@ -251,15 +264,37 @@ if executable('ag')
 endif
 
 " colorscheme
-syntax on
-set background=dark
-let g:solarized_termtrans = 1
-let g:solarized_visibility = "high"
-let g:solarized_contrast = "high"
+" check we're in iterm
+let terminal_program = $TERM_PROGRAM
 
-"colorscheme topfunky-light
-try
-  colorscheme solarized
-catch /^Vim\%((\a\+)\)\=:E185/
-  " default
-endtry
+" 24bit Truecolor support
+
+if has("nvim") && terminal_program == "iTerm.app"
+  " has true colour support
+  set termguicolors
+  "colorscheme NeoSolarized
+  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  set background=dark
+  colorscheme base16-materia
+elseif terminal_program == "iTerm.app"
+  " has true colour support
+  set termguicolors
+  set background=dark
+  let g:solarized_termtrans = 1
+  let g:solarized_visibility = "high"
+  let g:solarized_contrast = "high"
+  colorscheme NeoSolarized
+else
+  set background=dark
+  set termguicolors
+  let g:solarized_termtrans = 1
+  let g:solarized_visibility = "high"
+  let g:solarized_contrast = "high"
+  "colorscheme topfunky-light
+  try
+    colorscheme solarized
+  catch /^Vim\%((\a\+)\)\=:E185/
+    " default
+  endtry
+endif
+

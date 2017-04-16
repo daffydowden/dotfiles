@@ -4,6 +4,7 @@ cask_args appdir: '/Applications'
 
 brew 'vim'
 brew 'neovim/neovim/neovim'
+brew 'emacs'
 
 cask 'sublime-text'
 cask 'mou' # markdown editor

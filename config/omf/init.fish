@@ -15,6 +15,12 @@ set fish_plugins theme rbenv brew node tab
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
 
+# colours
+#set -g TERM "screen-256color"
+#set -g TERM "screen-256color-bce"
+#set -g  TERM "xterm-256color"
+#set -Ux TERM screen-256color-bce
+
 # Add local bin to path
 #set PATH $PATH ~/bin
 

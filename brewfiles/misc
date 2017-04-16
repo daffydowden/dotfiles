@@ -3,6 +3,7 @@ tap 'caskroom/cask'
 cask_args appdir: '/Applications'
 
 cask 'charles'
+cask 'fiddler'
 cask 'kaleidoscope'
 cask 'lastpass'
 
