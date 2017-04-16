@@ -1,3 +1,4 @@
+# Dotbot config
 - defaults: 
     link:
       create: true
@@ -19,8 +20,14 @@
     ~/.pryrc:
     ~/.zshrc:
     ~/.config: 
+        create: true
         force: true
+        relink: true
         path: config
+    ~/.config/nvim/init.vim: 
+        create: true
+        relink: true
+        path: vimrc
     ~/.gitconfig:
     ~/.gitignore:
     ~/.gitignore_global:
@@ -30,3 +37,4 @@
 - shell: 
   - [git submodule update --init --recursive, Installing submodules]
   - [vim +PluginInstall +qall, Installing vim plugins]
+  - [nvim +PluginInstall +qall, Installing NeoVim plugins]
