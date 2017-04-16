@@ -26,5 +26,4 @@
 
 - shell: 
   - [git submodule update --init --recursive, Installing submodules]
-  - [./fonts/install.sh, Installing fonts]
   - [vim +PluginInstall +qall, Installing vim plugins]
