@@ -3,9 +3,11 @@ tap 'caskroom/cask'
 cask_args appdir: '/Applications'
 
 brew 'vim'
-brew 'emacs'
 tap 'neovim/neovim'
 brew 'neovim'
+
+tap 'd12frosted/emacs-plus'
+brew 'emacs-plus'
 
 cask 'sublime-text'
 cask 'mou' # markdown editor

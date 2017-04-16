@@ -9,6 +9,9 @@
     ~/.vim: 
         force: true
         path: vim
+    ~/.emacs.d: 
+        force: true
+        path: emacs.d
     ~/.vimrc:
     ~/.tmux:
     ~/.tmux.conf:
