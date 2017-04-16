@@ -42,6 +42,9 @@ brew tap Homebrew/bundle
 
 #------------------------------------------------------------------------------
 
+echo -e "\n\nfonts\n"
+brew bundle -v --file=brewfiles/fonts
+
 echo -e "\n\nprogramming languages\n"
 brew bundle -v --file=brewfiles/languages
 
