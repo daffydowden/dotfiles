@@ -13,6 +13,7 @@ cask 'omnigraffle'
 
 cask 'spotify'
 cask 'dropbox'
+cask 'google-drive'
 
 cask 'skype'
 
