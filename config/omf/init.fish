@@ -12,6 +12,9 @@ set -g default_user richarddowden
 # Enable plugins by adding their name separated by a space to the line below.
 set fish_plugins theme rbenv brew node tab
 
+alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
+alias lsa='ls -al'
+
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
 
