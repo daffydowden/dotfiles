@@ -13,8 +13,8 @@ call vundle#begin()
 
 " enable system clipboard
 if $TMUX == ''
-  "set clipboard=unnamed
-  set clipboard+=unnamed
+  set clipboard=unnamed
+  "set clipboard+=unnamed
 endif
 
 " let Vundle manage Vundle
