@@ -1,1 +1,1 @@
-/Users/richard.dowden/.vimrc
+../vimrc
