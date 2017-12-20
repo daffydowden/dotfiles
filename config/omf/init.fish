@@ -30,5 +30,11 @@ set -gx N_PREFIX "$HOME/n"
 set -gx PATH $PATH $N_PREFIX/bin
 #set PATH $PATH ~/bin
 
+set -gx GOPATH $HOME/projects
+set -gx GOROOT /usr/local/opt/go/libexec
+set -gx GOBIN $HOME/projects/bin
+set -gx PATH $PATH $GOPATH/bin
+set -gx PATH $PATH $GOROOT/bin
+
 # Load oh-my-fish configuration.
 #source . $fish_path/oh-my-fish.fish
