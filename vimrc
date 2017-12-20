@@ -38,8 +38,8 @@ let g:NERDTreeHijackNetrw=0
 
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-repeat'
-Plugin 'ctrlpvim/ctrlp.vim'
-map ,b :CtrlPBuffer<CR>
+"Plugin 'ctrlpvim/ctrlp.vim'
+"map ,b :CtrlPBuffer<CR>
 Plugin 'tpope/vim-rails'
 Plugin 'tpope/vim-rake'
 Plugin 'tpope/vim-endwise'
@@ -58,6 +58,13 @@ let g:airline_powerline_fonts = 1
 Plugin 'edkolev/tmuxline.vim'
 "autocmd VimEnter * RainbowParenthesesToggle
 
+set rtp+=/usr/local/opt/fzf
+Plugin 'junegunn/fzf.vim'
+
+nnoremap <silent> <leader><space> :Files<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
+" https://github.com/zenbro/dotfiles/blob/master/.nvimrc#L220-L242
 " Syntax highlighting
 Plugin 'markcornick/vim-vagrant'
 Plugin 'mustache/vim-mustache-handlebars'
@@ -225,16 +232,16 @@ set spelllang=en_gb
 "map <Leader>t :FuzzyFinderTextMate<Enter>
 
 " CtrtlP Plugin mappings
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
+"let g:ctrlp_map = '<c-p>'
+"let g:ctrlp_cmd = 'CtrlP'
+"let g:ctrlp_working_path_mode = 'ra'
 " Exclude the following:
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 set wildignore+=*/node_modules/* 
 set wildignore+=*/dist/* 
 
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 
 
 " Controversial...swap colon and semicolon for easier commands
