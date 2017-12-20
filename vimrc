@@ -53,6 +53,7 @@ Plugin 'tpope/vim-cucumber'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
+Plugin 'yaymukund/vim-rabl' " RABL files
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
@@ -69,15 +70,22 @@ nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 " https://github.com/zenbro/dotfiles/blob/master/.nvimrc#L220-L242
 
+
+
 Plugin 'mbbill/undotree'
 nnoremap <F5> :UndotreeToggle<cr>
 
 " Syntax highlighting
-Plugin 'markcornick/vim-vagrant'
+Plugin 'sheerun/vim-polyglot'
+
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+
+"Plugin 'markcornick/vim-vagrant'
 Plugin 'mustache/vim-mustache-handlebars'
 
-Plugin 'elixir-lang/vim-elixir'
-autocmd BufNew,BufNewFile,BufRead *.ex :set filetype=elixir
+"Plugin 'elixir-lang/vim-elixir'
+"autocmd BufNew,BufNewFile,BufRead *.ex :set filetype=elixir
 
 " Snippets in vim
 Plugin 'MarcWeber/vim-addon-mw-utils'
@@ -86,7 +94,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'garbas/vim-snipmate'
 
 " Copy/Paste Mac
-Plugin 'kana/vim-fakeclip'
+"Plugin 'kana/vim-fakeclip'
 
 " Ack
 Plugin 'mileszs/ack.vim'
