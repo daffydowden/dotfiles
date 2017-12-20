@@ -25,6 +25,9 @@ alias lsa='ls -al'
 #set -Ux TERM screen-256color-bce
 
 # Add local bin to path
+#export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
+set -gx N_PREFIX "$HOME/n"
+set -gx PATH $PATH $N_PREFIX/bin
 #set PATH $PATH ~/bin
 
 # Load oh-my-fish configuration.
