@@ -68,6 +68,10 @@ nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader>b :Buffers<CR>
 nnoremap <silent> <leader>/ :execute 'Ag ' . input('Ag/')<CR>
 " https://github.com/zenbro/dotfiles/blob/master/.nvimrc#L220-L242
+
+Plugin 'mbbill/undotree'
+nnoremap <F5> :UndotreeToggle<cr>
+
 " Syntax highlighting
 Plugin 'markcornick/vim-vagrant'
 Plugin 'mustache/vim-mustache-handlebars'
