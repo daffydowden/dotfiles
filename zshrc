@@ -58,3 +58,5 @@ alias npm-exec='PATH=$(npm bin):$PATH'
 
 # Powerline config
 . ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
