@@ -19,6 +19,7 @@ alias lsa='ls -al'
 #set fish_custom $HOME/dotfiles/oh-my-fish
 
 # colours
+set -g TERM "xterm-color"
 #set -g TERM "screen-256color"
 #set -g TERM "screen-256color-bce"
 #set -g  TERM "xterm-256color"
