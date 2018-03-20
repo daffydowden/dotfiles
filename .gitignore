@@ -1,3 +1,5 @@
 config/fish/fishd.*
 .netrwhist
 tmux/resurrect/*
+fonts
+vim/bundle/
