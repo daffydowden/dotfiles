@@ -7,6 +7,7 @@ cask 'caffeine'
 cask 'flux'
 cask 'the-unarchiver'
 cask 'ngrok'
+cask 'iterm2'
 
 brew 'jq'
 brew 'watchman'
