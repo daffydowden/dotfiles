@@ -5,4 +5,4 @@ cask_args appdir: '/Applications'
 cask 'virtualbox'
 
 brew 'docker'
-brew 'boot2docker'
+cask 'docker'
