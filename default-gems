@@ -1,0 +1,6 @@
+bundler
+pry-byebug
+awesome_print
+hirb
+looksee
+net-http-spy

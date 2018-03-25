@@ -33,6 +33,8 @@
     ~/.gitignore_global:
     ~/.mackup.cfg:
         path: mackup.cfg
+    ~/.asdfrc:
+    ~/.default-gems:
 
 - shell: 
   - [git submodule update --init --recursive, Installing submodules]

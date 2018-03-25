@@ -58,4 +58,4 @@ require 'looksee/shortcuts'
 # ==============
 
 # Default editor is Sublime text 2
-Pry.config.editor = "subl"
+Pry.config.editor = "nvim"

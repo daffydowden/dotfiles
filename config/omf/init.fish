@@ -6,13 +6,14 @@
 set fish_theme bobthefish
 set -g theme_nerd_fonts yes
 set -g theme_color_scheme solarized-dark
+set -g theme_display_ruby yes
 
 set -g default_user richarddowden
 
 # All built-in plugins can be found at ~/.oh-my-fish/plugins/
 # Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
 # Enable plugins by adding their name separated by a space to the line below.
-set fish_plugins theme rbenv brew node tab
+set fish_plugins theme asdf brew node tab
 
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
 alias lsa='ls -al'

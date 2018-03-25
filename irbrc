@@ -3,7 +3,6 @@ require 'pp'
 # Make gems available
 require 'rubygems'
 
-
 # http://drnicutilities.rubyforge.org/map_by_method/
 require 'map_by_method'
 

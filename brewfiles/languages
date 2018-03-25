@@ -1,11 +1,11 @@
 brew 'node'
 
-brew 'rbenv'
-brew 'ruby-install'
-
-brew 'python'
-
-brew 'elixir'
+# ASDF deps
+brew 'openssl'
+brew 'libyaml'
+brew 'libffi'
+# Version manager
+brew 'asdf'
 
 brew 'heroku-toolbelt'
 
