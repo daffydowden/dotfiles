@@ -13,3 +13,6 @@ brew 'jq'
 brew 'watchman'
 
 brew 'fish' # fish shell
+# https://superuser.com/questions/397076/tmux-exits-with-exited-on-mac-os-x
+brew 'reattach-to-user-namespace'
+brew 'tmux'
