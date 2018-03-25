@@ -7,7 +7,7 @@ tap 'neovim/neovim'
 brew 'neovim'
 
 tap 'd12frosted/emacs-plus'
-brew 'emacs-plus'
+brew 'emacs-plus', args: ["with-24bit-color", "with-natural-title-bar"]
 
 cask 'sublime-text'
 cask 'macdown' # markdown editor
