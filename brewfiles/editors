@@ -20,4 +20,5 @@ cask 'vmware-fusion'
 brew 'ack'
 brew 'ag'
 brew 'ctags'
+brew 'fzf'
 
