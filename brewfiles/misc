@@ -13,7 +13,7 @@ cask 'omnigraffle'
 
 cask 'spotify'
 cask 'dropbox'
-cask 'google-drive'
+cask 'google-drive-file-stream'
 
 cask 'skype'
 
