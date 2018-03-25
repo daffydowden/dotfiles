@@ -10,7 +10,7 @@ tap 'd12frosted/emacs-plus'
 brew 'emacs-plus'
 
 cask 'sublime-text'
-cask 'mou' # markdown editor
+cask 'macdown' # markdown editor
 
 brew 'git'
 cask 'sourcetree'
