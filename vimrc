@@ -33,6 +33,7 @@ Plugin 'tomasr/molokai'
 Plugin 'fmoralesc/molokayo'
 
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rhubarb'
 Plugin 'scrooloose/nerdtree'
 map ,p :NERDTreeToggle<CR>
 map ,f :NERDTreeFind<CR>
