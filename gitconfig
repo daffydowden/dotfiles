@@ -11,3 +11,7 @@
 [user]
 	name = Richard Dowden
 	email = rd@richarddowden.com
+[commit]
+	template = /Users/richard.dowden/.stCommitMsg
+[credential]
+	helper = osxkeychain
