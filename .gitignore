@@ -3,3 +3,4 @@ config/fish/fishd.*
 tmux/resurrect/*
 fonts
 vim/bundle/
+vim/tmp
