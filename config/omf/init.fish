@@ -5,7 +5,7 @@
 #set fish_theme robbyrussell
 set fish_theme bobthefish
 set -g theme_nerd_fonts yes
-set -g theme_color_scheme solarized-dark
+set -g theme_color_scheme terminal2-dark
 set -g theme_display_ruby yes
 
 set -g default_user richarddowden

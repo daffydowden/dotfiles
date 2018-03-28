@@ -60,6 +60,7 @@ Plugin 'editorconfig/editorconfig-vim'
 Plugin 'kien/rainbow_parentheses.vim'
 Plugin 'bling/vim-airline'
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tmuxline#enabled = 0
 Plugin 'edkolev/tmuxline.vim'
 "autocmd VimEnter * RainbowParenthesesToggle
 
