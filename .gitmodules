@@ -25,3 +25,6 @@
 [submodule "emacs.d"]
 	path = emacs.d
 	url = https://github.com/syl20bnr/spacemacs
+[submodule "fish/completions/kubectl"]
+	path = fish/completions/kubectl
+	url = https://github.com/evanlucas/fish-kubectl-completions
