@@ -15,3 +15,21 @@
 	template = /Users/richard.dowden/.stCommitMsg
 [credential]
 	helper = osxkeychain
+[alias]
+  st = status
+  s = status
+  co = checkout
+  c = commit -v
+  b = branch
+  d = diff
+  p = pull
+  a = add
+  l = log
+  pushed = !git cherry -v `git symbolic-ref HEAD 2> /dev/null`
+  klog = log --graph --pretty=format:'%an: %s - %Cred%h%Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  stls = ls-files
+  edit-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; nvim `f`"
+  add-unmerged = "!f() { git ls-files --unmerged | cut -f2 | sort -u ; }; git add `f`"
+  lc = log ORIG_HEAD.. --stat --no-merges
+  who = log --pretty='format:%Cgreen%an%Creset\t%C(yellow)%ar%Creset\t%s ' --no-merges
+  unstage = reset HEAD
