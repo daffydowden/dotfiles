@@ -15,30 +15,21 @@ set -g default_user richarddowden
 # Enable plugins by adding their name separated by a space to the line below.
 set fish_plugins theme asdf brew node tab
 
+# asdf node bullshitery
+#set -xU GNUPGHOME="${ASDF_DIR:-$HOME/.asdf}/keyrings/nodejs"
+
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
 alias lsa='ls -al'
 
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
 
-# colours
-set -g TERM "xterm-color"
-#set -g TERM "screen-256color"
-#set -g TERM "screen-256color-bce"
-#set -g  TERM "xterm-256color"
-#set -Ux TERM screen-256color-bce
-
 # Add local bin to path
-#export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo)
-set -gx N_PREFIX "$HOME/n"
-set -gx PATH $PATH $N_PREFIX/bin
-#set PATH $PATH ~/bin
-
-set -gx GOPATH $HOME/projects
-set -gx GOROOT /usr/local/opt/go/libexec
-set -gx GOBIN $HOME/projects/bin
-set -gx PATH $PATH $GOPATH/bin
-set -gx PATH $PATH $GOROOT/bin
+#set -gx GOPATH $HOME/projects
+#set -gx GOROOT /usr/local/opt/go/libexec
+#set -gx GOBIN $HOME/projects/bin
+#set -gx PATH $PATH $GOPATH/bin
+#set -gx PATH $PATH $GOROOT/bin
 
 # Load oh-my-fish configuration.
 #source . $fish_path/oh-my-fish.fish
