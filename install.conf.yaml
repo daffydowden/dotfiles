@@ -10,6 +10,7 @@
     ~/.vim: 
         force: true
         path: vim
+    ~/.spacemacs:
     ~/.emacs.d: 
         force: true
         path: emacs.d
