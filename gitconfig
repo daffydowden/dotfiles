@@ -1,5 +1,5 @@
 [core]
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/richard.dowden/.gitignore_global
 	editor = /usr/local/bin/vim
 	autocrlf = input
 [difftool "sourcetree"]
@@ -23,6 +23,7 @@
   co = checkout
   c = commit -v
   b = branch
+  f = fetch
   d = diff
   p = pull
   a = add

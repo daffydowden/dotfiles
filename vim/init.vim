@@ -1,1 +1,1 @@
-../vimrc
+/Users/richard.dowden/projects/dotfiles/vimrc

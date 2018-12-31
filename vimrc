@@ -49,10 +49,10 @@ Plugin 'tpope/vim-rake'
 Plugin 'tpope/vim-endwise'
 Plugin 'tpope/vim-git'
 Plugin 'tpope/vim-ragtag'
-Plugin 'tpope/vim-haml'
-Plugin 'tpope/vim-cucumber'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-liquid'
+"Plugin 'tpope/vim-haml'
+"Plugin 'tpope/vim-cucumber'
+"Plugin 'tpope/vim-markdown'
+"Plugin 'tpope/vim-liquid'
 Plugin 'tpope/vim-bundler'
 Plugin 'yaymukund/vim-rabl' " RABL files
 Plugin 'scrooloose/nerdcommenter'
@@ -178,7 +178,11 @@ let g:neocomplcache_omni_patterns.php = '[^.\t]->\h\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
-syntax enable                     " Turn on syntax highlighting.
+" Turn on syntax highlighting.
+if !exists("g:syntax_on")
+  syntax enable
+endif
+
 " Toggle RainbowParenthese highlighting
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -306,7 +310,8 @@ elseif terminal_program == "iTerm.app"
   let g:solarized_termtrans = 1
   let g:solarized_visibility = "high"
   let g:solarized_contrast = "high"
-  colorscheme NeoSolarized
+  "colorscheme NeoSolarized
+  colorscheme gruvbox
 else
   set background=dark
   set termguicolors
