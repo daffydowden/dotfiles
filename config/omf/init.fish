@@ -6,7 +6,9 @@
 set fish_theme bobthefish
 set -g theme_nerd_fonts yes
 set -g theme_color_scheme terminal2-dark
-set -g theme_display_ruby yes
+set -g theme_display_ruby no
+set -g theme_display_k8s_context yes
+set -g theme_display_k8s_namespace yes
 
 set -g default_user richarddowden
 
