@@ -32,6 +32,7 @@ alias lsa='ls -al'
 #set -gx GOBIN $HOME/projects/bin
 #set -gx PATH $PATH $GOPATH/bin
 #set -gx PATH $PATH $GOROOT/bin
+set -gx PATH $PATH /usr/local/sbin
 
 # Load oh-my-fish configuration.
 #source . $fish_path/oh-my-fish.fish
