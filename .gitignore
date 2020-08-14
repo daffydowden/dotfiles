@@ -6,3 +6,4 @@ tmux/resurrect/*
 fonts
 vim/bundle/
 vim/tmp
+config/gcloud/logs
