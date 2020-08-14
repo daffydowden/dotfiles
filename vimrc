@@ -5,8 +5,11 @@ if $SHELL =~ 'bin/fish'
   set shell=/bin/sh
 endif
 
+if !exists('g:vscode')
+
 set nocompatible                  " Must come first because it changes other options.
 filetype off
+
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -321,3 +324,4 @@ else
   endtry
 endif
 
+endif
