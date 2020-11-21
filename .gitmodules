@@ -5,7 +5,7 @@
 	path = vim/vim-haml
 	url = https://github.com/tpope/vim-haml
 [submodule "solarized-osx-term"]
-	path = solarized-osx-term
+	path = colorschemes/solarized-osx-term
 	url = https://github.com/tomislav/osx-terminal.app-colors-solarized
 [submodule "dotbot"]
 	path = dotbot
@@ -28,3 +28,18 @@
 [submodule "fish/completions/kubectl"]
 	path = fish/completions/kubectl
 	url = https://github.com/evanlucas/fish-kubectl-completions
+[submodule "colorschemes/nord"]
+	path = colorschemes/nord-iterm2
+	url = git@github.com:arcticicestudio/nord-iterm2.git
+[submodule "colorschemes/radical-vscode"]
+	path = colorschemes/radical-vscode
+	url = git@github.com:DHedgecock/radical-vscode.git
+[submodule "colorschemes/dracula"]
+	path = colorschemes/dracula
+	url = git@github.com:dracula/dracula-theme.git
+[submodule "colorschemes/halcyon-item"]
+	path = colorschemes/halcyon-item
+	url = git@github.com:bchiang7/halcyon-iterm.git
+[submodule "colorschemes/halcyon-vscode"]
+	path = colorschemes/halcyon-vscode
+	url = git@github.com:bchiang7/halcyon-vscode.git

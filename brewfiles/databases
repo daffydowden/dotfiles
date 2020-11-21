@@ -1,17 +1,18 @@
-tap 'caskroom/cask'
-tap 'homebrew/services'
+tap "homebrew/cask"
+tap "homebrew/services"
 
-brew 'postgresql'
-brew 'mongodb'
-brew 'redis'
-brew 'memcached'
-brew 'neo4j'
+brew "postgresql"
+brew "redis"
+brew "memcached"
 
+# brew 'mongodb'
+# brew 'neo4j'
 
-cask_args appdir: '/Applications'
+cask_args appdir: "~/Applications", require_sha: true
 
-cask 'base' # sqlite db editor
-cask 'sequel-pro' # MySql gui
-cask 'robomongo' # Monogodb gui
-cask 'postico' # postgresql
-cask 'psequel' # postgresql
+# sqlite db editor
+mas "Base - SQLite Editor", id: 402383384
+
+cask "sequel-pro"
+cask "tableplus"
+cask "datagrip"

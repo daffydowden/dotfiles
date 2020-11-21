@@ -1,8 +1,0 @@
-tap 'caskroom/cask'
-
-cask_args appdir: '/Applications'
-
-cask 'virtualbox'
-
-brew 'docker'
-cask 'docker'

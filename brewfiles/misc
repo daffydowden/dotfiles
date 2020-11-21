@@ -1,20 +1,13 @@
-tap 'caskroom/cask'
+tap "homebrew/cask"
 
-cask_args appdir: '/Applications'
+cask_args appdir: "~/Applications"
 
-cask 'charles'
-cask 'fiddler'
-cask 'kaleidoscope'
-cask 'lastpass'
+# cask "charles"
+# cask "fiddler"
 
-cask 'adobe-creative-cloud'
-#cask 'sketchup' # 3d modelling
-cask 'omnigraffle' 
+mas "Kaleidoscope", id: 587512244
 
-cask 'spotify'
-cask 'dropbox'
-cask 'google-drive-file-stream'
+# cask "adobe-creative-cloud"
 
-cask 'skype'
-
-cask 'transmission'
+cask "spotify"
+cask "google-drive-file-stream"

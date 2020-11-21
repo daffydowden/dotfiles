@@ -1,24 +1,26 @@
-tap 'caskroom/cask'
+tap "homebrew/cask"
 
-cask_args appdir: '/Applications'
+cask_args appdir: "~/Applications", require_sha: true
 
-brew 'vim'
-tap 'neovim/neovim'
-brew 'neovim'
+brew "vim"
+brew "neovim"
 
-tap 'd12frosted/emacs-plus'
-brew 'emacs-plus', args: ["with-24bit-color", "with-natural-title-bar"]
+cask "visual-studio-code"
 
-cask 'sublime-text'
-cask 'macdown' # markdown editor
+tap "d12frosted/emacs-plus"
+brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 
-brew 'git'
-cask 'sourcetree'
-cask 'paw' # http client
-cask 'vmware-fusion'
+cask "sublime-text"
+cask "macdown" # markdown editor
+cask "obsidian"
 
-brew 'ack'
-brew 'ag'
-brew 'ctags'
-brew 'fzf'
+cask "sourcetree"
+cask "paw" # http client
+
+brew "ack"
+brew "ag"
+brew "ctags"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
 
