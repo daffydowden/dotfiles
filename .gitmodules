@@ -37,3 +37,9 @@
 [submodule "colorschemes/dracula"]
 	path = colorschemes/dracula
 	url = git@github.com:dracula/dracula-theme.git
+[submodule "colorschemes/halcyon-item"]
+	path = colorschemes/halcyon-item
+	url = git@github.com:bchiang7/halcyon-iterm.git
+[submodule "colorschemes/halcyon-vscode"]
+	path = colorschemes/halcyon-vscode
+	url = git@github.com:bchiang7/halcyon-vscode.git
