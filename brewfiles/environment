@@ -1,18 +1,16 @@
-tap 'caskroom/cask'
+tap "homebrew/cask"
 
-cask_args appdir: '/Applications'
+cask_args appdir: "~/Applications", require_sha: true
 
-cask 'spectacle' # window manager
-cask 'caffeine'
-cask 'flux'
-cask 'the-unarchiver'
-cask 'ngrok'
-cask 'iterm2'
+brew "docker"
+cask "docker"
 
-brew 'jq'
-brew 'watchman'
+cask "iterm2"
 
-brew 'fish' # fish shell
+brew "jq"
+
+brew "fish" # fish shell
 # https://superuser.com/questions/397076/tmux-exits-with-exited-on-mac-os-x
-brew 'reattach-to-user-namespace'
-brew 'tmux'
+
+# brew "reattach-to-user-namespace"
+# brew "tmux"

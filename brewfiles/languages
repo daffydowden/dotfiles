@@ -1,12 +1,5 @@
-brew 'node'
-
 # ASDF deps
-brew 'openssl'
-brew 'libyaml'
-brew 'libffi'
+brew "coreutils" 
+brew "curl" 
 # Version manager
-brew 'asdf'
-
-brew 'heroku-toolbelt'
-
-cask 'java' # required for neo4j
+brew "asdf"
