@@ -10,6 +10,7 @@ brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 
 cask "sublime-text"
 cask "macdown" # markdown editor
+cask "obsidian"
 
 cask "sourcetree"
 cask "paw" # http client
