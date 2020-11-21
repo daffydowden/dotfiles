@@ -34,3 +34,6 @@
 [submodule "colorschemes/radical-vscode"]
 	path = colorschemes/radical-vscode
 	url = git@github.com:DHedgecock/radical-vscode.git
+[submodule "colorschemes/dracula"]
+	path = colorschemes/dracula
+	url = git@github.com:dracula/dracula-theme.git
