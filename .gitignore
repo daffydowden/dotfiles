@@ -7,3 +7,4 @@ fonts
 vim/bundle/
 vim/tmp
 config/gcloud/logs
+emacs.d/eshell

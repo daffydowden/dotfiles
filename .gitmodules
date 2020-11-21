@@ -40,3 +40,6 @@
 [submodule "colorschemes/halcyon-vscode"]
 	path = colorschemes/halcyon-vscode
 	url = git@github.com:bchiang7/halcyon-vscode.git
+[submodule "emacs.d"]
+	path = emacs.d
+	url = https://github.com/hlissner/doom-emacs
