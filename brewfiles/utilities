@@ -18,3 +18,8 @@ mas "Slack", id: 803453959
 mas "Bear", id: 1091189122
 mas "Todoist", id: 585829637
 mas "iA Writer", id: 775737590
+
+brew "bat"
+brew "tldr"
+
+brew "openvpn"

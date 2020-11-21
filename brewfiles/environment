@@ -5,6 +5,9 @@ cask_args appdir: "~/Applications", require_sha: true
 brew "docker"
 cask "docker"
 
+brew "kubectx"
+brew "kustomize"
+
 brew "git"
 brew "gh"
 brew "tig"
