@@ -5,6 +5,8 @@ cask_args appdir: "~/Applications", require_sha: true
 brew "vim"
 brew "neovim"
 
+cask "visual-studio-code"
+
 tap "d12frosted/emacs-plus"
 brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 
