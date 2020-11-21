@@ -28,3 +28,6 @@
 [submodule "fish/completions/kubectl"]
 	path = fish/completions/kubectl
 	url = https://github.com/evanlucas/fish-kubectl-completions
+[submodule "colorschemes/nord"]
+	path = colorschemes/nord-iterm2
+	url = git@github.com:arcticicestudio/nord-iterm2.git
