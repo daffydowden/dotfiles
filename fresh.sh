@@ -40,10 +40,17 @@ echo -e "\n\nhomebrew-bundle\n"
 
 brew tap Homebrew/bundle
 
+echo -e "\n\nhomebrew-mas-cli\n"
+
+brew install mas
+
 #------------------------------------------------------------------------------
 
 echo -e "\n\nfonts\n"
 brew bundle -v --file=brewfiles/fonts
+
+echo -e "\n\nutilities\n"
+brew bundle -v --file=brewfiles/utilities
 
 echo -e "\n\nprogramming languages\n"
 brew bundle -v --file=brewfiles/languages
