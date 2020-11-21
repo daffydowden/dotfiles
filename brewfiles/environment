@@ -5,6 +5,10 @@ cask_args appdir: "~/Applications", require_sha: true
 brew "docker"
 cask "docker"
 
+brew "git"
+brew "gh"
+brew "tig"
+
 cask "iterm2"
 
 brew "jq"

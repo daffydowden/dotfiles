@@ -11,8 +11,6 @@ brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 cask "sublime-text"
 cask "macdown" # markdown editor
 
-brew "git"
-
 cask "sourcetree"
 cask "paw" # http client
 
