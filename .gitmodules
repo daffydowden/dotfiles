@@ -31,3 +31,6 @@
 [submodule "colorschemes/nord"]
 	path = colorschemes/nord-iterm2
 	url = git@github.com:arcticicestudio/nord-iterm2.git
+[submodule "colorschemes/radical-vscode"]
+	path = colorschemes/radical-vscode
+	url = git@github.com:DHedgecock/radical-vscode.git
