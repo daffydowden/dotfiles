@@ -1,6 +1,8 @@
 # Path to your oh-my-fish.
 #set fish_path $HOME/.oh-my-fish
 
+set -g fish_emoji_width 2
+
 # Theme - https://github.com/oh-my-fish/theme-bobthefish
 #set fish_theme robbyrussell
 set fish_theme bobthefish
