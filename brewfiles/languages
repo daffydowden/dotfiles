@@ -3,3 +3,5 @@ brew "coreutils"
 brew "curl" 
 # Version manager
 brew "asdf"
+
+brew "gpg" # for nodejs
