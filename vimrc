@@ -97,6 +97,7 @@ Plugin 'MarcWeber/vim-addon-mw-utils'
 Plugin 'tomtom/tlib_vim'
 Plugin 'honza/vim-snippets'
 Plugin 'garbas/vim-snipmate'
+let g:snipMate = { 'snippet_version' : 1 }
 
 " Copy/Paste Mac
 "Plugin 'kana/vim-fakeclip'
