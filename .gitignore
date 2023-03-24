@@ -21,3 +21,7 @@ vim/bundle/
 vim/tmp
 config/gcloud/logs
 emacs.d/eshell
+config/AWS VPN Client/AWS VPN Client/NetSparkleUpdater
+config/AWSVPNClient
+config/containers
+config/iterm2
