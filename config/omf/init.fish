@@ -25,6 +25,9 @@ set fish_plugins theme asdf brew node tab
 # asdf node bullshitery
 #set -xU GNUPGHOME="${ASDF_DIR:-$HOME/.asdf}/keyrings/nodejs"
 
+# Auto complete kubectl commands
+kubectl completion fish | source
+
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
 alias lsa='ls -al'
 
