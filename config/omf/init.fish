@@ -29,7 +29,7 @@ set fish_plugins theme asdf brew node tab
 kubectl completion fish | source
 
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
-alias lsa='ls -al'
+alias lsa='exa --long --header --icons --git'
 
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
