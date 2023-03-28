@@ -2,8 +2,7 @@ tap "homebrew/cask"
 
 cask_args appdir: "~/Applications", require_sha: true
 
-cask "spectacle" # window manager
-# Investigate Rectangle
+cask "rectangle" # window manager replacement for spectacle
 
 # mas "Amphetamine", id: 937984704
 mas "Lungo", id: 1263070803
@@ -16,10 +15,11 @@ mas "Kindle", id: 405399194
 mas "Slack", id: 803453959
 
 mas "Bear", id: 1091189122
-mas "Todoist", id: 585829637
+# mas "Todoist", id: 585829637
 mas "iA Writer", id: 775737590
 
 brew "bat"
 brew "tldr"
+brew "exa"
 
 brew "openvpn"

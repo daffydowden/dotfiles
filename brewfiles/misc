@@ -7,7 +7,4 @@ cask_args appdir: "~/Applications"
 
 mas "Kaleidoscope", id: 587512244
 
-# cask "adobe-creative-cloud"
-
 cask "spotify"
-cask "google-drive-file-stream"

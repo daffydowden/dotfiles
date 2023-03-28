@@ -7,8 +7,8 @@ brew "neovim"
 
 cask "visual-studio-code"
 
-tap "d12frosted/emacs-plus"
-brew "emacs-plus", args: ["with-modern-cg433n-icon"]
+# tap "d12frosted/emacs-plus"
+# brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 
 brew "pandoc"
 brew "shellcheck"
@@ -22,7 +22,7 @@ cask "paw" # http client
 
 brew "ack"
 brew "ag"
-brew "ctags"
+brew "ctags" # still needed with lsp?
 brew "fzf"
 brew "ripgrep"
 brew "fd"
