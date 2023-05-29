@@ -36,7 +36,7 @@ alias lsa='exa --long --header --icons --git'
 #set -gx GOBIN $HOME/projects/bin
 #set -gx PATH $PATH $GOPATH/bin
 #set -gx PATH $PATH $GOROOT/bin
-set -gx PATH $PATH /usr/local/sbin
+set -gx PATH $PATH /opt/homebrew/sbin
 
 # Load oh-my-fish configuration.
 #source . $fish_path/oh-my-fish.fish
