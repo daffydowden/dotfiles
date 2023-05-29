@@ -1,0 +1,38 @@
+{
+  "entries": {
+    "tap": {
+      "homebrew/cask": {
+        "revision": "ab0cda335a3a91c5df1b10cc1c987196f9f1cff6"
+      }
+    },
+    "mas": {
+      "Kaleidoscope": {
+        "id": "587512244",
+        "version": "2.4.6"
+      }
+    },
+    "cask": {
+      "spotify": {
+        "version": "1.2.10.760,52970952,1110",
+        "options": {
+          "full_name": "spotify",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "ventura": {
+        "HOMEBREW_VERSION": "4.0.16",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "api",
+        "CLT": "14.3.0.0.1.1679647830",
+        "Xcode": "14.3",
+        "macOS": "13.3.1"
+      }
+    }
+  }
+}
