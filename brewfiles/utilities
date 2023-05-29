@@ -9,7 +9,6 @@ mas "Lungo", id: 1263070803
 
 cask "vanilla" # Hide menu icons
 
-mas "Dashlane", id: 552383089
 mas "Kindle", id: 405399194
 
 mas "Slack", id: 803453959
