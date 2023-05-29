@@ -93,8 +93,8 @@ while true; do
           echo -e "\nInstalling oh-my-fish"
           curl -L http://get.oh-my.fish > install.fish
           fish install.fish --noninteractive --yes
-          sudo sh -c 'echo /usr/local/bin/fish >> /etc/shells'
-          chsh -s /usr/local/bin/fish
+          sudo sh -c 'echo $(brew --prefix)/bin/fish >> /etc/shells'
+          chsh -s $(brew --prefix)/bin/fish
           break;;
         [Nn]* ) exit;;
         * ) echo "Please answer yes or no.";;
