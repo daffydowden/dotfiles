@@ -4,7 +4,6 @@
 set -g fish_emoji_width 2
 
 # Theme - https://github.com/oh-my-fish/theme-bobthefish
-#set fish_theme robbyrussell
 set fish_theme bobthefish
 set -g theme_nerd_fonts yes
 #set -g theme_color_scheme terminal2-dark
@@ -20,13 +19,10 @@ set -g default_user $USER
 # All built-in plugins can be found at ~/.oh-my-fish/plugins/
 # Custom plugins may be added to ~/.oh-my-fish/custom/plugins/
 # Enable plugins by adding their name separated by a space to the line below.
-set fish_plugins theme asdf brew node tab
+set fish_plugins theme asdf brew tab
 
 # asdf node bullshitery
 #set -xU GNUPGHOME="${ASDF_DIR:-$HOME/.asdf}/keyrings/nodejs"
-
-# Auto complete kubectl commands
-kubectl completion fish | source
 
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
 alias lsa='exa --long --header --icons --git'
