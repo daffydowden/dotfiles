@@ -25,7 +25,7 @@ set fish_plugins theme asdf brew tab
 #set -xU GNUPGHOME="${ASDF_DIR:-$HOME/.asdf}/keyrings/nodejs"
 
 alias qlf='qlmanage -p "$argv" > /dev/null ^ /dev/null'
-alias lsa='exa --long --header --icons --git'
+alias lsa='exa --long --header --icons --git -a'
 
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
