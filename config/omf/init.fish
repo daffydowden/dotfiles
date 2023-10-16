@@ -41,5 +41,7 @@ set -gx PATH $PATH /opt/homebrew/sbin
 # Created by `pipx` on 2023-05-17 17:16:06
 set PATH $PATH /Users/richard.dowden/.local/bin
 
+set -gx PATH $PATH $HOME/.krew/bin
+
 # Load oh-my-fish configuration.
 #source . $fish_path/oh-my-fish.fish
