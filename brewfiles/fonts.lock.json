@@ -2,36 +2,36 @@
   "entries": {
     "tap": {
       "homebrew/cask-fonts": {
-        "revision": "46d588e36d8d5b0f2f9ca6a278c1fedf87bfe0b0"
+        "revision": "d6a879aa4e8b63e5871662b66c2f6bf85c83dca8"
       }
     },
     "cask": {
       "font-meslo-lg-nerd-font": {
-        "version": "2.1.0",
+        "version": "3.0.0",
         "options": {
           "full_name": "font-meslo-lg-nerd-font"
         }
       },
       "font-mononoki-nerd-font": {
-        "version": "2.1.0",
+        "version": "3.0.0",
         "options": {
           "full_name": "font-mononoki-nerd-font"
         }
       },
       "font-inconsolata-nerd-font": {
-        "version": "2.1.0",
+        "version": "3.0.0",
         "options": {
           "full_name": "font-inconsolata-nerd-font"
         }
       },
       "font-fira-code-nerd-font": {
-        "version": "2.1.0",
+        "version": "3.0.0",
         "options": {
           "full_name": "font-fira-code-nerd-font"
         }
       },
       "font-fira-mono-nerd-font": {
-        "version": "2.1.0",
+        "version": "3.0.0",
         "options": {
           "full_name": "font-fira-mono-nerd-font"
         }
@@ -47,6 +47,14 @@
         "CLT": "1103.0.32.59",
         "Xcode": "12.2",
         "macOS": "10.15.7"
+      },
+      "ventura": {
+        "HOMEBREW_VERSION": "4.0.16",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "api",
+        "CLT": "14.3.0.0.1.1679647830",
+        "Xcode": "14.3",
+        "macOS": "13.3.1"
       }
     }
   }

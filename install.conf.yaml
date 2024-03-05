@@ -7,19 +7,6 @@
 - clean: ['~', '~/.config']
 
 - link: 
-    ~/.vim: 
-        force: true
-        path: vim
-    ~/.spacemacs:
-    ~/.emacs.d: 
-        force: true
-        path: emacs.d
-    ~/.doom.d:
-        force: true
-        path: doom.d
-    ~/.vimrc:
-    ~/.tmux:
-    ~/.tmux.conf:
     ~/.irbrc:
     ~/.pryrc:
     ~/.zshrc:
@@ -35,13 +22,8 @@
     ~/.gitconfig:
     ~/.gitignore:
     ~/.gitignore_global:
-    ~/.mackup.cfg:
-        path: mackup.cfg
     ~/.asdfrc:
     ~/.default-gems:
 
 - shell: 
-  - [git submodule update --init --recursive, Installing submodules]
-  - [vim +PluginInstall +qall, Installing vim plugins]
   - [nvim +PluginInstall +qall, Installing NeoVim plugins]
-  - [~/.emacs.d/bin/doom install]

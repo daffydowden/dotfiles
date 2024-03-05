@@ -3,16 +3,16 @@ tap "homebrew/cask"
 cask_args appdir: "~/Applications", require_sha: true
 
 brew "docker"
-cask "docker"
 
 brew "kubectx"
-brew "kustomize"
+# brew "kustomize"
 
 brew "git"
 brew "gh"
 brew "tig"
+brew "lazygit"
 
-cask "iterm2"
+cask "kitty"
 
 brew "jq"
 brew "miller" # jq for csv,tsv and tabular json

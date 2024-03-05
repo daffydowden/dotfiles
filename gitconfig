@@ -1,6 +1,6 @@
 [core]
-	excludesfile = ~/.gitignore_global
-	editor = /usr/local/bin/nvim
+	excludesfile = /Users/richard.dowden/.gitignore_global
+	editor = /opt/homebrew/bin/nvim
 	autocrlf = input
 	safecrlf = true
 	askpass = git-gui--askpass
@@ -10,7 +10,7 @@
 [help]
   autocorrect = 10
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Users/richard.dowden/Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [user]
 	name = Richard Dowden
@@ -37,3 +37,9 @@
   unstage = reset HEAD
 [init]
 	defaultBranch = main
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
