@@ -30,6 +30,12 @@ alias lsa='exa --long --header --icons --git -a'
 # Path to your custom folder (default path is ~/.oh-my-fish/custom)
 #set fish_custom $HOME/dotfiles/oh-my-fish
 
+# Nix
+if test -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+    . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+end
+# End Nix
+
 # Add local bin to path
 #set -gx GOPATH $HOME/projects
 #set -gx GOROOT /usr/local/opt/go/libexec
