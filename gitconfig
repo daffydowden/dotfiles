@@ -1,6 +1,6 @@
 [core]
 	excludesfile = /Users/richard.dowden/.gitignore_global
-	editor = /opt/homebrew/bin/nvim
+	editor = /usr/local/bin/nvim
 	autocrlf = input
 	safecrlf = true
 	askpass = git-gui--askpass
