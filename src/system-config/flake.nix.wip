@@ -1,0 +1,99 @@
+{
+  description = "my minimal flake";
+  inputs = {
+    # everything
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.11-darwin";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-23.05-darwin";
+    nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # manages config links into home directory
+    home-manager.url = "github:nix-community/home-manager/master";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    # controls system preferences and settings
+    darwin.url = "github:lnl7/nix-darwin";
+    darwin.inputs.nixpkgs.follows = "nixpkgs";
+  };
+  outputs = inputs@{ self, nix-darwin, nixpkgs }: {
+    darwinConfigurations."Richards-MacBook-Air-3" = 
+      inputs.darwin.lib.darwinSystem {
+        system = "x86_64-darwin";
+        pkgs = import inputs.nixpkgs { system "x86_64-darwin"; };
+      };
+      modules = [
+        ({ pkgs, ...}: {
+          # things
+          programs.zsh.enable = true;
+          programs.fish.enable = true;
+          environment.shells = [ pkgs.bash pkgs.zsh pkgs.fish ];
+          environment.loginShell = pkgs.fish;
+
+          nix.extraOptions = ''
+            experimental-features = nix-command flakes
+          '';
+
+          systemPackages = [ pkgs.coreutils ];
+
+          system.keyboard.enableKeyMapping = true;
+          system.keyboard.remapCapsLockToControl = true;
+
+          fonts.fontsDir.enable = false; # DANGER - setting to true will delete other fonts
+          fonts.fonts = [ pkgs.powerline-fonts (pkgs.nerd-fonts.override { fonts = [ "Meslo" "FiraCode"] })];
+          # nerdfonts.override { withFont = "FiraCode"; })
+          #fonts.fonts = [ (pkgs.nerd-fonts.override { fonts = [ "Meslo" ] }) ];
+
+          services.nix-daemon.enable = true;
+
+          system.defaults.finder.AppleShowAllFiles = true;
+          system.defaults.finder.AppleShowAllExtensions = true;
+          system.defaults.NSGlobalDomain.AppleShowAllExtensions = true;
+          system.defaults.NSGlobalDomain.AppleInterfaceStyleSwitchesAutomatically = true;
+          system.defaults.NSGlobalDomain.InitialKeyRepeat = 14;
+          system.defaults.NSGlobalDomain.KeyRepeat = 1;
+          system.defaults.dock.autohide = true;
+
+          system.defaults.menuExtraClock.Show24Hour = true;
+          system.defaults.menuExtraClock.ShowDate = 0;
+          system.defaults.menuExtraClock.ShowDayOfMonth = true;
+          system.defaults.menuExtraClock.ShowDayOfWeek = true;
+        })
+        (inputs.home-manager.darwinModules.home-manager {
+          home-manager = {
+            useGlobalPkgs = true;
+            useUserPkgs = true;
+            users."richard.dowden".imports = [
+              ({pkgs, ...}: {
+                # home-manager config
+                home.packages = [ pkgs.ripgrep pkgs.fd pkgs.curl pkgs.less ];
+                home.sessionVariables = {
+                  CLICOLOR = 1;
+                  EDITOR = "nvim";
+                };
+                programs.bat.enable = true;
+                programs.bat.config.theme = "Dracula";
+
+                programs.fzf.enable = true;
+                programs.fzf.enableFishIntegration = true;
+
+                programs.eza.enable = true;
+                programs.git.enable = true;
+
+                programs.fish.enable = true;
+
+                programs.starship.enable = true;
+                programs.starship.enableFishIntegration = true;
+
+                programs.kitty.enable = true;
+                programs.kitty.shellIntegration.enableFishIntegration = true;
+                programs.kitty.theme = "1984 Dark";
+                programs.kitty.font.name = "FiraCode Nerd Font Mono Retina";
+                programs.kitty.font.size = 16
+              });
+            ];
+          };
+        });
+      ];
+  };
+}
