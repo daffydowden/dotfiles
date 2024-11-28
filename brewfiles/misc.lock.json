@@ -13,9 +13,18 @@
     },
     "cask": {
       "spotify": {
-        "version": "1.2.10.760,52970952,1110",
+        "version": "1.2.48.405",
         "options": {
           "full_name": "spotify",
+          "args": {
+            "appdir": "~/Applications"
+          }
+        }
+      },
+      "poe": {
+        "version": "1.1.21",
+        "options": {
+          "full_name": "poe",
           "args": {
             "appdir": "~/Applications"
           }
@@ -32,6 +41,14 @@
         "CLT": "14.3.0.0.1.1679647830",
         "Xcode": "14.3",
         "macOS": "13.3.1"
+      },
+      "sonoma": {
+        "HOMEBREW_VERSION": "4.4.2",
+        "HOMEBREW_PREFIX": "/opt/homebrew",
+        "Homebrew/homebrew-core": "api",
+        "CLT": "15.3.0.0.1.1708487402",
+        "Xcode": "15.4",
+        "macOS": "14.7"
       }
     }
   }
