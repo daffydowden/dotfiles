@@ -17,6 +17,6 @@ mas "iA Writer", id: 775737590
 
 brew "bat"
 brew "tldr"
-brew "exa"
+brew "eza"
 
 brew "openvpn"

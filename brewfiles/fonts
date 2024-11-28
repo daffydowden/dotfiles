@@ -8,8 +8,8 @@ cask "font-meslo-lg-nerd-font"
 cask "font-mononoki-nerd-font"
 cask "font-inconsolata-nerd-font"
 
-cask "font-fira-code"
-cask "font-fira-mono"
+#cask "font-fira-code"
+#cask "font-fira-mono"
 
 cask "font-fira-code-nerd-font"
 cask "font-fira-mono-nerd-font"

@@ -6,3 +6,5 @@ cask_args appdir: "~/Applications"
 mas "Kaleidoscope", id: 587512244
 
 cask "spotify"
+
+cask "poe"
