@@ -1,0 +1,26 @@
+if status is-interactive
+    # Commands to run in interactive sessions can go here
+end
+
+set fish_greeting
+
+set EZA_CONFIG_DIR ~/.config/eza
+
+fish_add_path /opt/homebrew/bin
+fish_add_path ~/.local/bin
+
+{{- if eq .chezmoi.hostname "RVU-J7P7JF2FP3" }}
+
+set -gx SRC_ENDPOINT https://rvu.sourcegraph.com
+set -gx SRC_ACCESS_TOKEN {{ keeperFindPassword "1fJ6SHh496On8Z4ybqVPiQ" }}
+
+set -gx JIRA_USER richard.dowden@rvu.co.uk
+set -gx JIRA_TOKEN {{ keeperFindPassword "5QOWx7Hdzc17QKtn7yGJJA" }}
+
+fish_add_path /opt/uswitch/bin
+
+{{- end }}
+
+mise activate fish | source
+
+starship init fish | source
