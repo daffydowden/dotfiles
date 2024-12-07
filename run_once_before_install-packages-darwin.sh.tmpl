@@ -1,0 +1,132 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+brew bundle --no-lock --file=/dev/stdin <<EOF
+
+# set arguments for all 'brew install --cask' commands
+cask_args appdir: "~/Applications", require_sha: true
+
+#--------- Environment
+
+brew "docker"
+
+brew "git"
+brew "gh"
+brew "tig"
+brew "lazygit"
+
+cask "kitty"
+
+brew "jq"
+brew "miller" # jq for csv,tsv and tabular json
+
+brew "fish" # fish shell
+# https://superuser.com/questions/397076/tmux-exits-with-exited-on-mac-os-x
+
+#--------- Browsers
+
+cask "google-chrome", args: { require_sha: false }
+
+#--------- Databases
+
+brew "postgresql"
+brew "redis"
+brew "memcached"
+
+# sqlite db editor
+mas "Base - SQLite Editor", id: 402383384
+
+cask "sequel-pro"
+cask "tableplus"
+cask "datagrip"
+
+#--------- Editors
+
+brew "vim"
+brew "neovim"
+
+cask "visual-studio-code"
+
+# tap "d12frosted/emacs-plus"
+# brew "emacs-plus", args: ["with-modern-cg433n-icon"]
+
+brew "pandoc"
+brew "shellcheck"
+
+cask "sublime-text"
+cask "macdown" # markdown editor
+cask "obsidian"
+
+cask "sourcetree"
+cask "bruno" # http client
+
+brew "ack"
+brew "ag"
+brew "fzf"
+brew "ripgrep"
+brew "fd"
+
+#--------- Fonts
+
+# 
+# https://github.com/ryanoasis/nerd-fonts/
+# 
+
+cask "font-meslo-lg-nerd-font"
+cask "font-mononoki-nerd-font"
+cask "font-inconsolata-nerd-font"
+
+#cask "font-fira-code"
+#cask "font-fira-mono"
+
+cask "font-fira-code-nerd-font"
+cask "font-fira-mono-nerd-font"
+
+cask "font-symbols-only-nerd-font"
+
+#--------- Languages
+
+# ~~ASDF~~ Mise deps
+brew "coreutils" 
+brew "curl" 
+# Version manager
+brew "mise"
+
+brew "gpg" # for nodejs
+
+
+#--------- Utils
+
+
+cask "rectangle" # window manager replacement for spectacle
+
+# mas "Amphetamine", id: 937984704
+mas "Lungo", id: 1263070803
+
+cask "vanilla" # Hide menu icons
+
+mas "Kindle", id: 405399194
+
+mas "Slack", id: 803453959
+
+mas "Bear", id: 1091189122
+# mas "Todoist", id: 585829637
+mas "iA Writer", id: 775737590
+
+brew "bat"
+brew "tldr"
+brew "eza"
+
+brew "openvpn"
+
+#--------- Misc
+
+cask "spotify", args: { require_sha: false }
+
+cask "poe"
+cask "msty", args: { require_sha: false }
+cask "jan"
+cask "lm-studio"
+
+EOF
+{{ end -}}
