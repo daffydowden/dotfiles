@@ -1,0 +1,18 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+mise use -g node@22
+mise use -g bun@latest
+mise use -g python@3.12
+mise use -g rust@latest
+mise use -g ruby@3.3.6
+mise use -g java@openjdk-21
+
+mise plugin add poetry
+mise plugin add uv https://github.com/b1-luettje/asdf-uv.git
+mise install uv@latest
+
+mise settings set python.uv_venv_auto true
+
+
+{{ end -}}
