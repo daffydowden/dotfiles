@@ -23,6 +23,7 @@ $rust\
 $scala\
 [](fg:#86BBD8 bg:#06969A)\
 $docker_context\
+$kubernetes\
 [](fg:#06969A bg:#33658A)\
 $time\
 [ ](fg:#33658A)\
@@ -38,13 +39,15 @@ show_always = false
 style_user = "bg:#9A348E"
 style_root = "bg:#9A348E"
 format = '[$user ]($style)'
-disabled = false
+disabled = true
 
 # An alternative to the username module which displays a symbol that
 # represents the current operating system
 [os]
 style = "bg:#9A348E"
-disabled = true # Disabled by default
+disabled = false # Disabled by default
+[os.symbols]
+Macos = " "
 
 [directory]
 style = "bg:#DA627D"
@@ -74,6 +77,16 @@ format = '[ $symbol ($version) ]($style)'
 symbol = " "
 style = "bg:#06969A"
 format = '[ $symbol $context ]($style)'
+
+[kubernetes]
+symbol = "󱃾"
+style = "bg:#06969A"
+format = '[ $symbol $context:$namespace ]($style)'
+disabled = false
+
+[kubernetes.context_aliases]
+"eks-01" = "01"
+"eks-02" = "02"
 
 [elixir]
 symbol = " "
