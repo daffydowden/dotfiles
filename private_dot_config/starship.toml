@@ -23,7 +23,6 @@ $nim\
 $rust\
 $scala\
 [](fg:#86BBD8 bg:#06969A)\
-$kubernetes \
 $docker_context\
 $kubernetes\
 [](fg:#06969A bg:#33658A)\
@@ -80,12 +79,6 @@ format = '[ $symbol ($version) ]($style)'
 symbol = " "
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
-
-[kubernetes]
-symbol = "⎈ "
-format = " [$symbol$context( \\($namespace\\))]($style) "
-style = "bright-blue"
-disabled = false
 
 [docker_context]
 symbol = " "
