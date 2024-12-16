@@ -82,9 +82,8 @@ truncation_symbol = "…/"
 # So either put "Important Documents" before "Documents" or use the substituted version:
 # "Important 󰈙 " = " 󰈙 "
 
-
 [bun]
-symbol = "🥟"
+symbol = "🍔"
 style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
@@ -94,9 +93,9 @@ style = "bg:#86BBD8"
 format = '[ $symbol ($version) ]($style)'
 
 [docker_context]
-symbol = " "
+symbol = ""
 style = "bg:#06969A"
-format = '[ $symbol $context ]($style)'
+format = '[ $symbol $context]($style)'
 
 [kubernetes]
 symbol = "󱃾"
