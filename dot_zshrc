@@ -12,7 +12,7 @@ printf '\33c\e[3J'
 #ZSH_THEME="rdowden" # based on robbyrussell 
 #ZSH_THEME="powerline"
 DEFAULT_USER='richarddowden'
-ZSH_THEME="agnoster"
+# ZSH_THEME="agnoster"
 
 # Set to this to use case-sensitive completion
 # CASE_SENSITIVE="true"
@@ -64,3 +64,5 @@ alias npm-exec='PATH=$(npm bin):$PATH'
 #. ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+eval "$(starship init zsh)"
