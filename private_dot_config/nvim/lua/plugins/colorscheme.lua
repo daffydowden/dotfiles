@@ -5,4 +5,5 @@ return {
   { "sainnhe/sonokai" },
   { "ellisonleao/gruvbox.nvim" },
   { "shaunsingh/nord.nvim" },
+  { "EdenEast/nightfox.nvim" },
 }
