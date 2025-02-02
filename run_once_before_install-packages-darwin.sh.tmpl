@@ -5,6 +5,7 @@ brew bundle --no-lock --file=/dev/stdin <<EOF
 
 # set arguments for all 'brew install --cask' commands
 cask_args appdir: "~/Applications", require_sha: true
+# TODO: Not sure whether the above is a good idea...
 
 #--------- Environment
 
@@ -130,7 +131,6 @@ mas "Windows App", id: 1295203466
 
 cask "spotify", args: { require_sha: false }
 
-cask "poe"
 cask "msty", args: { require_sha: false }
 cask "jan"
 cask "lm-studio"
