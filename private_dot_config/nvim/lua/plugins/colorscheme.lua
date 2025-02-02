@@ -6,4 +6,5 @@ return {
   { "ellisonleao/gruvbox.nvim" },
   { "shaunsingh/nord.nvim" },
   { "EdenEast/nightfox.nvim" },
+  { "rose-pine/neovim", name = "rose-pine" },
 }
