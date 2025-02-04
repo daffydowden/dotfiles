@@ -1,0 +1,17 @@
+{{ if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+
+set +x
+{{ range $default := .osx_defaults.defaults -}}
+{{ if eq $default.type "dict-add" -}}
+defaults write {{ $default.domain }} {{ $default.element }} -dict-add {{ $default.key }} "{{ $default.value }}"
+{{ else -}}
+defaults write {{ $default.domain }} {{ $default.element }} -{{ $default.type }} {{ $default.value }}
+{{ end -}}
+{{ end -}}
+
+{{ range $app := .osx_defaults.kill_to_apply -}}
+killall {{ $app }}
+{{ end -}}
+
+{{ end -}}
