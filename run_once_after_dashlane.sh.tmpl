@@ -1,0 +1,17 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env fish
+echo "Login to Dashlane"
+dcli sync
+
+dcli configure user-presence --method biometrics
+
+{{- if eq .chezmoi.hostname "Richards-Air" }}
+
+set -Ux OPENAI_API_KEY {{ dashlaneNote "OpenAI-Macbook-Air" }}
+set -Ux ANTHROPIC_API_KEY {{ dashlaneNote "Anthropic-Macbook-Air" }}
+set -Ux DEEPSEEK_API_KEY {{ dashlaneNote "Deepseek-Macbook-Air" }}
+set -Ux OPENROUTER_API_KEY {{ dashlaneNote "OpenRouter-Macbook-Air" }}
+
+{{ end -}}
+
+{{ end -}}
