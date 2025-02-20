@@ -103,9 +103,13 @@ style = "bg:#06969A"
 format = '[ $symbol $context:$namespace ]($style)'
 disabled = false
 
-[kubernetes.context_aliases]
-"eks-01" = "01"
-"eks-02" = "02"
+[[kubernetes.contexts]]
+context_pattern = "eks-01"
+context_alias = "01"
+
+[[kubernetes.contexts]]
+context_pattern = "eks-02"
+context_alias = "02"
 
 [elixir]
 symbol = " "
