@@ -24,7 +24,7 @@ fish_add_path /opt/uswitch/bin
 {{- end }}
 
 set fish_cursor_default block
-
-mise activate fish | source
-
 starship init fish | source
+
+# Added by LM Studio CLI (lms)
+set -gx PATH $PATH /Users/richarddowden/.cache/lm-studio/bin
