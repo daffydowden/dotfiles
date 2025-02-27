@@ -344,6 +344,13 @@ return {
       desc = "Search for Plugin Spec",
     },
     {
+      "<leader>sP",
+      function()
+        Snacks.picker()
+      end,
+      desc = "Search for a Picker",
+    },
+    {
       "<leader>sq",
       function()
         Snacks.picker.qflist()
@@ -411,7 +418,7 @@ return {
     {
       "<leader>ss",
       function()
-        Snacks.picker.lsp_symbols()
+        Snacks.picker.lsp_symbols({layout = {preset = "vscode", preview = "main"}})
       end,
       desc = "LSP Symbols",
     },
