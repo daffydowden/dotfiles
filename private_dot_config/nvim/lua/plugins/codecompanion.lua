@@ -1,4 +1,4 @@
-local prefix = "<leader>a"
+local prefix = "<leader>ac"
 return {
   {
     "olimorris/codecompanion.nvim",
@@ -47,7 +47,7 @@ return {
     "folke/which-key.nvim",
     opts = {
       spec = {
-        { prefix, group = "ai", icon = "󱚦 ", mode = { "n", "v" } },
+        { prefix, group = "CodeCompanion", mode = { "n", "v" } },
       },
     },
   },
