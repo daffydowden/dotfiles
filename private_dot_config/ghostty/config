@@ -3,6 +3,7 @@
 shell-integration-features = sudo,title
 copy-on-select = false
 
+# theme = duskfox
 theme = tokyonight
 palette = 0=#1b1d2b
 palette = 1=#ff757f
@@ -35,3 +36,5 @@ selection-foreground = #c8d3f5
 font-thicken = true
 font-family = FiraCode Nerd Font Mono Retina
 macos-titlebar-style = tabs
+
+macos-option-as-alt = left
