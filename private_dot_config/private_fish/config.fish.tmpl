@@ -23,6 +23,8 @@ fish_add_path /opt/uswitch/bin
 
 {{- end }}
 
+set -gx EDITOR nvim
+
 set fish_cursor_default block
 starship init fish | source
 
