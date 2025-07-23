@@ -6,20 +6,27 @@ return {
     opts = function()
       return {
         provider = "claude",
-        claude = {
-          endpoint = "https://api.anthropic.com",
-          model = "claude-3-7-sonnet-20250219",
-          temperature = 0,
-          max_tokens = 4096,
-          -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
-        },
-        openai = {
-          endpoint = "https://api.openai.com/v1",
-          model = "o3-mini",
-          timeout = 30000,
-          temperature = 0,
-          max_tokens = 4096,
-          -- reasoning_effort = "high" -- only supported for reasoning models (o1, etc.)
+        providers = {
+          claude = {
+            endpoint = "https://api.anthropic.com",
+            -- Note: Model name updated to "claude-sonnet-4-20250514" as per your example.
+            -- If you wish to keep your original model, change this back to "claude-3-7-sonnet-20250219".
+            model = "claude-sonnet-4-20250514",
+            timeout = 30000, -- Timeout in milliseconds
+            extra_request_body = {
+              temperature = 0, -- Original temperature
+              max_tokens = 4096, -- Original max_tokens
+            },
+          },
+          openai = {
+            endpoint = "https://api.openai.com/v1",
+            model = "o3-mini",
+            timeout = 30000, -- Timeout in milliseconds
+            extra_request_body = {
+              temperature = 0, -- Original temperature
+              max_tokens = 4096, -- Original max_tokens
+            },
+          },
         },
         file_selector = {
           provider = "snacks",
