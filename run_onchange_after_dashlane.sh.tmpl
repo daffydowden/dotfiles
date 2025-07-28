@@ -1,0 +1,48 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env fish
+# This script is now run_onchange_ instead of run_once_
+# It will only run when the contents of the script itself change
+
+# Check if we already have a service device key configured
+if not set -q DASHLANE_SERVICE_DEVICE_KEYS
+    echo "Setting up Dashlane non-interactive access..."
+    
+    # This will require one fingerprint authentication to set up
+    # But future runs won't need fingerprint authentication
+    echo "Login to Dashlane"
+    dcli sync
+    
+    # Setup a service device key for non-interactive access
+    # This is a one-time setup that will allow future script runs without fingerprint
+    echo "Creating a service device key for non-interactive access"
+    set -l device_name "chezmoi-$(hostname)"
+    
+    # The register command will output the device key to stdout
+    # We'll capture it and store it in the fish universal variables
+    set -l service_key (dcli devices register --name $device_name)
+    
+    if test $status -eq 0
+        echo "Successfully created service device key"
+        set -Ux DASHLANE_SERVICE_DEVICE_KEYS $service_key
+    else
+        echo "Failed to create service device key, falling back to interactive mode"
+        dcli configure user-presence --method biometrics
+    end
+else
+    echo "Using existing Dashlane service device key"
+end
+
+{{- if eq .chezmoi.hostname "Richards-MacBook-Pro" }}
+
+# Now fetch secrets using the service device key (no fingerprint required)
+echo "Fetching API keys from Dashlane"
+set -Ux OPENAI_API_KEY {{ dashlaneNote "OpenAI-Macbook-Air" }}
+set -Ux ANTHROPIC_API_KEY {{ dashlaneNote "Anthropic-Macbook-Air" }}
+set -Ux DEEPSEEK_API_KEY {{ dashlaneNote "Deepseek-Macbook-Air" }}
+set -Ux OPENROUTER_API_KEY {{ dashlaneNote "OpenRouter-Macbook-Air" }}
+set -Ux GOOGLE_AI_API_KEY {{ dashlaneNote "Google-Ai-Macbook-Air" }}
+set -Ux GROQ_API_KEY {{ dashlaneNote "Groq-Macbook-Air" }}
+
+{{ end -}}
+
+{{ end -}}
