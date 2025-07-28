@@ -1,48 +1,70 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/usr/bin/env fish
-# This script is now run_onchange_ instead of run_once_
-# It will only run when the contents of the script itself change
+
+# Creating a log file for debugging
+set LOG_FILE "$HOME/.dashlane_script.log"
+echo "=== Script started at (date) ===" > "$LOG_FILE"
+
+# Function to log messages to both console and log file
+function log
+    echo "$argv" | tee -a "$LOG_FILE"
+end
 
 # Check if we already have a service device key configured
 if not set -q DASHLANE_SERVICE_DEVICE_KEYS
-    echo "Setting up Dashlane non-interactive access..."
+    log "=============================================================="
+    log "Dashlane service device key setup required"
+    log "=============================================================="
+    log ""
+    log "Please run the following commands manually in your terminal:"
+    log ""
+    log "1. Ensure you're logged in to Dashlane:"
+    log "   dcli sync"
+    log ""
+    log "2. Register a new device (requires 2FA):"
+    log "   dcli devices register chezmoi-(hostname)"
+    log ""
+    log "3. Copy the service key (starts with 'dls_') and save it:"
+    log "   set -Ux DASHLANE_SERVICE_DEVICE_KEYS 'your_key_here'"
+    log ""
+    log "4. Run chezmoi apply again to continue setup"
+    log "=============================================================="
     
-    # This will require one fingerprint authentication to set up
-    # But future runs won't need fingerprint authentication
-    echo "Login to Dashlane"
-    dcli sync
-    
-    # Setup a service device key for non-interactive access
-    # This is a one-time setup that will allow future script runs without fingerprint
-    echo "Creating a service device key for non-interactive access"
-    set -l device_name "chezmoi-$(hostname)"
-    
-    # The register command will output the device key to stdout
-    # We'll capture it and store it in the fish universal variables
-    set -l service_key (dcli devices register --name $device_name)
-    
-    if test $status -eq 0
-        echo "Successfully created service device key"
-        set -Ux DASHLANE_SERVICE_DEVICE_KEYS $service_key
-    else
-        echo "Failed to create service device key, falling back to interactive mode"
-        dcli configure user-presence --method biometrics
-    end
+    # Exit with a non-zero status to indicate that further action is needed
+    exit 1
 else
-    echo "Using existing Dashlane service device key"
+    log "Using existing Dashlane service device key"
+    
+    {{- if eq .chezmoi.hostname "Richards-MacBook-Pro" }}
+    
+    # Check and update API keys only if they don't exist or are empty
+    log "Checking API keys..."
+    
+    # Define a function to check and set keys
+    function check_and_set_key
+        set -l key_name $argv[1]
+        set -l key_value $argv[2]
+        
+        # Check if key exists and is not empty
+        if not set -q $key_name; or test -z "$$key_name"
+            log "Setting $key_name from Dashlane"
+            set -Ux $key_name $key_value
+        else
+            log "$key_name already exists, skipping"
+        end
+    end
+    
+    # Check and set each key
+    check_and_set_key "OPENAI_API_KEY" "{{ dashlaneNote "OpenAI-Macbook-Air" }}"
+    check_and_set_key "ANTHROPIC_API_KEY" "{{ dashlaneNote "Anthropic-Macbook-Air" }}"
+    check_and_set_key "DEEPSEEK_API_KEY" "{{ dashlaneNote "Deepseek-Macbook-Air" }}"
+    check_and_set_key "OPENROUTER_API_KEY" "{{ dashlaneNote "OpenRouter-Macbook-Air" }}"
+    check_and_set_key "GOOGLE_AI_API_KEY" "{{ dashlaneNote "Google-Ai-Macbook-Air" }}"
+    check_and_set_key "GROQ_API_KEY" "{{ dashlaneNote "Groq-Macbook-Air" }}"
+    
+    {{ end -}}
 end
 
-{{- if eq .chezmoi.hostname "Richards-MacBook-Pro" }}
-
-# Now fetch secrets using the service device key (no fingerprint required)
-echo "Fetching API keys from Dashlane"
-set -Ux OPENAI_API_KEY {{ dashlaneNote "OpenAI-Macbook-Air" }}
-set -Ux ANTHROPIC_API_KEY {{ dashlaneNote "Anthropic-Macbook-Air" }}
-set -Ux DEEPSEEK_API_KEY {{ dashlaneNote "Deepseek-Macbook-Air" }}
-set -Ux OPENROUTER_API_KEY {{ dashlaneNote "OpenRouter-Macbook-Air" }}
-set -Ux GOOGLE_AI_API_KEY {{ dashlaneNote "Google-Ai-Macbook-Air" }}
-set -Ux GROQ_API_KEY {{ dashlaneNote "Groq-Macbook-Air" }}
-
-{{ end -}}
+log "=== Script completed at (date) ==="
 
 {{ end -}}
