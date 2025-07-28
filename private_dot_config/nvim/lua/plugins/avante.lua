@@ -1,5 +1,26 @@
 return {
   {
+      'saghen/blink.cmp',
+      dependencies = {
+          'Kaiser-Yang/blink-cmp-avante',
+      },
+      opts = {
+          sources = {
+              -- Add 'avante' to the list
+              default = { 'avante', 'lsp', 'path', 'luasnip', 'buffer' },
+              providers = {
+                  avante = {
+                      module = 'blink-cmp-avante',
+                      name = 'Avante',
+                      opts = {
+                          -- options for blink-cmp-avante
+                      }
+                  }
+              },
+          }
+      }
+  },
+  {
     "yetone/avante.nvim",
     event = "VeryLazy",
     version = false, -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
@@ -54,7 +75,7 @@ return {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
-      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
       -- "zbirenbaum/copilot.lua", -- for providers='copilot'
       "ravitemer/mcphub.nvim",
