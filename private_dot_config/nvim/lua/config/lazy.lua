@@ -13,6 +13,7 @@ require("lazy").setup({
       colorscheme = "duskfox",
     } },
     -- import any extras modules here
+    { import = "lazyvim.plugins.extras.coding.blink" }, -- Add blink.cmp extra
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
     { import = "lazyvim.plugins.extras.formatting.prettier" },
     { import = "lazyvim.plugins.extras.lang.json" },

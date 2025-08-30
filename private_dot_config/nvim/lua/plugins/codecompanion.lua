@@ -26,6 +26,9 @@ return {
           },
           chat = {
             adapter = "anthropic",
+            opts = {
+              completion_provider = "blink", -- Set blink as completion provider
+            },
             tools = {
               ["mcp"] = {
                 callback = require("mcphub.extensions.codecompanion"),
