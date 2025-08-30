@@ -11,9 +11,13 @@ return {
     config = function()
       require("codecompanion").setup({
         display = {
+          action_palette = {
+            provider = "snacks",
+          },
           chat = {
-            show_settings = true,
-            render_headers = false,
+            show_settings = false, -- Irritatingly, blocks changing adapters
+            render_headers = true,
+            show_token_count = true,
           },
         },
         strategies = {
@@ -34,6 +38,9 @@ return {
           },
         },
       })
+
+      -- Command-line alias: expand 'cc' to 'CodeCompanion'
+      vim.cmd([[cab cc CodeCompanion]])
     end,
     keys = {
       { prefix .. "a", "<cmd>CodeCompanionActions<cr>", mode = { "n", "v" }, desc = "Action Palette" },
@@ -60,7 +67,7 @@ return {
     config = function()
       require("mcphub").setup({
         -- Required options
-        port = 3000, -- Port for MCP Hub server
+        port = 5050, -- Port for MCP Hub server
         config = vim.fn.expand("~/mcpservers.json"), -- Absolute path to config file
 
         -- Optional options
