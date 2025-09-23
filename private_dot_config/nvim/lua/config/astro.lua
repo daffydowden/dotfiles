@@ -7,7 +7,7 @@ vim.filetype.add({
 return {
   "williamboman/mason-lspconfig.nvim",
   dependencies = {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
   },
   opts = {
     ensure_installed = {
