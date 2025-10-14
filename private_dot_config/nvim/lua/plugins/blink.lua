@@ -1,14 +1,15 @@
 return {
-  -- Add blink.cmp (nvim-cmp disabled in disable-cmp.lua)
+  -- Configure blink.cmp (nvim-cmp disabled in disable-cmp.lua)
+  -- This is the main completion engine for LazyVim 14.x+
   {
     "saghen/blink.cmp",
     lazy = false, -- lazy loading handled internally
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "Kaiser-Yang/blink-cmp-avante",
+      "Kaiser-Yang/blink-cmp-avante", -- Avante AI completion integration
       "L3MON4D3/LuaSnip",
     },
-    version = "1.*", -- Use correct version constraint
+    version = "1.*",
     opts = {
       keymap = {
         preset = "default",
@@ -27,26 +28,26 @@ return {
         nerd_font_variant = "mono",
       },
       sources = {
-        default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
+        default = { "avante", "lsp", "path", "snippets", "buffer" },
         per_filetype = {
           codecompanion = { "codecompanion" },
         },
         providers = {
-            avante = {
-                module = 'blink-cmp-avante',
-                name = 'Avante',
-                opts = {
-                    -- options for blink-cmp-avante
-                }
+          avante = {
+            module = "blink-cmp-avante",
+            name = "Avante",
+            opts = {
+              -- Options for blink-cmp-avante integration
             },
-            codecompanion = {
-                name = 'CodeCompanion',
-                module = 'codecompanion.providers.completion.blink',
-            }
+          },
+          codecompanion = {
+            name = "CodeCompanion",
+            module = "codecompanion.providers.completion.blink",
+          },
         },
       },
-      snippets = { 
-        preset = 'luasnip' 
+      snippets = {
+        preset = "luasnip",
       },
       completion = {
         accept = {

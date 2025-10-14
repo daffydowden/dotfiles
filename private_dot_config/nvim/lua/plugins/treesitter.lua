@@ -1,11 +1,16 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   opts = function(_, opts)
-    -- add tsx and treesitter
+    -- Add parsers for languages used in this config
+    -- Note: tsx, typescript already included in LazyVim defaults
     vim.list_extend(opts.ensure_installed, {
+      -- Languages from astro.lua LSP config
+      "astro",
       "clojure",
-      "tsx",
-      "typescript",
+      "elixir",
+      "hcl", -- Terraform
+      "rust",
+      "svelte",
     })
   end,
 }

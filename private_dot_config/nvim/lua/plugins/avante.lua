@@ -1,25 +1,6 @@
 return {
-  {
-      'saghen/blink.cmp',
-      dependencies = {
-          'Kaiser-Yang/blink-cmp-avante',
-      },
-      opts = {
-          sources = {
-              -- Add 'avante' to the list
-              default = { 'avante', 'lsp', 'path', 'snippets', 'buffer' },
-              providers = {
-                  avante = {
-                      module = 'blink-cmp-avante',
-                      name = 'Avante',
-                      opts = {
-                          -- options for blink-cmp-avante
-                      }
-                  }
-              },
-          }
-      }
-  },
+  -- Note: blink.cmp configuration is in blink.lua
+  -- This includes the Avante completion provider integration
   {
     "yetone/avante.nvim",
     event = "VeryLazy",
@@ -70,14 +51,14 @@ return {
     -- Leaderae	edit selected blocks
     -- },
     dependencies = {
+      -- Completion engine (must load before Avante)
+      "saghen/blink.cmp",
+      -- Core dependencies
       "nvim-treesitter/nvim-treesitter",
       "stevearc/dressing.nvim",
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      -- "zbirenbaum/copilot.lua", -- for providers='copilot'
+      "nvim-tree/nvim-web-devicons",
       "ravitemer/mcphub.nvim",
       -- "takeshid/avante-status.nvim", https://github.com/takeshiD/avante-status.nvim
       {

@@ -1,14 +1,16 @@
--- Override LazyVim's default completion plugins BEFORE they load
--- This must be in a separate file that loads early
+-- Disable nvim-cmp and related plugins
+-- LazyVim 14.x+ uses blink.cmp by default, but this ensures
+-- no old nvim-cmp plugins are loaded if you're migrating from an older setup
 
 return {
-  -- Disable all LazyVim completion plugins at the source
+  -- Disable all nvim-cmp plugins
   { "hrsh7th/nvim-cmp", enabled = false },
   { "hrsh7th/cmp-buffer", enabled = false },
   { "hrsh7th/cmp-path", enabled = false },
   { "hrsh7th/cmp-nvim-lsp", enabled = false },
   { "hrsh7th/cmp-cmdline", enabled = false },
-  -- { "L3MON4D3/LuaSnip", enabled = false }, -- Re-enabled for blink.cmp
   { "saadparwaiz1/cmp_luasnip", enabled = false },
-  { "rafamadriz/friendly-snippets", enabled = false }, -- We'll re-enable this in blink.lua
+
+  -- Note: LuaSnip and friendly-snippets are used by blink.cmp
+  -- They are configured in blink.lua, not disabled here
 }
