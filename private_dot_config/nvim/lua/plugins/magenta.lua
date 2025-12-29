@@ -7,6 +7,23 @@ return {
     opts = {
       sidebarPosition = "right",
       picker = "snacks",
+      profiles = {
+        {
+          name = "sonnet-4.5",
+          provider = "anthropic",
+          model = "claude-sonnet-4-5-20250929",
+        },
+        {
+          name = "opus-4.1",
+          provider = "anthropic",
+          model = "claude-opus-4-1-20250805",
+        },
+        {
+          name = "haiku-4.5",
+          provider = "anthropic",
+          model = "claude-haiku-4-5-20251001",
+        },
+      },
     },
     keys = {
       { prefix .. "n", "<cmd>Magenta new-thread<cr>", mode = "n", desc = "Create new Magenta thread" },
@@ -22,7 +39,7 @@ return {
       { prefix .. ".", "<cmd>Magenta replay-inline-edit-selection<cr>", mode = "v", desc = "Replay last inline edit on selection" },
       { prefix .. "b", function() return require("magenta.actions").add_buffer_to_context() end, mode = "n", desc = "Add current buffer to Magenta context" },
       { prefix .. "f", function() return require("magenta.actions").pick_context_files() end, mode = "n", desc = "Select files to add to Magenta context" },
-      { prefix .. "p", function() return require("magenta.actions").pick_provider() end, mode = "n", desc = "Select provider and model" },
+      { prefix .. "p", function() return require("magenta.actions").pick_profile() end, mode = "n", desc = "Select provider and model" },
     },
   },
   {
