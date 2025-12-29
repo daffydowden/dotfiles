@@ -6,7 +6,6 @@ return {
     lazy = false, -- lazy loading handled internally
     dependencies = {
       "rafamadriz/friendly-snippets",
-      "Kaiser-Yang/blink-cmp-avante", -- Avante AI completion integration
       "L3MON4D3/LuaSnip",
     },
     version = "1.*",
@@ -28,18 +27,11 @@ return {
         nerd_font_variant = "mono",
       },
       sources = {
-        default = { "avante", "lsp", "path", "snippets", "buffer" },
+        default = { "lsp", "path", "snippets", "buffer" },
         per_filetype = {
           codecompanion = { "codecompanion" },
         },
         providers = {
-          avante = {
-            module = "blink-cmp-avante",
-            name = "Avante",
-            opts = {
-              -- Options for blink-cmp-avante integration
-            },
-          },
           codecompanion = {
             name = "CodeCompanion",
             module = "codecompanion.providers.completion.blink",
