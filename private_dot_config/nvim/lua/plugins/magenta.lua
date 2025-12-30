@@ -23,6 +23,26 @@ return {
           provider = "anthropic",
           model = "claude-haiku-4-5-20251001",
         },
+        {
+          name = "gpt-5.2",
+          provider = "openai",
+          model = "gpt-5.2",
+        },
+        {
+          name = "gpt-5.1-codex",
+          provider = "openai",
+          model = "gpt-5.1-codex",
+        },
+        {
+          name = "gpt-5.1-codex-max",
+          provider = "openai",
+          model = "gpt-5.1-codex-max",
+        },
+        {
+          name = "gpt-5.1-codex-mini",
+          provider = "openai",
+          model = "gpt-5.1-codex-mini",
+        },
       },
     },
     keys = {
