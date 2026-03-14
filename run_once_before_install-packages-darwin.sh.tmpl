@@ -4,8 +4,7 @@
 brew bundle --no-upgrade --file=/dev/stdin <<EOF
 
 # set arguments for all 'brew install --cask' commands
-cask_args appdir: "~/Applications", require_sha: true
-# TODO: Not sure whether the above is a good idea...
+cask_args require_sha: true
 
 #--------- Environment
 
@@ -142,7 +141,7 @@ cask "spotify", args: { require_sha: false }
 
 cask "msty", args: { require_sha: false }
 cask "jan"
-cask "lm-studio", args: { appdir: "/Applications" }
+cask "lm-studio"
 brew "aichat"
 
 cask "positron"
