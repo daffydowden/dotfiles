@@ -32,14 +32,17 @@ osx_defaults:
       element: magnification
       type: bool
       value: TRUE
+      max_macos: 15
     - domain: com.apple.dock
       element: largesize
       type: int
       value: 50
+      max_macos: 15
     - domain: com.apple.dock
       element: show-recents
       type: bool
       value: "TRUE"
+      max_macos: 15
     - domain: com.apple.dock
       element: autohide
       type: bool
@@ -48,6 +51,7 @@ osx_defaults:
       element: minimize-to-application
       type: bool
       value: "TRUE"
+      max_macos: 15
     - domain: com.apple.dock
       element: persistent-apps
       type: array-add
@@ -56,10 +60,12 @@ osx_defaults:
       element: static-only
       type: bool
       value: "TRUE"
+      max_macos: 15
     - domain: com.apple.dock
       element: mru-spaces
       type: bool
       value: "FALSE"
+      max_macos: 15
 
     # Disable mission control ctrl+up/down
     - domain: com.apple.symbolichotkeys

@@ -2,11 +2,16 @@
 #!/bin/bash
 
 set +x
+
+# macOS version: {{ output "sw_vers" "--productVersion" | trim }}
+{{ $macOSMajor := output "sw_vers" "--productVersion" | trim | splitList "." | first | atoi -}}
 {{ range $default := .osx_defaults.defaults -}}
+{{ if or (not (hasKey $default "max_macos")) (le $macOSMajor (get $default "max_macos" | int)) -}}
 {{ if eq $default.type "dict-add" -}}
 defaults write {{ $default.domain }} {{ $default.element }} -dict-add {{ $default.key }} "{{ $default.value }}"
 {{ else -}}
 defaults write {{ $default.domain }} {{ $default.element }} -{{ $default.type }} {{ $default.value }}
+{{ end -}}
 {{ end -}}
 {{ end -}}
 
