@@ -9,7 +9,6 @@ cask_args require_sha: true
 #--------- Environment
 
 brew "docker"
-brew "docker-compose"
 brew "colima"
 
 brew "git"
@@ -52,26 +51,18 @@ cask "datagrip"
 
 #--------- Editors
 
-brew "vim"
 brew "neovim"
 
 cask "visual-studio-code"
-
-# tap "d12frosted/emacs-plus"
-# brew "emacs-plus", args: ["with-modern-cg433n-icon"]
 
 brew "pandoc"
 brew "shellcheck"
 
 cask "sublime-text"
-cask "macdown" # markdown editor
 cask "obsidian"
 
-cask "sourcetree"
 cask "bruno" # http client
 
-brew "ack"
-brew "ag"
 brew "fzf"
 brew "ripgrep"
 brew "fd"
@@ -85,9 +76,6 @@ brew "fd"
 cask "font-meslo-lg-nerd-font"
 cask "font-mononoki-nerd-font"
 cask "font-inconsolata-nerd-font"
-
-#cask "font-fira-code"
-#cask "font-fira-mono"
 
 cask "font-fira-code-nerd-font"
 cask "font-fira-mono-nerd-font"
@@ -109,7 +97,6 @@ brew "gpg" # for nodejs
 
 cask "rectangle" # window manager replacement for spectacle
 
-# mas "Amphetamine", id: 937984704
 mas "Lungo", id: 1263070803
 mas "Dashlane", id: 517914548
 
@@ -124,7 +111,6 @@ mas "Kindle", id: 302584613
 mas "Slack", id: 803453959
 
 mas "Bear", id: 1091189122
-# mas "Todoist", id: 585829637
 mas "iA Writer", id: 775737590
 
 brew "bat"
@@ -140,16 +126,14 @@ mas "Windows App", id: 1295203466
 
 cask "spotify", args: { require_sha: false }
 
-cask "msty", args: { require_sha: false }
-cask "jan"
+# cask "msty", args: { require_sha: false }
+# cask "jan"
 cask "lm-studio"
 brew "aichat"
 
 cask "positron"
 
 #--------- AI
-# cask "aide-app" # paid for...
-# cask "trae" # trae.ai
 cask "zed"
 brew "codex"
 brew "gemini-cli"
