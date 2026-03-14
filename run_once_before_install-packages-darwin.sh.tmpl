@@ -125,6 +125,11 @@ brew "openvpn"
 
 mas "Windows App", id: 1295203466
 
+{{ if not .is_work -}}
+#--------- Personal
+brew "openhue-cli"
+
+{{ end -}}
 #--------- Misc
 
 cask "spotify", args: { require_sha: false }
