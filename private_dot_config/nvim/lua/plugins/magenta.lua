@@ -9,14 +9,14 @@ return {
       picker = "snacks",
       profiles = {
         {
-          name = "sonnet-4.5",
+          name = "sonnet-4.6",
           provider = "anthropic",
-          model = "claude-sonnet-4-5-20250929",
+          model = "claude-sonnet-4-6-20260301",
         },
         {
-          name = "opus-4.1",
+          name = "opus-4.6",
           provider = "anthropic",
-          model = "claude-opus-4-1-20250805",
+          model = "claude-opus-4-6-20260301",
         },
         {
           name = "haiku-4.5",
@@ -24,24 +24,19 @@ return {
           model = "claude-haiku-4-5-20251001",
         },
         {
-          name = "gpt-5.2",
+          name = "gpt-5.4",
           provider = "openai",
-          model = "gpt-5.2",
+          model = "gpt-5.4",
         },
         {
-          name = "gpt-5.1-codex",
+          name = "gpt-5.4-pro",
           provider = "openai",
-          model = "gpt-5.1-codex",
+          model = "gpt-5.4-pro",
         },
         {
-          name = "gpt-5.1-codex-max",
+          name = "gpt-5.2-codex",
           provider = "openai",
-          model = "gpt-5.1-codex-max",
-        },
-        {
-          name = "gpt-5.1-codex-mini",
-          provider = "openai",
-          model = "gpt-5.1-codex-mini",
+          model = "gpt-5.2-codex",
         },
       },
     },

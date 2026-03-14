@@ -46,8 +46,8 @@ return {
               }
             end,
             models = {
-              "claude-opus-4-5-20251101",
-              "claude-sonnet-4-5-20250929",
+              "claude-opus-4-6-20260301",
+              "claude-sonnet-4-6-20260301",
               "claude-haiku-4-5-20251001",
             },
             preprocess_payload = function(payload)
@@ -165,15 +165,14 @@ return {
               command = { temperature = 1.1, top_p = 1 },
             },
             topic = {
-              model = "gpt-5.1-codex-min",
+              model = "gpt-5-mini",
               params = { max_tokens = 64 },
             },
             models = {
-              "gpt-5.2",
+              "gpt-5.4",
+              "gpt-5.4-pro",
               "gpt-5.2-codex",
-              "gpt-5.1-codex",
-              "gpt-5.1-codex-min",
-              "gpt-5.1-codex-max",
+              "gpt-5-mini",
             },
             preprocess_payload = function(payload)
               -- Remove messages with empty content
