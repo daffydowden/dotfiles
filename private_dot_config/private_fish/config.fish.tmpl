@@ -11,7 +11,7 @@ fish_add_path /opt/homebrew/sbin
 fish_add_path ~/.local/bin
 fish_add_path ~/.krew/bin
 
-{{- if eq .chezmoi.hostname "RVU-J7P7JF2FP3" }}
+{{- if .is_work }}
 
 set -gx SRC_ENDPOINT https://rvu.sourcegraph.com
 set -gx SRC_ACCESS_TOKEN {{ keeperFindPassword "1fJ6SHh496On8Z4ybqVPiQ" }}

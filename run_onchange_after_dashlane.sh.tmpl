@@ -35,7 +35,7 @@ if not set -q DASHLANE_SERVICE_DEVICE_KEYS
 else
     log "Using existing Dashlane service device key"
     
-    {{- if eq .chezmoi.hostname "Richards-MacBook-Pro" }}
+    {{- if not .is_work }}
     
     # Check and update API keys only if they don't exist or are empty
     log "Checking API keys..."
