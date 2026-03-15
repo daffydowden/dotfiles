@@ -2,7 +2,7 @@
 {{- if (hasKey . "is_work") -}}
 {{-   $isWork = .is_work -}}
 {{- else -}}
-{{-   $isWork = promptBool "Is this a work machine" -}}
+{{-   $isWork = promptBool "Is this a work machine (yes/no)" -}}
 {{- end -}}
 
 [data]
