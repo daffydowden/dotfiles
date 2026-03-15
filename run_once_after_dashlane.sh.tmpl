@@ -29,39 +29,44 @@ if not set -q DASHLANE_SERVICE_DEVICE_KEYS
     log ""
     log "4. Run chezmoi apply again to continue setup"
     log "=============================================================="
-    
+
     # Exit with a non-zero status to indicate that further action is needed
     exit 1
 else
     log "Using existing Dashlane service device key"
-    
+
     {{- if not .is_work }}
-    
+
     # Check and update API keys only if they don't exist or are empty
     log "Checking API keys..."
-    
+
     # Define a function to check and set keys
     function check_and_set_key
         set -l key_name $argv[1]
-        set -l key_value $argv[2]
-        
+        set -l note_title $argv[2]
+
         # Check if key exists and is not empty
         if not set -q $key_name; or test -z "$$key_name"
             log "Setting $key_name from Dashlane"
-            set -Ux $key_name $key_value
+            set -l key_value (dcli note "$note_title" 2>/dev/null)
+            if test -n "$key_value"
+                set -Ux $key_name $key_value
+            else
+                log "  Warning: could not fetch $note_title from Dashlane"
+            end
         else
             log "$key_name already exists, skipping"
         end
     end
-    
+
     # Check and set each key
-    check_and_set_key "OPENAI_API_KEY" "{{ dashlaneNote "OpenAI-Macbook-Air" }}"
-    check_and_set_key "ANTHROPIC_API_KEY" "{{ dashlaneNote "Anthropic-Macbook-Air" }}"
-    check_and_set_key "DEEPSEEK_API_KEY" "{{ dashlaneNote "Deepseek-Macbook-Air" }}"
-    check_and_set_key "OPENROUTER_API_KEY" "{{ dashlaneNote "OpenRouter-Macbook-Air" }}"
-    check_and_set_key "GOOGLE_AI_API_KEY" "{{ dashlaneNote "Google-Ai-Macbook-Air" }}"
-    check_and_set_key "GROQ_API_KEY" "{{ dashlaneNote "Groq-Macbook-Air" }}"
-    
+    check_and_set_key "OPENAI_API_KEY" "OpenAI-Macbook-Air"
+    check_and_set_key "ANTHROPIC_API_KEY" "Anthropic-Macbook-Air"
+    check_and_set_key "DEEPSEEK_API_KEY" "Deepseek-Macbook-Air"
+    check_and_set_key "OPENROUTER_API_KEY" "OpenRouter-Macbook-Air"
+    check_and_set_key "GOOGLE_AI_API_KEY" "Google-Ai-Macbook-Air"
+    check_and_set_key "GROQ_API_KEY" "Groq-Macbook-Air"
+
     {{ end -}}
 end
 
