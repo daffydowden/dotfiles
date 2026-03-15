@@ -151,13 +151,12 @@ brew "llm"
 tap "charmbracelet/tap"
 brew "charmbracelet/tap/crush"
 
-EOF
-
 {{ if not .is_work -}}
-# openhue-cli (no homebrew formula, install from GitHub release)
-if ! command -v openhue &>/dev/null; then
-  curl -sL https://github.com/openhue/openhue-cli/releases/latest/download/openhue_Darwin_all.tar.gz | tar xz -C /opt/homebrew/bin openhue
-fi
+#--------- Personal
+tap "openhue/cli"
+brew "openhue-cli"
+
 {{ end -}}
+EOF
 
 {{ end -}}
