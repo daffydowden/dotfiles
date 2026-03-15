@@ -1,6 +1,10 @@
 {{- if eq .chezmoi.os "darwin" -}}
 #!/bin/bash
 
+# Cache sudo credentials for the duration of the script
+sudo -v
+while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+
 brew bundle --no-upgrade --file=/dev/stdin <<EOF
 
 # set arguments for all 'brew install --cask' commands
