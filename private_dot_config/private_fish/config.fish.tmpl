@@ -25,6 +25,13 @@ fish_add_path /opt/uswitch/bin
 
 set -gx EDITOR nvim
 
+# Claude Code via cmux agent teams
+if set -q CMUX_WORKSPACE_ID
+    alias c 'cmux claude-teams --dangerously-skip-permissions'
+    alias claude-teams 'cmux claude-teams'
+    alias cy 'claude --dangerously-skip-permissions'
+end
+
 set fish_cursor_default block
 starship init fish | source
 
