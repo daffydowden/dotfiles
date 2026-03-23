@@ -20,6 +20,12 @@ if ! command -v brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# Keeper CLI (needed for secrets during chezmoi init on work machines)
+if ! command -v keeper &>/dev/null; then
+  echo "==> Installing Keeper CLI..."
+  brew install keeper-commander
+fi
+
 # chezmoi
 if ! command -v chezmoi &>/dev/null; then
   echo "==> Installing chezmoi..."

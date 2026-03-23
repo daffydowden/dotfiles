@@ -14,13 +14,17 @@ fish_add_path ~/.krew/bin
 {{- if .is_work }}
 
 set -gx SRC_ENDPOINT https://rvu.sourcegraph.com
-set -gx SRC_ACCESS_TOKEN {{ keeperFindPassword "1fJ6SHh496On8Z4ybqVPiQ" }}
+set -gx SRC_ACCESS_TOKEN {{ .src_access_token }}
 
 set -gx JIRA_USER richard.dowden@rvu.co.uk
-set -gx JIRA_TOKEN {{ keeperFindPassword "5QOWx7Hdzc17QKtn7yGJJA" }}
+set -gx JIRA_TOKEN {{ .jira_token }}
 
 fish_add_path /opt/uswitch/bin
 
+{{- end }}
+{{- if .is_work }}
+
+eval (ai-env)
 {{- end }}
 
 set -gx EDITOR nvim
@@ -39,3 +43,5 @@ starship init fish | source
 set -gx PATH $PATH /Users/{{ .chezmoi.username }}/.cache/lm-studio/bin
 
 zoxide init fish | source
+
+if command -v wt >/dev/null 2>&1; eval (command wt config shell init fish); end

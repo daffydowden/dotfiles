@@ -1,4 +1,4 @@
-{{- if eq .chezmoi.os "darwin" -}}
+{{- if and (eq .chezmoi.os "darwin") (not .is_work) -}}
 #!/usr/bin/env fish
 
 # Creating a log file for debugging
@@ -35,8 +35,7 @@ if not set -q DASHLANE_SERVICE_DEVICE_KEYS
 else
     log "Using existing Dashlane service device key"
 
-    {{- if not .is_work }}
-
+    {{ if not .is_work }}
     # Check and update API keys only if they don't exist or are empty
     log "Checking API keys..."
 

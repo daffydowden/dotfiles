@@ -7,3 +7,7 @@
 
 [data]
     is_work = {{ $isWork }}
+{{- if $isWork }}
+    src_access_token = "{{ keeperFindPassword "1fJ6SHh496On8Z4ybqVPiQ" }}"
+    jira_token = "{{ keeperFindPassword "5QOWx7Hdzc17QKtn7yGJJA" }}"
+{{- end }}
