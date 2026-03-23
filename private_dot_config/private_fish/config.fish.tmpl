@@ -21,8 +21,7 @@ set -gx JIRA_TOKEN {{ .jira_token }}
 
 fish_add_path /opt/uswitch/bin
 
-{{- end }}
-{{- if .is_work }}
+set -gx LITE_LLM_API_KEY {{ .litellm_api_key }}
 
 eval (ai-env)
 {{- end }}
@@ -39,8 +38,9 @@ end
 set fish_cursor_default block
 starship init fish | source
 
-# Added by LM Studio CLI (lms)
-set -gx PATH $PATH /Users/{{ .chezmoi.username }}/.cache/lm-studio/bin
+if test -d ~/.cache/lm-studio/bin
+    fish_add_path ~/.cache/lm-studio/bin
+end
 
 zoxide init fish | source
 

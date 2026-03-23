@@ -5,7 +5,8 @@
 sudo -v
 while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 
-brew bundle --no-upgrade --file=/dev/stdin <<EOF || true
+if ! brew bundle --no-upgrade --file=/dev/stdin <<EOF
+
 
 # set arguments for all 'brew install --cask' commands
 cask_args require_sha: true
@@ -166,5 +167,8 @@ brew "openhue/cli/openhue-cli"
 
 {{ end -}}
 EOF
+then
+  echo "WARNING: Some brew bundle dependencies failed to install" >&2
+fi
 
 {{ end -}}
