@@ -13,13 +13,13 @@ fish_add_path ~/.krew/bin
 
 {{- if .is_work }}
 
-set -gx SRC_ENDPOINT https://rvu.sourcegraph.com
+set -gx SRC_ENDPOINT {{ .src_endpoint }}
 set -gx SRC_ACCESS_TOKEN {{ .src_access_token }}
 
-set -gx JIRA_USER richard.dowden@rvu.co.uk
+set -gx JIRA_USER {{ .jira_user }}
 set -gx JIRA_TOKEN {{ .jira_token }}
 
-fish_add_path /opt/uswitch/bin
+fish_add_path {{ .work_bin_path }}
 
 set -gx LITE_LLM_API_KEY {{ .litellm_api_key }}
 

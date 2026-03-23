@@ -8,7 +8,13 @@
 [data]
     is_work = {{ $isWork }}
 {{- if $isWork }}
-    src_access_token = "{{ keeperFindPassword "1fJ6SHh496On8Z4ybqVPiQ" }}"
-    jira_token = "{{ keeperFindPassword "5QOWx7Hdzc17QKtn7yGJJA" }}"
-    litellm_api_key = "{{ keeperFindPassword "j83u9g9XiX7Pl4PGMw_rrA" }}"
+    src_endpoint = "{{ promptString "Sourcegraph endpoint URL" }}"
+    src_access_token = "{{ keeperFindPassword "sourcegraph_access_token" }}"
+    jira_user = "{{ promptString "Jira email address" }}"
+    jira_token = "{{ keeperFindPassword "jira_token" }}"
+    litellm_api_key = "{{ keeperFindPassword "LiteLLM API Key" }}"
+    work_bin_path = "{{ promptString "Work bin path (e.g. /opt/company/bin)" }}"
+    k8s_cluster_1 = "{{ promptString "Primary k8s cluster name" }}"
+    k8s_cluster_2 = "{{ promptString "Secondary k8s cluster name" }}"
+    k8s_namespace = "{{ promptString "Default k8s namespace" }}"
 {{- end }}

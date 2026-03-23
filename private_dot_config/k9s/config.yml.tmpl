@@ -16,15 +16,16 @@ k9s:
     fullScreenLogs: false
     textWrap: false
     showTime: false
-  currentContext: eks-02
-  currentCluster: eks-02
+{{- if .is_work }}
+  currentContext: {{ .k8s_cluster_2 }}
+  currentCluster: {{ .k8s_cluster_2 }}
   clusters:
-    eks-02:
+    {{ .k8s_cluster_2 }}:
       namespace:
-        active: broadband
+        active: {{ .k8s_namespace }}
         lockFavorites: false
         favorites:
-        - broadband
+        - {{ .k8s_namespace }}
         - default
       view:
         active: po
@@ -40,6 +41,7 @@ k9s:
           memory: 100Mi
         labels: {}
       portForwardAddress: localhost
+{{- end }}
   thresholds:
     cpu:
       critical: 90
@@ -47,4 +49,4 @@ k9s:
     memory:
       critical: 90
       warn: 70
-  screenDumpDir: /var/folders/w7/6p7bxnkn7434p197mwsj2qn80000gn/T/k9s-screens-richard.dowden
+  screenDumpDir: {{ .chezmoi.homeDir }}/.k9s-screens
