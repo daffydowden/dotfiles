@@ -114,7 +114,11 @@ cask "hiddenbar" # Hide menu icons
 
 mas "Kindle", id: 302584613
 
+{{ if .is_work -}}
+cask "slack"
+{{ else -}}
 mas "Slack", id: 803453959
+{{ end -}}
 
 mas "Bear", id: 1091189122
 mas "iA Writer", id: 775737590
@@ -126,7 +130,9 @@ brew "cbonsai"
 
 brew "openvpn"
 
+{{ if not .is_work -}}
 mas "Windows App", id: 1295203466
+{{ end -}}
 
 #--------- Misc
 
