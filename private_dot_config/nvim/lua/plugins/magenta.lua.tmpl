@@ -12,31 +12,55 @@ return {
           name = "sonnet-4.6",
           provider = "anthropic",
           model = "claude-sonnet-4-6-20260301",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
         {
           name = "opus-4.6",
           provider = "anthropic",
           model = "claude-opus-4-6-20260301",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
         {
           name = "haiku-4.5",
           provider = "anthropic",
           model = "claude-haiku-4-5-20251001",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
         {
           name = "gpt-5.4",
           provider = "openai",
           model = "gpt-5.4",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
         {
           name = "gpt-5.4-pro",
           provider = "openai",
           model = "gpt-5.4-pro",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
         {
           name = "gpt-5.2-codex",
           provider = "openai",
           model = "gpt-5.2-codex",
+{{- if .is_work }}
+          apiKeyEnvVar = "LITE_LLM_API_KEY",
+          baseUrl = "{{ env "LITELLM_BASE_URL" }}",
+{{- end }}
         },
       },
     },
