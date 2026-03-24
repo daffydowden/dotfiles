@@ -28,6 +28,8 @@ eval (ai-env)
 
 set -gx EDITOR nvim
 
+alias grep 'ug'
+
 # Claude Code via cmux agent teams
 if set -q CMUX_WORKSPACE_ID
     alias c 'cmux claude-teams --dangerously-skip-permissions'
