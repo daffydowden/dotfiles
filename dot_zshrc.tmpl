@@ -61,6 +61,17 @@ fi
 alias npm-exec='PATH=$(npm bin):$PATH'
 alias grep='ug'
 
+# Claude Code
+if [ -n "$CMUX_WORKSPACE_ID" ]; then
+    alias c='cmux claude-teams --dangerously-skip-permissions'
+    alias claude='cmux claude-teams --dangerously-skip-permissions'
+    alias claude-teams='cmux claude-teams'
+    alias cy='claude --dangerously-skip-permissions'
+else
+    alias c='command claude --dangerously-skip-permissions'
+    alias claude='command claude --dangerously-skip-permissions'
+fi
+
 # Powerline config
 #. ~/Library/Python/2.7/lib/python/site-packages/powerline/bindings/zsh/powerline.zsh
 
