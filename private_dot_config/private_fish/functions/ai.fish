@@ -48,10 +48,10 @@ $envctx
 $dyn"
 
     set -l session "ai-shell-"(date +%s)
-    set -l common --no-tools --no-context-files --no-extensions --session-dir $sess_dir
+    set -l common --no-tools --no-context-files --no-extensions --no-session
 
-    set -l cmd (pi -p $common --session $session --model $models[$mi] \
-        --system-prompt "$sys_prompt" "$task" 2>/dev/null \
+    set -l cmd (pi -p $common --model $models[$mi] \
+        --system-prompt "$sys_prompt" "$task" </dev/null 2>/dev/null \
         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
 
     while true
@@ -72,15 +72,22 @@ $dyn"
             case r
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
-                set cmd (pi -p $common --session $session --model $models[$mi] \
-                    --system-prompt "$sys_prompt" "Revise the previous command per: $rev" 2>/dev/null \
+                set cmd (pi -p $common --model $models[$mi] \
+                    --system-prompt "$sys_prompt" "Original task: $task
+
+Current candidate:
+$cmd
+
+Revise per: $rev
+
+Output ONLY the revised command." </dev/null 2>/dev/null \
                     | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
             case m
                 if test $mi -lt (count $models)
                     set mi (math $mi + 1)
                     echo "→ retrying with $models[$mi]"
-                    set cmd (pi -p $common --session $session --model $models[$mi] \
-                        --system-prompt "$sys_prompt" "Same task — try again with this model." 2>/dev/null \
+                    set cmd (pi -p $common --model $models[$mi] \
+                        --system-prompt "$sys_prompt" "$task" </dev/null 2>/dev/null \
                         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
                 else
                     echo "(already at strongest model in cycle)"
@@ -88,7 +95,7 @@ $dyn"
             case d
                 set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain in 2-3 short lines.")
                 pi -p --no-tools --no-context-files --no-extensions --no-session \
-                    --model $models[$mi] --system-prompt "$dprompt" "$cmd"
+                    --model $models[$mi] --system-prompt "$dprompt" "$cmd" </dev/null
             case c
                 printf '%s' "$cmd" | pbcopy
                 echo "copied"
