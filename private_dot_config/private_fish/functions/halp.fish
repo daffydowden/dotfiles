@@ -50,11 +50,16 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
                     return 1
             end
         case '*'
-            echo "usage: halp                              (debug previous command)" >&2
-            echo "       halp '<description>'              (suggest a command)" >&2
-            echo "       halp describe '<command>'         (explain a command)" >&2
-            echo "       halp tldr '<cmd[: context]>'      (man-page Q&A)" >&2
-            return 1
+            if test $argv[1] = tldr
+                set tldr_mode 1
+                set tldr_input (string join ' ' $argv[2..-1])
+            else
+                echo "usage: halp                              (debug previous command)" >&2
+                echo "       halp '<description>'              (suggest a command)" >&2
+                echo "       halp describe '<command>'         (explain a command)" >&2
+                echo "       halp tldr cmd [words]             (man-page Q&A)" >&2
+                return 1
+            end
     end
 
     set -l sys_dir ~/.local/share/ai/system-prompts
