@@ -7,10 +7,27 @@ function ai -d "Env-aware shell command suggester (pi-backed, aichat -e replacem
 
     set -l sys_dir ~/.local/share/ai/system-prompts
     set -l env_file ~/.cache/ai/env.txt
+    set -l builder ~/.local/share/ai/build-env.sh
     set -l ai_root ~/.local/share/ai
     set -l hist_file $ai_root/history.jsonl
     set -l sess_dir $ai_root/sessions
     mkdir -p $sess_dir
+
+    # Self-heal env cache: rebuild if missing, or if any tracked tool has been
+    # upgraded since the snapshot (e.g. via `brew upgrade` outside chezmoi).
+    if test -x $builder
+        if not test -r $env_file
+            $builder
+        else
+            for t in eza fd rg bat jq delta gh
+                set -l p (command -v $t 2>/dev/null)
+                if test -n "$p"; and test "$p" -nt "$env_file"
+                    $builder
+                    break
+                end
+            end
+        end
+    end
 
     # Models — env-overridable
     set -l models openai/gpt-5.4-nano openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
