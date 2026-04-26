@@ -3,6 +3,8 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     set -l debug_mode 0
     set -l describe_mode 0
     set -l describe_target ""
+    set -l tldr_mode 0
+    set -l tldr_input ""
 
     switch (count $argv)
         case 0
@@ -21,25 +23,37 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
             end
             set task $prev_cmd
         case 1
-            if test $argv[1] = describe
-                echo "usage: halp describe '<command>'" >&2
-                return 1
+            switch $argv[1]
+                case describe
+                    echo "usage: halp describe '<command>'" >&2
+                    return 1
+                case tldr
+                    echo "usage: halp tldr '<cmd>'           (overview)" >&2
+                    echo "       halp tldr '<cmd: context>'  (targeted)" >&2
+                    return 1
+                case '*'
+                    set task $argv[1]
             end
-            set task $argv[1]
         case 2
-            if test $argv[1] = describe
-                set describe_mode 1
-                set describe_target $argv[2]
-            else
-                echo "usage: halp                          (debug previous command)" >&2
-                echo "       halp '<description>'          (suggest a command)" >&2
-                echo "       halp describe '<command>'     (explain a command)" >&2
-                return 1
+            switch $argv[1]
+                case describe
+                    set describe_mode 1
+                    set describe_target $argv[2]
+                case tldr
+                    set tldr_mode 1
+                    set tldr_input $argv[2]
+                case '*'
+                    echo "usage: halp                              (debug previous command)" >&2
+                    echo "       halp '<description>'              (suggest a command)" >&2
+                    echo "       halp describe '<command>'         (explain a command)" >&2
+                    echo "       halp tldr '<cmd[: context]>'      (man-page Q&A)" >&2
+                    return 1
             end
         case '*'
-            echo "usage: halp                          (debug previous command)" >&2
-            echo "       halp '<description>'          (suggest a command)" >&2
-            echo "       halp describe '<command>'     (explain a command)" >&2
+            echo "usage: halp                              (debug previous command)" >&2
+            echo "       halp '<description>'              (suggest a command)" >&2
+            echo "       halp describe '<command>'         (explain a command)" >&2
+            echo "       halp tldr '<cmd[: context]>'      (man-page Q&A)" >&2
             return 1
     end
 
@@ -96,6 +110,131 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
 $describe_target"
         end
         return 0
+    end
+
+    # tldr mode: man-page-backed interactive Q&A — exits before env cache
+    if test $tldr_mode -eq 1
+        set -l common --no-tools --no-context-files --no-extensions --no-session
+
+        # Parse 'cmd' or 'cmd: context'
+        set -l tldr_cmd (string replace -r ':.*' '' -- $tldr_input | string trim)
+        set -l tldr_ctx (string replace -r '^[^:]*:?\s*' '' -- $tldr_input | string trim)
+        set -l words (string split ' ' -- $tldr_cmd)
+
+        # Fetch man page, with compound-command and --help fallbacks
+        set -l mantext ""
+        set -l mansource ""
+        if test (count $words) -eq 1
+            set mantext (man -P cat $words[1] 2>/dev/null | col -bx 2>/dev/null)
+            test -n "$mantext"; and set mansource "man $tldr_cmd"
+        else
+            set -l hyphenated (string join '-' $words)
+            set mantext (man -P cat $hyphenated 2>/dev/null | col -bx 2>/dev/null)
+            if test -n "$mantext"
+                set mansource "man $hyphenated"
+            else
+                set mantext (man -P cat $words[1] 2>/dev/null | col -bx 2>/dev/null)
+                test -n "$mantext"; and set mansource "man $words[1]"
+            end
+        end
+        if test -z "$mantext"
+            set mantext ($words --help 2>&1)
+            test -n "$mantext"; and set mansource "$tldr_cmd --help"
+        end
+
+        if test -z "$mantext"
+            echo "halp: no man page or --help output found for '$tldr_cmd'" >&2
+            return 1
+        end
+
+        # Truncate large pages
+        set -l truncated 0
+        set -l maxchars 10000
+        if test (string length -- $mantext) -gt $maxchars
+            set mantext (string sub -l $maxchars -- $mantext)
+            set truncated 1
+        end
+
+        # System prompt embeds the reference — stable across all follow-up turns
+        set -l tprompt (cat $sys_dir/shell-tldr.md 2>/dev/null; or echo "Summarise this man page concisely.")
+        set -l sys_with_man "$tprompt
+
+# REFERENCE ($mansource):
+$mantext"
+        if test $truncated -eq 1
+            set sys_with_man "$sys_with_man
+
+[Reference truncated at $maxchars chars — invite the user to ask follow-ups for specific sections or flags]"
+        end
+
+        set -l cur_q "Give me an overview of $tldr_cmd"
+        test -n "$tldr_ctx"; and set cur_q "For $tldr_cmd: $tldr_ctx"
+
+        echo
+        set_color brblack
+        printf 'source: %s' $mansource
+        test $truncated -eq 1; and printf ' (truncated — follow up for details)'
+        echo
+        set_color normal
+        echo
+
+        set -l convo ""
+        set -l answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$cur_q" </dev/null 2>/dev/null)
+
+        while true
+            if test -z "$answer"
+                echo "(no answer returned — try \`pi -p --model $models[$mi] hi\` to debug)" >&2
+                return 1
+            end
+            printf '%s\n' $answer
+            echo
+            set_color brblack; echo "  ($models[$mi])"; set_color normal
+            read --nchars 1 --prompt-str "[f]ollow-up [m]odel [c]opy [t]alk [q]uit: " choice
+            echo
+            switch $choice
+                case f
+                    read --prompt-str "follow-up: " followup
+                    test -z "$followup"; and continue
+                    set convo "$convo
+Q: $cur_q
+A: $answer"
+                    set cur_q $followup
+                    set -l ctx_msg $cur_q
+                    test -n "$convo"; and set ctx_msg "Prior conversation:$convo
+
+New question: $cur_q"
+                    set answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null 2>/dev/null)
+                case m
+                    if test $mi -lt (count $models)
+                        set mi (math $mi + 1)
+                        echo "→ retrying with $models[$mi]"
+                        set -l ctx_msg $cur_q
+                        test -n "$convo"; and set ctx_msg "Prior conversation:$convo
+
+New question: $cur_q"
+                        set answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null 2>/dev/null)
+                    else
+                        echo "(already at strongest model in cycle)"
+                    end
+                case c
+                    printf '%s' "$answer" | pbcopy
+                    echo "copied"
+                    return 0
+                case t
+                    set -l talk_ctx "Exploring docs for: $tldr_cmd"
+                    test -n "$convo"; and set talk_ctx "$talk_ctx
+
+Conversation so far:$convo
+Q: $cur_q
+A: $answer"
+                    pi "$talk_ctx
+
+Pick up from here."
+                    return 0
+                case q '*'
+                    return 0
+            end
+        end
     end
 
     # Self-heal env cache: rebuild if missing, or if any tracked tool has been
