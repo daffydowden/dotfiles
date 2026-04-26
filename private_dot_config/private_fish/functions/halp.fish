@@ -1,29 +1,46 @@
 function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replacement). Alias: h"
-    if test (count $argv) -gt 1
-        echo "usage: halp                   (debug previous command)" >&2
-        echo "       halp '<description>'   (describe what you want)" >&2
-        return 1
-    end
-
     set -l task ""
     set -l debug_mode 0
-    if test (count $argv) -eq 0
-        set debug_mode 1
-        # Walk history skipping leading halp/h invocations
-        set -l prev_cmd ""
-        for entry in (builtin history | head -n 20)
-            if not string match -qr '^(halp|h)(\s|$)' -- $entry
-                set prev_cmd $entry
-                break
+    set -l describe_mode 0
+    set -l describe_target ""
+
+    switch (count $argv)
+        case 0
+            set debug_mode 1
+            # Walk history skipping leading halp/h invocations
+            set -l prev_cmd ""
+            for entry in (builtin history | head -n 20)
+                if not string match -qr '^(halp|h)(\s|$)' -- $entry
+                    set prev_cmd $entry
+                    break
+                end
             end
-        end
-        if test -z "$prev_cmd"
-            echo "halp: no previous command found in history" >&2
+            if test -z "$prev_cmd"
+                echo "halp: no previous command found in history" >&2
+                return 1
+            end
+            set task $prev_cmd
+        case 1
+            if test $argv[1] = describe
+                echo "usage: halp describe '<command>'" >&2
+                return 1
+            end
+            set task $argv[1]
+        case 2
+            if test $argv[1] = describe
+                set describe_mode 1
+                set describe_target $argv[2]
+            else
+                echo "usage: halp                          (debug previous command)" >&2
+                echo "       halp '<description>'          (suggest a command)" >&2
+                echo "       halp describe '<command>'     (explain a command)" >&2
+                return 1
+            end
+        case '*'
+            echo "usage: halp                          (debug previous command)" >&2
+            echo "       halp '<description>'          (suggest a command)" >&2
+            echo "       halp describe '<command>'     (explain a command)" >&2
             return 1
-        end
-        set task $prev_cmd
-    else
-        set task $argv[1]
     end
 
     set -l sys_dir ~/.local/share/ai/system-prompts
@@ -33,6 +50,51 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     set -l hist_file $ai_root/history.jsonl
     set -l sess_dir $ai_root/sessions
     mkdir -p $sess_dir
+
+    # Models — env-overridable (resolved before describe early-exit so model cycling works)
+    set -l models openai/gpt-5.4-nano openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
+    if set -q AI_MODELS
+        set models (string split ',' -- $AI_MODELS)
+    end
+    set -l default openai/gpt-5.4-mini
+    set -q AI_MODEL; and set default $AI_MODEL
+    set -l mi 1
+    for i in (seq (count $models))
+        if test "$models[$i]" = "$default"
+            set mi $i
+            break
+        end
+    end
+
+    # Describe mode: explain a pasted command — exits before env cache (no env context needed)
+    if test $describe_mode -eq 1
+        set -l common --no-tools --no-context-files --no-extensions --no-session
+        set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain what this shell command does in 2-3 concise lines.")
+        echo
+        printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $describe_target) (set_color normal)
+        set_color brblack; echo "  ($models[$mi])"; set_color normal
+        echo
+        set -l description (pi -p $common --model $models[$mi] \
+            --system-prompt "$dprompt" "$describe_target" </dev/null 2>/dev/null)
+        if test -z "$description"
+            echo "(no description returned — try \`pi -p --model $models[$mi] hi\` to debug)" >&2
+            return 1
+        end
+        printf '%s\n' $description
+        echo
+        read --nchars 1 --prompt-str "[c]opy [t]alk [q]uit: " choice
+        echo
+        switch $choice
+            case c
+                printf '%s' "$description" | pbcopy
+                echo "copied"
+            case t
+                pi "Explain this shell command in detail:
+
+$describe_target"
+        end
+        return 0
+    end
 
     # Self-heal env cache: rebuild if missing, or if any tracked tool has been
     # upgraded since the snapshot (e.g. via `brew upgrade` outside chezmoi).
@@ -47,21 +109,6 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
                     break
                 end
             end
-        end
-    end
-
-    # Models — env-overridable
-    set -l models openai/gpt-5.4-nano openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
-    if set -q AI_MODELS
-        set models (string split ',' -- $AI_MODELS)
-    end
-    set -l default openai/gpt-5.4-mini
-    set -q AI_MODEL; and set default $AI_MODEL
-    set -l mi 1
-    for i in (seq (count $models))
-        if test "$models[$i]" = "$default"
-            set mi $i
-            break
         end
     end
 
