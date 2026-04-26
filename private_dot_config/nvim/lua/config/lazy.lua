@@ -13,6 +13,9 @@ require("lazy").setup({
       colorscheme = "duskfox",
     } },
     -- import any extras modules here
+    -- AI
+    { import = "lazyvim.plugins.extras.ai.claudecode" },
+    { import = "lazyvim.plugins.extras.ai.avante" },
     -- Coding
     { import = "lazyvim.plugins.extras.coding.blink" },
     { import = "lazyvim.plugins.extras.coding.mini-surround" },

@@ -8,33 +8,11 @@ return {
     dashboard = {
       enabled = true,
       sections = {
-        {
-          section = "terminal",
-          cmd = "cbonsai -i -w 1 -l -t 0.01",
-          height = 36,
-          padding = 1,
-        },
-        {
-          pane = 2,
-          {
-            section = "keys",
-            gap = 1,
-            padding = 2,
-          },
-          {
-            icon = " ",
-            title = "Recent Files",
-            section = "recent_files",
-            padding = 2,
-          },
-          {
-            icon = " ",
-            title = "Projects",
-            section = "projects",
-            padding = 2,
-          },
-          { section = "startup" },
-        },
+        { section = "header" },
+        { section = "keys", gap = 1, padding = 1 },
+        { icon = " ", title = "Recent Files", section = "recent_files", padding = 1 },
+        { icon = " ", title = "Projects", section = "projects", padding = 1 },
+        { section = "startup" },
       },
     },
     explorer = { enabled = true, replace_netrw = true },
