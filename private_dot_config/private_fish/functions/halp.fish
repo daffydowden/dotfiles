@@ -1,9 +1,30 @@
 function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replacement). Alias: h"
-    if test (count $argv) -ne 1
-        echo "usage: halp '<description>'   (quote the task — single or double)" >&2
+    if test (count $argv) -gt 1
+        echo "usage: halp                   (debug previous command)" >&2
+        echo "       halp '<description>'   (describe what you want)" >&2
         return 1
     end
-    set -l task $argv[1]
+
+    set -l task ""
+    set -l debug_mode 0
+    if test (count $argv) -eq 0
+        set debug_mode 1
+        # Walk history skipping leading halp/h invocations
+        set -l prev_cmd ""
+        for entry in (builtin history | head -n 20)
+            if not string match -qr '^(halp|h)(\s|$)' -- $entry
+                set prev_cmd $entry
+                break
+            end
+        end
+        if test -z "$prev_cmd"
+            echo "halp: no previous command found in history" >&2
+            return 1
+        end
+        set task $prev_cmd
+    else
+        set task $argv[1]
+    end
 
     set -l sys_dir ~/.local/share/ai/system-prompts
     set -l env_file ~/.cache/ai/env.txt
@@ -44,9 +65,23 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
         end
     end
 
+    # In debug mode, pull the most recent failure entry for the previous command
+    set -l debug_err ""
+    if test $debug_mode -eq 1; and test -r $hist_file; and command -q jq
+        set debug_err (jq -r --arg cmd "$task" \
+            'select(.cmd == $cmd and .ok == false) | .error' \
+            $hist_file 2>/dev/null | tail -1)
+    end
+
     # System prompt = strict rules + cached env + dynamic context
     set -l rules ""
-    test -r $sys_dir/shell-suggester.md; and set rules (cat $sys_dir/shell-suggester.md)
+    if test $debug_mode -eq 1
+        test -r $sys_dir/shell-debug.md; and set rules (cat $sys_dir/shell-debug.md)
+        # Fall back to suggester rules if no debug prompt exists
+        test -z "$rules"; and test -r $sys_dir/shell-suggester.md; and set rules (cat $sys_dir/shell-suggester.md)
+    else
+        test -r $sys_dir/shell-suggester.md; and set rules (cat $sys_dir/shell-suggester.md)
+    end
     set -l envctx ""
     test -r $env_file; and set envctx (cat $env_file)
     set -l dyn "PWD: $PWD"
@@ -84,9 +119,35 @@ $dyn$fail_block"
     set -l session "ai-shell-"(date +%s)
     set -l common --no-tools --no-context-files --no-extensions --no-session
 
+    # Build the user message: debug mode sends structured context; normal mode sends the task
+    set -l user_msg "$task"
+    if test $debug_mode -eq 1
+        set user_msg "Command: $task"
+        if test -n "$debug_err"
+            set user_msg "$user_msg
+Error: $debug_err"
+        end
+        echo "(previous command: $task)"
+    end
+
     set -l cmd (pi -p $common --model $models[$mi] \
-        --system-prompt "$sys_prompt" "$task" </dev/null 2>/dev/null \
+        --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+
+    # If the model needs clarification it returns "Q: <question>" — answer and retry once
+    if string match -q 'Q: *' -- $cmd
+        set -l question (string replace 'Q: ' '' -- $cmd)
+        echo
+        set_color yellow; echo "? $question"; set_color normal
+        read --prompt-str "answer: " clarification
+        if test -n "$clarification"
+            set user_msg "$user_msg
+Clarification: $clarification"
+            set cmd (pi -p $common --model $models[$mi] \
+                --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
+                | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+        end
+    end
 
     while true
         if test -z "$cmd"
@@ -114,7 +175,7 @@ $dyn$fail_block"
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
                 set cmd (pi -p $common --model $models[$mi] \
-                    --system-prompt "$sys_prompt" "Original task: $task
+                    --system-prompt "$sys_prompt" "Original task: $user_msg
 
 Current candidate:
 $cmd
@@ -128,7 +189,7 @@ Output ONLY the revised command." </dev/null 2>/dev/null \
                     set mi (math $mi + 1)
                     echo "→ retrying with $models[$mi]"
                     set cmd (pi -p $common --model $models[$mi] \
-                        --system-prompt "$sys_prompt" "$task" </dev/null 2>/dev/null \
+                        --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
                         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
                 else
                     echo "(already at strongest model in cycle)"
