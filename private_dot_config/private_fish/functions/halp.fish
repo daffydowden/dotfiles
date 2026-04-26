@@ -155,7 +155,7 @@ Clarification: $clarification"
             return 1
         end
         echo
-        set_color cyan; echo "> $cmd"
+        printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $cmd) (set_color normal)
         set_color brblack; echo "  ($models[$mi])"; set_color normal
         read --nchars 1 --prompt-str "[e]xec [r]evise [m]odel [d]escribe [c]opy [t]alk [q]uit: " choice
         echo
@@ -247,4 +247,27 @@ function __ai_log
         --arg error "$error" \
         '{ts:$ts, cwd:$cwd, task:$task, cmd:$cmd, model:$model, outcome:$outcome, session:$session, ok:$ok, error:$error}' \
         >> $hist
+end
+
+function __halp_highlight_dangerous
+    set -l r (set_color red)
+    set -l c (set_color cyan)
+    set -l h $argv[1]
+
+    # Dangerous commands (word-boundary safe — \b prevents matching substrings)
+    for w in rm rmdir dd mkfs fdisk parted gdisk shred truncate wipefs kill killall pkill sudo
+        set h (string replace --regex --all "\\b$w\\b" "$r$w$c" -- $h)
+    end
+
+    # Dangerous flags (literal substring — - is not a word char so \b doesn't help)
+    for f in '-rf' '-fr' '-Rf' '-fR' '-rF' '-Fr' '--force' '--hard' '--no-preserve-root' '--force-with-lease'
+        set h (string replace --all -- $f "$r$f$c" $h)
+    end
+
+    # Pipe to shell
+    for s in sh bash fish zsh ksh
+        set h (string replace --regex --all "\\|\\s*$s\\b" "$r| $s$c" -- $h)
+    end
+
+    printf '%s' $h
 end
