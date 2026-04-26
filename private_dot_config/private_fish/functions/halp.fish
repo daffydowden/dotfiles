@@ -1,6 +1,6 @@
-function ai -d "Env-aware shell command suggester (pi-backed, aichat -e replacement)"
+function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replacement). Alias: h"
     if test (count $argv) -ne 1
-        echo "usage: ai '<description>'   (quote the task — single or double)" >&2
+        echo "usage: halp '<description>'   (quote the task — single or double)" >&2
         return 1
     end
     set -l task $argv[1]
