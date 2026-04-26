@@ -24,6 +24,13 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
             set task $prev_cmd
         case 1
             switch $argv[1]
+                case halp --help -h
+                    echo "usage: halp                              debug previous command"
+                    echo "       halp '<description>'              suggest a command"
+                    echo "       halp describe '<command>'         explain what a command does"
+                    echo "       halp tldr cmd [words]             man-page Q&A"
+                    echo "       halp tldr 'cmd: context'          man-page Q&A (targeted)"
+                    return 0
                 case describe
                     echo "usage: halp describe '<command>'" >&2
                     return 1
