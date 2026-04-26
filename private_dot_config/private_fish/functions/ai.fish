@@ -1,9 +1,9 @@
 function ai -d "Env-aware shell command suggester (pi-backed, aichat -e replacement)"
-    if test (count $argv) -eq 0
-        echo "usage: ai <description>" >&2
+    if test (count $argv) -ne 1
+        echo "usage: ai '<description>'   (quote the task — single or double)" >&2
         return 1
     end
-    set -l task (string join ' ' -- $argv)
+    set -l task $argv[1]
 
     set -l sys_dir ~/.local/share/ai/system-prompts
     set -l env_file ~/.cache/ai/env.txt
