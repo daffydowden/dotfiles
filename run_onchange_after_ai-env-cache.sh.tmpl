@@ -1,0 +1,49 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -e
+
+# Brewfile hash: {{ include "run_onchange_before_install-packages-darwin.sh.tmpl" | sha256sum }}
+#
+# Builds ~/.cache/ai/env.txt with environment context for the `ai` shell-command
+# suggester (private_dot_config/private_fish/functions/ai.fish). The wrapper
+# reads this file and prepends it to the system prompt so suggestions match the
+# user's preferred toolset and shell. Refreshes whenever the Brewfile script
+# changes (so package additions can be reflected by hand-editing this file).
+
+mkdir -p ~/.cache/ai
+cat > ~/.cache/ai/env.txt <<'EOF'
+OS: macOS (darwin)
+Default shell: fish (zsh available as fallback)
+Editor: nvim (set as $EDITOR)
+Pager: bat for files (with syntax highlighting), delta for git diffs, less for stdin
+
+PREFERRED TOOLS — use these instead of POSIX defaults where they fit:
+- rg (ripgrep) — search; not grep
+- fd          — find files; not find
+- bat         — view files with highlighting; not cat
+- eza         — listing; not ls (user has alias `lsa = eza --long --header --icons --git -a`)
+- delta       — diffs / git pager
+- jq, yq      — JSON / YAML query
+- gh          — GitHub CLI
+- chezmoi     — dotfile manager (source at ~/.local/share/chezmoi)
+- mise        — runtime version manager
+- starship    — prompt
+- zoxide (z)  — directory jumping
+- fzf         — interactive fuzzy filter
+- lazygit     — git TUI
+- ugrep (ug)  — also aliased to `grep` in this shell
+- pi          — local AI coding agent
+- claude      — Claude Code CLI
+
+SHELL NOTES (fish):
+- Use ';', 'and', 'or' — NOT '&&' / '||' — for command chaining
+- Variable assignment: set -l name VALUE
+- Loops: for x in ...; ...; end
+- Conditionals: if test ...; ...; end
+- Subshells / command substitution: (cmd)
+- POSIX-only constructs ($(...), <<EOF, &&) work in zsh / bash but NOT in fish
+
+LANGUAGES (mise -g): node 22, bun, python 3.12, rust, ruby 3.3.6, java openjdk-21, uv
+EOF
+
+{{ end -}}
