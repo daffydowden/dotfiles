@@ -46,6 +46,7 @@ require("lazy").setup({
   },
   install = { colorscheme = { "tokyonight", "habamax" } },
   checker = { enabled = true }, -- automatically check for plugin updates
+  rocks = { hererocks = false }, -- no installed plugins need luarocks
   performance = {
     rtp = {
       -- disable some rtp plugins

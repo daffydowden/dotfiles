@@ -4,6 +4,9 @@
 
 vim.g.lazyvim_picker = "snacks"
 
+-- Use the experimental Microsoft Go-based TS server (much faster than vtsls)
+vim.g.lazyvim_ts_lsp = "tsgo"
+
 -- Not a fan of autoformatting
 vim.g.autoformat = false
 

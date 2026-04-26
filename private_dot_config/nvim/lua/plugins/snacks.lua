@@ -95,13 +95,6 @@ return {
       desc = "Command History",
     },
     {
-      "<leader>n",
-      function()
-        Snacks.picker.notifications()
-      end,
-      desc = "Notification History",
-    },
-    {
       "<leader>e",
       function()
         Snacks.explorer({ hidden = true })
