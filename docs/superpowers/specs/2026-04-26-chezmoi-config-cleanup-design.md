@@ -124,7 +124,7 @@ the ghostty palette.
 [delta]
     navigate = true
     line-numbers = true
-    syntax-theme = Coldark-Dark
+    syntax-theme = tokyonight_night
 [merge]
     conflictStyle = zdiff3
 [diff]
@@ -153,7 +153,20 @@ the ghostty palette.
 `excludesfile` in gitconfig points at `~/.gitignore_global` only. Avoids
 confusion.
 
-### 7. mise bootstrap (`run_once_after_mise.sh.tmpl`)
+### 7. Bat / delta theme alignment (tokyonight)
+
+Bat does not ship a tokyonight theme. To align bat (currently `Coldark-Dark`)
+and delta (`syntax-theme`) with the tokyonight palette used in ghostty/zed:
+
+- Add `private_dot_config/bat/themes/tokyonight_night.tmTheme` (sourced from
+  the folke/tokyonight Sublime export, vendored into the chezmoi repo so the
+  config is self-contained — no network at apply time).
+- Add `run_once_after_bat-cache.sh.tmpl` that runs `bat cache --build` so the
+  new theme is registered.
+- Update `private_dot_config/bat/config` `--theme="tokyonight_night"`.
+- Gitconfig `[delta] syntax-theme = tokyonight_night` (already in section 6).
+
+### 8. mise bootstrap (`run_once_after_mise.sh.tmpl`)
 
 Replace third-party `asdf-uv` plugin install with first-party mise tool:
 
