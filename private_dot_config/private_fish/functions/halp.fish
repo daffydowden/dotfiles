@@ -82,11 +82,13 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
         end
         printf '%s\n' $description
         echo
-        read --nchars 1 --prompt-str "[c]opy [t]alk [q]uit: " choice
+        read --nchars 1 --prompt-str "[e]xec [c]opy cmd [t]alk [q]uit: " choice
         echo
         switch $choice
+            case e
+                eval "$describe_target"
             case c
-                printf '%s' "$description" | pbcopy
+                printf '%s' "$describe_target" | pbcopy
                 echo "copied"
             case t
                 pi "Explain this shell command in detail:
