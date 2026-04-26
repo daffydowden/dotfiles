@@ -1,15 +1,17 @@
 #!/bin/bash
 # Builds ~/.cache/ai/env.txt — environment context for the `ai` shell-command
-# suggester. Lean: only what the model can't already infer from its own
-# parametric memory. The unique signal is (a) which tools the user prefers and
-# (b) the *installed versions* of those tools, so the model can match flag
-# syntax to the actually-installed reality (eza 0.10 vs 0.21, etc.).
+# suggester. Introspects the live system (brew, mise, $SHELL, uname) so the
+# output reflects whichever Mac it runs on. Nothing about the dotfile owner
+# (versions, formula list, brew prefix, mise tools) is hardcoded.
 #
-# Best-effort: missing tools are skipped silently. set -e is intentionally OFF.
+# Best-effort: missing tools are skipped silently. set -e is OFF on purpose.
 
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/bin:$HOME/.local/bin:$PATH"
-# Add mise-managed install dirs (e.g. pi via npm-mariozechner-pi-coding-agent)
-# without requiring `mise activate`, which doesn't fire in non-interactive bash.
+brew_prefix=$(brew --prefix 2>/dev/null)
+[ -z "$brew_prefix" ] && brew_prefix="/opt/homebrew"
+
+export PATH="$brew_prefix/bin:$brew_prefix/sbin:$HOME/bin:$HOME/.local/bin:$PATH"
+# Add mise install dirs without requiring `mise activate` (which doesn't fire
+# in non-interactive bash). Glob-best-effort; fine if no matches.
 for d in "$HOME"/.local/share/mise/installs/*/*/bin; do
     [ -d "$d" ] && PATH="$d:$PATH"
 done
@@ -18,22 +20,44 @@ export PATH
 dest="$HOME/.cache/ai/env.txt"
 mkdir -p "$(dirname "$dest")"
 
-cat > "$dest" <<'EOF'
-OS: macOS (darwin)
-Shell: fish (fallback: zsh)
-Editor: nvim
-Pager: bat (files), delta (git diffs), less (stdin)
+os=$(uname -srm 2>/dev/null || echo "macOS (darwin)")
+shell_name=$(basename "${SHELL:-fish}")
 
-Preferred tools (use these instead of the POSIX defaults the model would
-otherwise reach for): rg, fd, bat, eza, delta, jq, gh, mise, zoxide (z),
-fzf, lazygit, ugrep (also aliased to `grep`), pi, claude, chezmoi.
+formulas=""
+if command -v brew >/dev/null 2>&1; then
+    formulas=$(brew leaves 2>/dev/null | sort -u | paste -sd ',' - | sed 's/,/, /g')
+fi
 
-Languages installed via mise (-g): node 22, bun, python 3.12, rust,
-ruby 3.3.6, java openjdk-21, uv.
+mise_tools=""
+if command -v mise >/dev/null 2>&1; then
+    mise_tools=$(mise ls --current 2>/dev/null \
+        | awk 'NF>=2 {printf "%s %s, ", $1, $2}' \
+        | sed 's/, $//')
+fi
+
+{
+    cat <<EOF
+OS: $os
+Default shell: $shell_name (the \`ai\` wrapper itself is fish; suggestions should target that)
+Editor: ${EDITOR:-vi}
+Pager: ${PAGER:-less}
+Brew prefix: $brew_prefix
+
+Preferences (universal — apply regardless of what's installed):
+- Modern alternatives where present: rg > grep, fd > find, bat > cat,
+  eza > ls, delta as git pager.
+- Prefer long-form flags when uncertain — they age better than short forms.
 
 EOF
 
-{
+    if [ -n "$formulas" ]; then
+        printf 'Brew formulas installed (top-level — `brew leaves`):\n%s\n\n' "$formulas"
+    fi
+
+    if [ -n "$mise_tools" ]; then
+        printf 'Active mise runtimes (`mise ls --current`):\n%s\n\n' "$mise_tools"
+    fi
+
     if command -v gdate >/dev/null 2>&1; then
         ts=$(gdate -Iseconds)
     else
@@ -50,4 +74,4 @@ EOF
         out=$($cmd 2>&1 | head -n 1 | sed 's/[[:space:]]*$//')
         [ -z "$out" ] || printf -- '- %s: %s\n' "$tool" "$out"
     done
-} >> "$dest"
+} > "$dest"
