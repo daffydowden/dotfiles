@@ -43,7 +43,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
             end
         case 2
             switch $argv[1]
-                case describe
+                case describe d
                     set describe_mode 1
                     set describe_target $argv[2]
                 case tldr
