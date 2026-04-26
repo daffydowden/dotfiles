@@ -56,13 +56,30 @@ function ai -d "Env-aware shell command suggester (pi-backed, aichat -e replacem
         set dyn "$dyn
 GIT: branch=$branch dirty=$dirty"
     end
+    # Failure-aware learning: surface the last 3 deduplicated failures so the
+    # model doesn't repeat patterns that errored on this machine.
+    # NOTE: jq's `//` treats false as nullish, so use explicit `== false`.
+    set -l fail_block ""
+    if test -r $hist_file; and command -q jq
+        set -l recents (jq -r '
+            select(.outcome=="e" and .ok == false) |
+            "- task=\"\(.task)\"\n  cmd=\(.cmd)\n  error: \((.error // "") | .[0:200])"
+        ' $hist_file 2>/dev/null | awk '!seen[$0]++' | tail -9)
+        if test -n "$recents"
+            set fail_block "
+
+# RECENT FAILURES (do not repeat these patterns — they errored on this machine):
+$recents"
+        end
+    end
+
     set -l sys_prompt "$rules
 
 # ENVIRONMENT
 $envctx
 
 # CURRENT CONTEXT
-$dyn"
+$dyn$fail_block"
 
     set -l session "ai-shell-"(date +%s)
     set -l common --no-tools --no-context-files --no-extensions --no-session
@@ -83,9 +100,16 @@ $dyn"
         echo
         switch $choice
             case e ''
-                __ai_log "$task" "$cmd" $models[$mi] e $session
-                eval $cmd
-                return
+                # Run via tee so we can both display output and capture it for
+                # failure-recall on the next call.
+                set -l outlog (mktemp -t ai-out.XXXXXX)
+                eval "$cmd" 2>&1 | tee $outlog
+                set -l rc $pipestatus[1]
+                set -l err ""
+                test $rc -ne 0; and set err (head -c 600 $outlog)
+                rm -f $outlog
+                __ai_log "$task" "$cmd" $models[$mi] e $session $rc "$err"
+                return $rc
             case r
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
@@ -140,10 +164,16 @@ function __ai_log
     set -l model $argv[3]
     set -l outcome $argv[4]
     set -l session $argv[5]
+    set -l rc $argv[6]
+    set -l error $argv[7]
     set -l hist ~/.local/share/ai/history.jsonl
     if not command -q jq
         return 0
     end
+    set -l ok true
+    test -n "$rc"; and test $rc -ne 0; and set ok false
+    set -l rc_arg
+    test -n "$rc"; and set rc_arg --argjson rc $rc
     jq -cn \
         --arg ts (date -u +%Y-%m-%dT%H:%M:%SZ) \
         --arg cwd (pwd) \
@@ -152,6 +182,8 @@ function __ai_log
         --arg model "$model" \
         --arg outcome "$outcome" \
         --arg session "$session" \
-        '{ts:$ts, cwd:$cwd, task:$task, cmd:$cmd, model:$model, outcome:$outcome, session:$session}' \
+        --argjson ok $ok \
+        --arg error "$error" \
+        '{ts:$ts, cwd:$cwd, task:$task, cmd:$cmd, model:$model, outcome:$outcome, session:$session, ok:$ok, error:$error}' \
         >> $hist
 end
