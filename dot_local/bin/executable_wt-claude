@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Silently no-op marker commands when not in a git repo, pass everything else through.
+if [[ "$1 $2 $3" == "config state marker" ]]; then
+    git rev-parse --git-dir >/dev/null 2>&1 || exit 0
+fi
+exec /opt/homebrew/bin/wt "$@"

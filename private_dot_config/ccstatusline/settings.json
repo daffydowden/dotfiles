@@ -39,13 +39,24 @@
         "type": "git-worktree",
         "color": "black",
         "backgroundColor": "bgGreen",
-        "merge": true
+        "merge": true,
+        "metadata": { "hideNoGit": "true" }
+      },
+      {
+        "id": "wt-agent-marker",
+        "type": "custom-command",
+        "commandPath": "/Users/richarddowden/.local/bin/wt-agent-marker",
+        "color": "black",
+        "backgroundColor": "bgGreen",
+        "merge": true,
+        "timeout": 500
       },
       {
         "id": "7",
         "type": "git-changes",
         "color": "black",
-        "backgroundColor": "bgYellow"
+        "backgroundColor": "bgYellow",
+        "metadata": { "hideNoGit": "true" }
       }
     ],
     [],

@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+/opt/homebrew/bin/wt config state marker get 2>/dev/null || true
