@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# ~/bin/claude shim (chezmoi-managed; source: bin/executable_claude)
+#
+# Purpose: `cmux claude-teams` deliberately bypasses cmux's hook bridge (it
+# detects that bridge by its file header and skips it), so teammate-mode
+# sessions normally get NO Feed/hook integration. This shim re-inserts the
+# bridge: claude-teams resolves THIS file (its header differs, so it is not
+# skipped), and we then hand off to the real cmux hook bridge, which injects
+# --settings/--session-id and execs the real claude.
+#
+# Escape hatch: set CMUX_TEAMS_HOOK_SHIM=0 to bypass (straight to real claude).
+# Remove entirely with: chezmoi forget ~/bin/claude && rm ~/bin/claude
+#
+# TEMPORARY WORKAROUND for an upstream cmux gap (added 2026-06-03):
+#   - bug:  manaflow-ai/cmux#2229  (no notifications in claude-teams mode)
+#   - gap:  claude-teams never mirrored the hook injection that #2465 added
+#           for the plain `claude` path.
+#   - fixes in flight (both OPEN as of 2026-06-03, neither in nightly):
+#       #4901  Enable Claude agent teams in normal sessions  <-- expected to land
+#       #2631  Fix cmux claude-teams hook injection gap       (alternative)
+#
+# RETIRE WHEN #4901 SHIPS (in your installed cmux): #4901 makes the wrapper
+# itself set up teams+hooks (default-on inside cmux). At that point:
+#   1. change the fish alias `claude` from `cmux claude-teams ...` to plain
+#      `claude --dangerously-skip-permissions` (let it reach the wrapper),
+#   2. remove this shim (chezmoi forget + rm, see above).
+# Until then this shim ensures `claude` reaches the hook bridge despite
+# ~/.local/bin sitting ahead of the cmux bin dir on PATH.
+#
+# IMPORTANT: do not let this file's first 512 bytes contain cmux's bridge
+# header signature, or claude-teams would skip this shim too.
+
+# Drop our own directory from PATH so the bridge (and a re-exec of `claude`)
+# resolve the *next* claude, never re-entering this shim (avoids a loop).
+self_dir="$(cd -- "$(dirname -- "$0")" >/dev/null 2>&1 && pwd -P)"
+clean=""
+IFS=':'
+for d in $PATH; do
+    [ "$d" = "$self_dir" ] && continue
+    clean="${clean:+$clean:}$d"
+done
+unset IFS
+export PATH="$clean"
+
+# Resolve the cmux hook bridge from the bundled CLI path (set only inside a
+# cmux session). Absent on non-cmux machines / outside cmux -> plain passthrough.
+bridge=""
+if [ -n "${CMUX_BUNDLED_CLI_PATH:-}" ]; then
+    bridge="$(dirname -- "$CMUX_BUNDLED_CLI_PATH")/claude"
+fi
+
+if [ "${CMUX_TEAMS_HOOK_SHIM:-1}" != "0" ] && [ -n "$bridge" ] && [ -x "$bridge" ]; then
+    exec "$bridge" "$@"
+fi
+
+exec claude "$@"
