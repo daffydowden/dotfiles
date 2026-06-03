@@ -1,0 +1,7 @@
+#!/bin/bash
+input=$(cat)
+[ -z "$input" ] && input='{}'
+echo "$input" | jq \
+  --arg provider "{{ if .is_work }}anthropic{{ else }}openai{{ end }}" \
+  --arg model "{{ if .is_work }}claude-sonnet-4-6-20260301{{ else }}gpt-5.4-nano{{ end }}" \
+  '. + {defaultProvider: $provider, defaultModel: $model}'
