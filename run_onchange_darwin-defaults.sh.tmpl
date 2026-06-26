@@ -15,6 +15,12 @@ defaults write {{ $default.domain }} {{ $default.element }} -{{ $default.type }}
 {{ end -}}
 {{ end -}}
 
+# cmux: DO NOT set claudeCodeCustomClaudePath to ~/bin/claude — it causes infinite
+# recursion (cmux-claude-wrapper re-reads CMUX_CUSTOM_CLAUDE_PATH → shim → wrapper →
+# … "Argument list too long"). Actively remove it in case a machine got the bad
+# value. See docs/claude-teams-hooks-vs-splitpanes.md.
+defaults delete com.cmuxterm.app claudeCodeCustomClaudePath 2>/dev/null || true
+
 {{ range $app := .osx_defaults.kill_to_apply -}}
 killall {{ $app }}
 {{ end -}}
