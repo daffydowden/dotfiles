@@ -1,0 +1,34 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+# Self-heal the native Claude Code launcher symlink.
+#
+# Claude Code's auto-updater owns ~/.local/bin/claude and repoints it at the
+# newest binary in ~/.local/share/claude/versions/ on each update. But if that
+# symlink goes missing (e.g. a `mise use claude` registration once shadowed the
+# native install on the work machine and the launcher vanished), nothing on PATH
+# terminates the cmux/`~/bin/claude`-shim wrapper chain, so it re-execs and grows
+# argv until it exceeds ARG_MAX -> "Argument list too long".
+#
+# This guard is VERSION-AGNOSTIC and non-destructive:
+#   - it only acts when the launcher is missing or dangling (`-e` is false for a
+#     broken symlink too), so it never overrides a healthy updater-set link;
+#   - it targets the newest versions/* by version sort, which is exactly the rule
+#     the updater uses (latest downloaded == current) -- so it can't diverge or
+#     pin a stale version, and it can't drift across machines.
+# It intentionally does NOT bootstrap a fresh machine: it needs versions/* to
+# already exist (Claude Code installed at least once); first install stays the
+# native installer's job.
+set -euo pipefail
+
+vdir="$HOME/.local/share/claude/versions"
+launcher="$HOME/.local/bin/claude"
+
+if [ -d "$vdir" ] && [ ! -e "$launcher" ]; then
+  latest="$(ls -1 "$vdir" 2>/dev/null | sort -V | tail -1)"
+  if [ -n "$latest" ]; then
+    mkdir -p "$(dirname "$launcher")"
+    ln -sfn "$vdir/$latest" "$launcher"
+    echo "chezmoi: repaired claude launcher -> $vdir/$latest"
+  fi
+fi
+{{ end -}}
