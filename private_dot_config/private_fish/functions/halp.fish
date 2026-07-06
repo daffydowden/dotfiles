@@ -153,8 +153,8 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
         printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $describe_target) (set_color normal)
         set_color brblack; echo "  ($models[$mi])"; set_color normal
         echo
-        set -l description (pi -p $common --model $models[$mi] \
-            --system-prompt "$dprompt" "$describe_target" </dev/null 2>/dev/null)
+        set -l description (__ai_spin pi -p $common --model $models[$mi] \
+            --system-prompt "$dprompt" "$describe_target" </dev/null)
         if test -z "$description"
             echo "(no description returned — try \`pi -p --model $models[$mi] hi\` to debug)" >&2
             return 1
@@ -170,7 +170,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
                 printf '%s' "$describe_target" | pbcopy
                 echo "copied"
             case t
-                pi "Explain this shell command in detail:
+                pi --no-extensions "Explain this shell command in detail:
 
 $describe_target"
         end
@@ -244,7 +244,7 @@ $mantext"
         echo
 
         set -l convo ""
-        set -l answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$cur_q" </dev/null 2>/dev/null)
+        set -l answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$cur_q" </dev/null)
 
         while true
             if test -z "$answer"
@@ -268,18 +268,24 @@ A: $answer"
                     test -n "$convo"; and set ctx_msg "Prior conversation:$convo
 
 New question: $cur_q"
-                    set answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null 2>/dev/null)
+                    set answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null)
                 case m
-                    if test $mi -lt (count $models)
-                        set mi (math $mi + 1)
+                    set -l picked (__ai_pick_model $models $models[$mi])
+                    if test -z "$picked"
+                        echo "(no model selected)"
+                    else
+                        for i in (seq (count $models))
+                            if test "$models[$i]" = "$picked"
+                                set mi $i
+                                break
+                            end
+                        end
                         echo "→ retrying with $models[$mi]"
                         set -l ctx_msg $cur_q
                         test -n "$convo"; and set ctx_msg "Prior conversation:$convo
 
 New question: $cur_q"
-                        set answer (pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null 2>/dev/null)
-                    else
-                        echo "(already at strongest model in cycle)"
+                        set answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null)
                     end
                 case c
                     printf '%s' "$answer" | pbcopy
@@ -292,7 +298,7 @@ New question: $cur_q"
 Conversation so far:$convo
 Q: $cur_q
 A: $answer"
-                    pi "$talk_ctx
+                    pi --no-extensions "$talk_ctx
 
 Pick up from here."
                     return 0
@@ -394,8 +400,8 @@ Error: $debug_err"
     end
 
     set -l t0 (date +%s)
-    set -l cmd (pi -p $common --model $models[$mi] \
-        --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
+    set -l cmd (__ai_spin pi -p $common --model $models[$mi] \
+        --system-prompt "$sys_prompt" "$user_msg" </dev/null \
         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
     set -l elapsed (math (date +%s) - $t0)
 
@@ -409,8 +415,8 @@ Error: $debug_err"
             set user_msg "$user_msg
 Clarification: $clarification"
             set t0 (date +%s)
-            set cmd (pi -p $common --model $models[$mi] \
-                --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
+            set cmd (__ai_spin pi -p $common --model $models[$mi] \
+                --system-prompt "$sys_prompt" "$user_msg" </dev/null \
                 | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
             set elapsed (math (date +%s) - $t0)
         end
@@ -446,7 +452,7 @@ Clarification: $clarification"
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
                 set t0 (date +%s)
-                set cmd (pi -p $common --model $models[$mi] \
+                set cmd (__ai_spin pi -p $common --model $models[$mi] \
                     --system-prompt "$sys_prompt" "Original task: $user_msg
 
 Current candidate:
@@ -454,24 +460,30 @@ $cmd
 
 Revise per: $rev
 
-Output ONLY the revised command." </dev/null 2>/dev/null \
+Output ONLY the revised command." </dev/null \
                     | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
                 set elapsed (math (date +%s) - $t0)
             case m
-                if test $mi -lt (count $models)
-                    set mi (math $mi + 1)
+                set -l picked (__ai_pick_model $models $models[$mi])
+                if test -z "$picked"
+                    echo "(no model selected)"
+                else
+                    for i in (seq (count $models))
+                        if test "$models[$i]" = "$picked"
+                            set mi $i
+                            break
+                        end
+                    end
                     echo "→ retrying with $models[$mi]"
                     set t0 (date +%s)
-                    set cmd (pi -p $common --model $models[$mi] \
-                        --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
+                    set cmd (__ai_spin pi -p $common --model $models[$mi] \
+                        --system-prompt "$sys_prompt" "$user_msg" </dev/null \
                         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
                     set elapsed (math (date +%s) - $t0)
-                else
-                    echo "(already at strongest model in cycle)"
                 end
             case d
                 set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain in 2-3 short lines.")
-                pi -p --no-tools --no-context-files --no-extensions --no-session \
+                __ai_spin pi -p --no-tools --no-context-files --no-extensions --no-session \
                     --model $models[$mi] --system-prompt "$dprompt" "$cmd" </dev/null
             case c
                 printf '%s' "$cmd" | pbcopy
@@ -480,7 +492,7 @@ Output ONLY the revised command." </dev/null 2>/dev/null \
                 return
             case t
                 __ai_log "$task" "$cmd" $models[$mi] t $session
-                pi "Working on: $task
+                pi --no-extensions "Working on: $task
 
 Candidate command:
 $cmd
@@ -492,6 +504,43 @@ Let's discuss."
                 return
         end
     end
+end
+
+function __ai_pick_model -d "Prompt to choose from a list of models; prints the chosen model name, or nothing if cancelled"
+    set -l models $argv[1..-2]
+    set -l current $argv[-1]
+    set -l picked ""
+    if command -q fzf
+        set picked (printf '%s\n' $models | fzf --prompt='model> ' --height=~40% --reverse --header="current: $current")
+    else
+        for i in (seq (count $models))
+            set -l marker ' '
+            test "$models[$i]" = "$current"; and set marker '*'
+            printf ' %s%d) %s\n' $marker $i $models[$i] >&2
+        end
+        read --prompt-str 'model #: ' num
+        if string match -qr '^[0-9]+$' -- $num; and test $num -ge 1 -a $num -le (count $models)
+            set picked $models[$num]
+        end
+    end
+    printf '%s' $picked
+end
+
+function __ai_spin -d "Run argv as a background job, show a spinner on stderr until it exits, print its stdout"
+    set -l tmp (mktemp -t ai-spin.XXXXXX)
+    $argv >$tmp 2>/dev/null &
+    set -l pid $last_pid
+    set -l frames ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
+    set -l i 1
+    while kill -0 $pid 2>/dev/null
+        printf '\r%s thinking…' $frames[$i] >&2
+        set i (math $i % (count $frames) + 1)
+        sleep 0.08
+    end
+    wait $pid 2>/dev/null
+    printf '\r\033[K' >&2
+    cat $tmp
+    rm -f $tmp
 end
 
 function __ai_log
