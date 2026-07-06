@@ -90,11 +90,15 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     if set -q AI_MODELS
         set models (string split ',' -- $AI_MODELS)
     end
-    set -l default openai/gpt-5.4-mini
+    # Bare id, matched by suffix so it resolves under any provider prefix
+    # (openai/, anthropic/, litellm/) — matching the full "provider/model"
+    # string would silently miss on work machines where litellm/ replaces
+    # the static defaults above.
+    set -l default gpt-5.4-mini
     set -q AI_MODEL; and set default $AI_MODEL
     set -l mi 1
     for i in (seq (count $models))
-        if test "$models[$i]" = "$default"
+        if string match -q -- "*$default" $models[$i]
             set mi $i
             break
         end
@@ -102,7 +106,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
 
     # Describe mode: explain a pasted command — exits before env cache (no env context needed)
     if test $describe_mode -eq 1
-        set -l common --no-tools --no-context-files --no-extensions --no-session
+        set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
         set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain what this shell command does in 2-3 concise lines.")
         echo
         printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $describe_target) (set_color normal)
@@ -134,7 +138,7 @@ $describe_target"
 
     # tldr mode: man-page-backed interactive Q&A — exits before env cache
     if test $tldr_mode -eq 1
-        set -l common --no-tools --no-context-files --no-extensions --no-session
+        set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
 
         # Parse 'cmd' or 'cmd: context'
         set -l tldr_cmd (string replace -r ':.*' '' -- $tldr_input | string trim)
@@ -335,7 +339,7 @@ $envctx
 $dyn$fail_block"
 
     set -l session "ai-shell-"(date +%s)
-    set -l common --no-tools --no-context-files --no-extensions --no-session
+    set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
 
     # Build the user message: debug mode sends structured context; normal mode sends the task
     set -l user_msg "$task"
@@ -348,9 +352,11 @@ Error: $debug_err"
         echo "(previous command: $task)"
     end
 
+    set -l t0 (date +%s)
     set -l cmd (pi -p $common --model $models[$mi] \
         --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+    set -l elapsed (math (date +%s) - $t0)
 
     # If the model needs clarification it returns "Q: <question>" — answer and retry once
     if string match -q 'Q: *' -- $cmd
@@ -361,9 +367,11 @@ Error: $debug_err"
         if test -n "$clarification"
             set user_msg "$user_msg
 Clarification: $clarification"
+            set t0 (date +%s)
             set cmd (pi -p $common --model $models[$mi] \
                 --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
                 | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+            set elapsed (math (date +%s) - $t0)
         end
     end
 
@@ -374,7 +382,7 @@ Clarification: $clarification"
         end
         echo
         printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $cmd) (set_color normal)
-        set_color brblack; echo "  ($models[$mi])"; set_color normal
+        set_color brblack; echo "  ($models[$mi] · $elapsed"s")"; set_color normal
         read --nchars 1 --prompt-str "[e]xec [r]evise [m]odel [d]escribe [c]opy [t]alk [q]uit: " choice
         echo
         switch $choice
@@ -392,6 +400,7 @@ Clarification: $clarification"
             case r
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
+                set t0 (date +%s)
                 set cmd (pi -p $common --model $models[$mi] \
                     --system-prompt "$sys_prompt" "Original task: $user_msg
 
@@ -402,13 +411,16 @@ Revise per: $rev
 
 Output ONLY the revised command." </dev/null 2>/dev/null \
                     | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+                set elapsed (math (date +%s) - $t0)
             case m
                 if test $mi -lt (count $models)
                     set mi (math $mi + 1)
                     echo "→ retrying with $models[$mi]"
+                    set t0 (date +%s)
                     set cmd (pi -p $common --model $models[$mi] \
                         --system-prompt "$sys_prompt" "$user_msg" </dev/null 2>/dev/null \
                         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
+                    set elapsed (math (date +%s) - $t0)
                 else
                     echo "(already at strongest model in cycle)"
                 end
