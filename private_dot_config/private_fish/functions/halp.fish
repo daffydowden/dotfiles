@@ -79,6 +79,14 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
 
     # Models — env-overridable (resolved before describe early-exit so model cycling works)
     set -l models openai/gpt-5.4-nano openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
+    # On work machines, build-env.sh refreshes this from LiteLLM's live model list
+    # (see ~/.local/share/ai/executable_build-env.sh) — prefer it over the static
+    # defaults above when present.
+    set -l litellm_models_file ~/.cache/ai/litellm-models.txt
+    if test -r $litellm_models_file
+        set -l lm (string match -rv '^\s*$' -- (cat $litellm_models_file))
+        test (count $lm) -gt 0; and set models (string replace -r '^' 'litellm/' -- $lm)
+    end
     if set -q AI_MODELS
         set models (string split ',' -- $AI_MODELS)
     end
@@ -249,19 +257,29 @@ Pick up from here."
         end
     end
 
-    # Self-heal env cache: rebuild if missing, or if any tracked tool has been
-    # upgraded since the snapshot (e.g. via `brew upgrade` outside chezmoi).
+    # Self-heal env cache: rebuild if missing, if any tracked tool has been
+    # upgraded since the snapshot (e.g. via `brew upgrade` outside chezmoi), or
+    # if the snapshot is older than 7 days (catches LiteLLM model drift on work
+    # machines, which has no local binary to compare mtimes against).
     if test -x $builder
         if not test -r $env_file
             $builder
         else
+            set -l stale 0
             for t in eza fd rg bat jq delta gh
                 set -l p (command -v $t 2>/dev/null)
                 if test -n "$p"; and test "$p" -nt "$env_file"
-                    $builder
+                    set stale 1
                     break
                 end
             end
+            if test $stale -eq 0
+                set -l mtime (stat -f %m $env_file 2>/dev/null)
+                test -z "$mtime"; and set mtime 0
+                set -l age (math (date +%s) - $mtime)
+                test $age -gt 604800; and set stale 1
+            end
+            test $stale -eq 1; and $builder
         end
     end
 
