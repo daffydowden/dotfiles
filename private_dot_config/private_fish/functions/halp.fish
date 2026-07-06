@@ -5,27 +5,69 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     set -l describe_target ""
     set -l tldr_mode 0
     set -l tldr_input ""
+    set -l hist_offset 1
+    set -l use_halp_hist 0
+    set -l hist_file ~/.local/share/ai/history.jsonl
+
+    # bash/zsh-style event designators for debug mode:
+    #   !!     last non-halp shell command (same as bare `halp`)
+    #   !-N    Nth previous non-halp shell command
+    #   !?     last halp-suggested command (from history.jsonl, any outcome)
+    #   !?-N   Nth-last halp-suggested command
+    # Fish has no `!`-history-expansion, so these arrive as plain literals.
+    if test (count $argv) -eq 1
+        if test "$argv[1]" = '!!'
+            set argv
+        else if string match -qr '^!-[0-9]+$' -- $argv[1]
+            set hist_offset (string replace -r '^!-' '' -- $argv[1])
+            set argv
+        else if test "$argv[1]" = '!?'
+            set use_halp_hist 1
+            set argv
+        else if string match -qr '^!\?-[0-9]+$' -- $argv[1]
+            set use_halp_hist 1
+            set hist_offset (string replace -r '^!\?-' '' -- $argv[1])
+            set argv
+        end
+        test $hist_offset -lt 1; and set hist_offset 1
+    end
 
     switch (count $argv)
         case 0
             set debug_mode 1
-            # Walk history skipping leading halp/h invocations
-            set -l prev_cmd ""
-            for entry in (builtin history | head -n 20)
-                if not string match -qr '^(halp|h)(\s|$)' -- $entry
-                    set prev_cmd $entry
-                    break
+            if test $use_halp_hist -eq 1
+                set -l h_cmds
+                test -r $hist_file; and set h_cmds (jq -r '.cmd' $hist_file 2>/dev/null | tail -r)
+                if test (count $h_cmds) -lt $hist_offset
+                    set -l label '!?'
+                    test $hist_offset -gt 1; and set label "!?-$hist_offset"
+                    echo "halp: no halp-generated command at $label (only "(count $h_cmds)" logged)" >&2
+                    return 1
                 end
+                set task $h_cmds[$hist_offset]
+            else
+                # Walk history skipping leading halp/h invocations
+                set -l matches
+                for entry in (builtin history | head -n 200)
+                    if not string match -qr '^(halp|h)(\s|$)' -- $entry
+                        set -a matches $entry
+                        test (count $matches) -ge $hist_offset; and break
+                    end
+                end
+                if test (count $matches) -lt $hist_offset
+                    echo "halp: no command at offset -$hist_offset in history" >&2
+                    return 1
+                end
+                set task $matches[$hist_offset]
             end
-            if test -z "$prev_cmd"
-                echo "halp: no previous command found in history" >&2
-                return 1
-            end
-            set task $prev_cmd
         case 1
             switch $argv[1]
                 case halp --help -h
                     echo "usage: halp                              debug previous command"
+                    echo "       halp !!                           debug previous command (explicit)"
+                    echo "       halp !-N                          debug Nth previous command"
+                    echo "       halp !?                           debug last halp-suggested command"
+                    echo "       halp !?-N                         debug Nth-last halp-suggested command"
                     echo "       halp '<description>'              suggest a command"
                     echo "       halp describe '<command>'         explain what a command does"
                     echo "       halp tldr cmd [words]             man-page Q&A"
@@ -73,7 +115,6 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     set -l env_file ~/.cache/ai/env.txt
     set -l builder ~/.local/share/ai/build-env.sh
     set -l ai_root ~/.local/share/ai
-    set -l hist_file $ai_root/history.jsonl
     set -l sess_dir $ai_root/sessions
     mkdir -p $sess_dir
 
@@ -387,6 +428,10 @@ Clarification: $clarification"
         echo
         switch $choice
             case e ''
+                # halp ran this, not the user at the prompt, so fish's normal
+                # history capture never sees it — inject it explicitly so it's
+                # available for up-arrow / ctrl-r like anything else.
+                builtin history append -- "$cmd"
                 # Run via tee so we can both display output and capture it for
                 # failure-recall on the next call.
                 set -l outlog (mktemp -t ai-out.XXXXXX)
