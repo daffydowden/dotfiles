@@ -1,0 +1,19 @@
+# Signed commits need access to the protected .git directory and 1Password's
+# local signing socket. Limit the sandbox exception to this trusted repository.
+prefix_rule(
+    pattern = [
+        "git",
+        "-C",
+        "/Users/richarddowden/.local/share/chezmoi",
+        "commit",
+    ],
+    decision = "allow",
+    justification = "Allow signed commits in the trusted dotfiles repository",
+    match = [
+        "git -C /Users/richarddowden/.local/share/chezmoi commit -m 'Update dotfiles'",
+    ],
+    not_match = [
+        "git -C /Users/richarddowden/.local/share/chezmoi push origin main",
+        "git -C /Users/richarddowden/projects/example commit -m 'Update project'",
+    ],
+)
