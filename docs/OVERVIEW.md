@@ -65,8 +65,9 @@ A pi-backed shell assistant under `private_fish/functions/` + `dot_local/share/a
 - **`run_onchange_darwin-defaults.sh.tmpl`** — applies `macos defaults` from
   `.chezmoidata/osx_default.yaml` (Dock, Finder, key-repeat, hotkeys), gated by
   macOS major version.
-- **`run_onchange_after_dashlane.sh.tmpl`** — (personal only) registers a Dashlane
-  device key and pulls API keys into universal fish vars.
+- **`run_onchange_after_1password.sh.tmpl`** — (personal only) checks that the
+  1Password CLI is authenticated, then pulls API keys out of the `Personal` vault
+  into universal fish vars.
 - **`run_onchange_after_bat-cache.sh.tmpl`** — rebuilds bat theme cache when themes change.
 - **`run_onchange_after_ai-env-cache.sh.tmpl`** — rebuilds the `ai` env cache when
   the Brewfile changes.
@@ -85,8 +86,6 @@ Fragility risks flagged in the repo audit (task #1). Be aware when editing/apply
 - **Brew bundle fails silently** — `install-packages-darwin.sh.tmpl` lacks `set -e`,
   and a failed `brew bundle` only warns to stderr while exiting `0`, so chezmoi sees
   success despite partial package installs. Check brew output manually after apply.
-- **Dashlane log timestamps are broken** — the bash log lines use literal `(date)`
-  instead of `$(date)`, so debug timestamps in `~/.dashlane_script.log` are useless.
 - **Bootstrap doesn't verify keeper** — `bootstrap.sh` doesn't confirm
   `keeper-commander` installed before running `chezmoi init`, which needs it for work
   secrets; a failed install surfaces as a confusing init error.
@@ -96,8 +95,6 @@ Fragility risks flagged in the repo audit (task #1). Be aware when editing/apply
 
 **High**
 
-- **`dcli` unchecked** — the dashlane script's API-key fetch swallows errors with
-  `2>/dev/null`, so a missing `dcli` fails silently while the script reports success.
 - **Hardcoded model versions** — `private_dot_pi/.../modify_settings.json.tmpl` pins
   exact model IDs (`claude-sonnet-4-6-…`, `gpt-5.4-nano`) that will drift/deprecate.
 - **Hardcoded `claude` CLI flags** — `worktrunk/config.toml`'s commit-message command
