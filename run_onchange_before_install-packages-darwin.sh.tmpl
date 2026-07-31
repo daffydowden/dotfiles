@@ -108,8 +108,10 @@ cask "rectangle" # window manager replacement for spectacle
 
 mas "Lungo", id: 1263070803
 
+{{ if not .is_work -}}
 cask "1password"
 cask "1password-cli"
+{{ end -}}
 
 cask "jordanbaird-ice" # Menu bar manager
 
