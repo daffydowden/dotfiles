@@ -1,0 +1,9 @@
+# Colima writes its own host entries here; a missing Include is ignored.
+Include {{ .chezmoi.homeDir }}/.colima/ssh_config
+
+# Authentication goes through the 1Password SSH agent rather than key files on
+# disk, so private keys never leave the vault and each use needs Touch ID.
+# Which keys the agent offers is set by ~/.config/1Password/ssh/agent.toml
+# (absent = every SSH key in the account).
+Host *
+	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"

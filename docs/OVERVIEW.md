@@ -76,6 +76,9 @@ A pi-backed shell assistant under `private_fish/functions/` + `dot_local/share/a
 
 - **`dot_local/bin/wt-claude` / `wt-agent-marker`** — worktrunk wrappers that no-op
   marker commands outside a git repo.
+- **`private_dot_ssh/config.tmpl`** — points SSH at the 1Password agent for all
+  hosts, and includes colima's generated host entries. Private keys live in the
+  vault, not on disk.
 
 ## Gotchas
 
