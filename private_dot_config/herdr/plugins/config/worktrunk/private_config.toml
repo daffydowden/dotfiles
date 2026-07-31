@@ -1,0 +1,6 @@
+# Open worktrees as native linked-worktree workspaces in Herdr's sidebar.
+open_mode = "workspace"
+
+# Keep the picker focused on local branches; `git fetch` plus this toggle can
+# expose remote-tracking branches later if desired.
+show_remote_branches = false

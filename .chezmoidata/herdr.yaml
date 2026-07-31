@@ -1,0 +1,11 @@
+herdr_plugins:
+  - id: worktrunk
+    source: devashish2203/herdr-worktrunk
+    ref: v0.5.0
+    commit: a3107ca566bafcd463bc138007a0c01051970784
+    enabled: true
+  - id: caioniehues.herdmates
+    source: caioniehues/herdmates
+    ref: v2.2.0
+    commit: 9469ab2abeea4d593906ff7eebb8af22cd22b8e0
+    enabled: true

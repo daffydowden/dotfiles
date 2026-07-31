@@ -1,0 +1,16 @@
+{{- if and (eq .chezmoi.os "darwin") .herdr_plugins -}}
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v herdr >/dev/null 2>&1; then
+  echo "WARNING: herdr is not installed; skipping plugin installation" >&2
+  exit 0
+fi
+
+{{ range .herdr_plugins -}}
+# {{ .id }} {{ .ref }}
+herdr plugin install "{{ .source }}" --ref "{{ .commit }}" --yes
+herdr plugin {{ if .enabled }}enable{{ else }}disable{{ end }} "{{ .id }}"
+
+{{ end -}}
+{{- end -}}

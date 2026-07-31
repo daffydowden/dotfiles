@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Preserve Herdr's runtime-managed settings while maintaining our plugin UI.
+set -euo pipefail
+
+current="$(cat)"
+current="$(printf '%s\n' "$current" | awk '
+  /^# BEGIN CHEZMOI: herdr plugins$/ { managed = 1; next }
+  /^# END CHEZMOI: herdr plugins$/   { managed = 0; next }
+  !managed { print }
+')"
+
+printf '%s\n' "$current"
+cat <<'EOF'
+
+# BEGIN CHEZMOI: herdr plugins
+[[keys.command]]
+key = "prefix+shift+g"
+type = "plugin_action"
+command = "worktrunk.open"
+description = "Worktree: switch / create from default branch"
+
+[[keys.command]]
+key = "prefix+shift+c"
+type = "plugin_action"
+command = "worktrunk.open-current"
+description = "Worktree: switch / create from current branch"
+
+[[keys.command]]
+key = "prefix+shift+d"
+type = "plugin_action"
+command = "worktrunk.remove"
+description = "Worktree: remove"
+
+[ui.sidebar.agents]
+rows = [
+  ["state_icon", "agent", "state_text"],
+  ["$task"],
+  ["$status"],
+]
+# END CHEZMOI: herdr plugins
+EOF
