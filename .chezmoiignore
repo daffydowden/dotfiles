@@ -5,3 +5,11 @@ planning.avanterules
 .DS_Store
 docs
 docs/**
+
+{{ if .is_work }}
+# The SSH config here points Host * at the 1Password agent and the signers file
+# holds the personal key. Managing them on a work machine would overwrite that
+# machine's own SSH config, so leave both alone there.
+.ssh/config
+.config/git/allowed_signers
+{{ end }}

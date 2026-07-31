@@ -1,9 +1,11 @@
 [user]
 	name = Richard Dowden
 	email = rd@richarddowden.com
+{{- if not .is_work }}
 	# Public half of the "GitHub MB Personal" SSH key in 1Password; the private
 	# half never leaves the vault.
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7q3t99QPb/6/NAEpzTj3WK/7bpI3Av+Pk0pn7KT2i/
+{{- end }}
 
 [core]
 	excludesfile = /Users/{{ .chezmoi.username }}/.gitignore_global
@@ -87,7 +89,11 @@
 	who = log --pretty='format:%Cgreen%an%Creset\t%C(yellow)%ar%Creset\t%s ' --no-merges
 	unstage = reset HEAD
 
+{{- if not .is_work }}
+
 # Commit signing via the 1Password SSH agent — signing prompts for Touch ID.
+# Personal machines only: gpgsign with a signing program that isn't installed
+# makes every `git commit` fail, so work machines must not inherit this.
 [gpg]
 	format = ssh
 [gpg "ssh"]
@@ -95,3 +101,4 @@
 	allowedSignersFile = /Users/{{ .chezmoi.username }}/.config/git/allowed_signers
 [commit]
 	gpgsign = true
+{{- end }}
