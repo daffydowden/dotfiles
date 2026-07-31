@@ -10,9 +10,9 @@ function q -d "Ask a general question via pi (multi-turn lite, one-shot pricing)
     test -r $sys_dir/general-q.md; and set sys_prompt (cat $sys_dir/general-q.md)
 
     # Models — env-overridable, shared with `ai`
-    set -l models openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
+    set -l models openai-codex/gpt-5.6-terra openai-codex/gpt-5.6-sol anthropic/claude-haiku-4-5 anthropic/claude-sonnet-5
     set -q AI_MODELS; and set models (string split ',' -- $AI_MODELS)
-    set -l default openai/gpt-5.4-mini
+    set -l default openai-codex/gpt-5.6-terra
     set -q AI_MODEL; and set default $AI_MODEL
     set -l mi 1
     for i in (seq (count $models))

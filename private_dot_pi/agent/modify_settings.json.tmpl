@@ -2,6 +2,15 @@
 input=$(cat)
 [ -z "$input" ] && input='{}'
 echo "$input" | jq \
-  --arg provider "{{ if .is_work }}anthropic{{ else }}openai{{ end }}" \
-  --arg model "{{ if .is_work }}claude-sonnet-4-6-20260301{{ else }}gpt-5.4-nano{{ end }}" \
-  '. + {defaultProvider: $provider, defaultModel: $model}'
+  --arg provider "{{ if .is_work }}anthropic{{ else }}openai-codex{{ end }}" \
+  --arg model "{{ if .is_work }}claude-sonnet-5{{ else }}gpt-5.6-sol{{ end }}" \
+  '. + {
+    defaultProvider: $provider,
+    defaultModel: $model,
+    enabledModels: [
+      "openai-codex/gpt-5.6-terra",
+      "openai-codex/gpt-5.6-sol",
+      "anthropic/claude-haiku-4-5",
+      "anthropic/claude-sonnet-5"
+    ]
+  }'

@@ -119,7 +119,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     mkdir -p $sess_dir
 
     # Models — env-overridable (resolved before describe early-exit so model cycling works)
-    set -l models openai/gpt-5.4-nano openai/gpt-5.4-mini openai/gpt-5.4 anthropic/claude-haiku-4-5 anthropic/claude-sonnet-4-6
+    set -l models openai-codex/gpt-5.6-terra openai-codex/gpt-5.6-sol anthropic/claude-haiku-4-5 anthropic/claude-sonnet-5
     # On work machines, build-env.sh refreshes this from LiteLLM's live model list
     # (see ~/.local/share/ai/executable_build-env.sh) — prefer it over the static
     # defaults above when present.
@@ -132,10 +132,10 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
         set models (string split ',' -- $AI_MODELS)
     end
     # Bare id, matched by suffix so it resolves under any provider prefix
-    # (openai/, anthropic/, litellm/) — matching the full "provider/model"
+    # (openai-codex/, anthropic/, litellm/) — matching the full "provider/model"
     # string would silently miss on work machines where litellm/ replaces
     # the static defaults above.
-    set -l default gpt-5.4-mini
+    set -l default gpt-5.6-terra
     set -q AI_MODEL; and set default $AI_MODEL
     set -l mi 1
     for i in (seq (count $models))
