@@ -1,0 +1,7 @@
+# Public keys trusted to sign commits, for `git log --show-signature` and
+# `git verify-commit`. Without this file git can sign but cannot verify.
+#
+# One line per key: <committer email> <key type> <public key>
+# Add a line here for each machine's key as they are created in 1Password.
+
+rd@richarddowden.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIM7q3t99QPb/6/NAEpzTj3WK/7bpI3Av+Pk0pn7KT2i/
