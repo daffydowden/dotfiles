@@ -1,0 +1,17 @@
+{{- if .herdr_integrations -}}
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v herdr >/dev/null 2>&1; then
+  echo "WARNING: herdr is not installed; skipping integration installation" >&2
+  exit 0
+fi
+
+integration_status="$(herdr integration status 2>/dev/null || true)"
+
+{{ range .herdr_integrations -}}
+if ! printf '%s\n' "$integration_status" | grep -Fq "{{ . }}: current "; then
+  herdr integration install "{{ . }}"
+fi
+{{ end -}}
+{{- end -}}

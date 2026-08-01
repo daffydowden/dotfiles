@@ -9,3 +9,8 @@ herdr_plugins:
     ref: v2.2.0
     commit: 9469ab2abeea4d593906ff7eebb8af22cd22b8e0
     enabled: true
+
+herdr_integrations:
+  - claude
+  - codex
+  - pi
