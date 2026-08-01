@@ -120,6 +120,8 @@ mas "Kindle", id: 302584613
 
 {{ if .is_work -}}
 cask "slack"
+tap "schpet/tap"
+brew "schpet/tap/linear"
 {{ else -}}
 mas "Slack", id: 803453959
 {{ end -}}
@@ -128,6 +130,7 @@ mas "Bear", id: 1091189122
 mas "iA Writer", id: 775737590
 
 brew "bat"
+brew "glow"
 brew "tldr"
 brew "eza"
 brew "cbonsai"

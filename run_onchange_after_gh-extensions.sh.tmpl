@@ -1,0 +1,12 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "WARNING: gh is not installed; skipping GitHub CLI extensions" >&2
+  exit 0
+fi
+
+# Pin extensions so a new machine gets the same tested release.
+gh extension install dlvhdr/gh-dash --pin v4.25.2 --force
+{{- end -}}
