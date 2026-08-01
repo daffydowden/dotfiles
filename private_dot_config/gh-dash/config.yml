@@ -1,0 +1,127 @@
+# PR-first GitHub dashboard. Issues stay deliberately small because Linear is
+# the primary work tracker; notifications focus on requests that need action.
+prSections:
+  - title: Needs My Review
+    filters: is:open review-requested:@me -is:draft
+    limit: 30
+  - title: My Failing PRs
+    filters: is:open author:@me status:failure
+    limit: 20
+  - title: My PRs
+    filters: is:open author:@me -is:draft
+    limit: 30
+  - title: My Drafts
+    filters: is:open author:@me is:draft
+    limit: 20
+  - title: Involved
+    filters: is:open involves:@me -author:@me
+    limit: 30
+
+issuesSections:
+  - title: Assigned
+    filters: is:open assignee:@me
+  - title: Created By Me
+    filters: is:open author:@me
+
+notificationsSections:
+  - title: Review Requested
+    filters: reason:review-requested
+  - title: Mentioned
+    filters: reason:mention
+  - title: Participating
+    filters: reason:participating
+  - title: Assigned
+    filters: reason:assign
+
+repo:
+  branchesRefetchIntervalSeconds: 30
+  prsRefetchIntervalSeconds: 60
+
+defaults:
+  preview:
+    open: true
+    width: 0.50
+    height: 0.50
+    position: auto
+  prsLimit: 30
+  prApproveComment: LGTM
+  issuesLimit: 20
+  notificationsLimit: 30
+  view: prs
+  layout:
+    prs:
+      updatedAt:
+        width: 7
+      createdAt:
+        width: 7
+        hidden: true
+      repo:
+        width: 20
+      author:
+        width: 14
+      authorIcon:
+        hidden: false
+      assignees:
+        width: 16
+        hidden: true
+      base:
+        width: 14
+        hidden: true
+      lines:
+        width: 12
+    issues:
+      updatedAt:
+        width: 7
+      createdAt:
+        width: 7
+        hidden: true
+      repo:
+        width: 20
+      creator:
+        width: 14
+      creatorIcon:
+        hidden: false
+      assignees:
+        width: 16
+        hidden: true
+  refetchIntervalMinutes: 10
+
+keybindings:
+  universal:
+    - key: g
+      name: Open in LazyGit
+      command: cd "{{.RepoPath}}" && lazygit
+
+repoPaths:
+  daffydowden/*: ~/projects/*
+  daffydowden/dotfiles: ~/.local/share/chezmoi
+
+theme:
+  ui:
+    sectionsShowCount: true
+    table:
+      showSeparator: true
+      compact: true
+  colors:
+    text:
+      primary: "#c0caf5"
+      secondary: "#7aa2f7"
+      inverted: "#1a1b26"
+      faint: "#565f89"
+      warning: "#f7768e"
+      success: "#9ece6a"
+      actor: "#bb9af7"
+    background:
+      selected: "#283457"
+    border:
+      primary: "#7aa2f7"
+      secondary: "#bb9af7"
+      faint: "#414868"
+
+pager:
+  diff: delta
+
+confirmQuit: false
+showAuthorIcons: true
+smartFilteringAtLaunch: false
+includeReadNotifications: false
