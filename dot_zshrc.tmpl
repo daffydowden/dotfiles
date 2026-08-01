@@ -10,6 +10,19 @@ export PATH="$HOME/.local/bin:$PATH"
 
 alias grep='ug'
 
+{{ if .is_work -}}
+# gh-dash needs an exact repo list for the reactor-* queue. Discover it using
+# the work machine's SSO-authorized GitHub session immediately before launch.
+gh() {
+    if [[ "$1" == dash ]]; then
+        shift
+        gh-dash-work "$@"
+    else
+        command gh "$@"
+    fi
+}
+{{ end -}}
+
 # Claude Code aliases — mirror config.fish.tmpl
 if [ -n "$CMUX_WORKSPACE_ID" ]; then
     alias c='cmux claude-teams --dangerously-skip-permissions'

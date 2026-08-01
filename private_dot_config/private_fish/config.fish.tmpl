@@ -25,6 +25,17 @@ fish_add_path {{ .work_bin_path }}
 set -gx LITE_LLM_API_KEY {{ .litellm_api_key }}
 
 eval (ai-env)
+
+# Refresh the work-only, repository-prefix filters before launching gh-dash.
+# --wraps keeps gh's normal Fish completions while all other gh commands pass
+# straight through to the real executable.
+function gh --wraps gh
+    if test (count $argv) -gt 0; and test "$argv[1]" = dash
+        gh-dash-work $argv[2..-1]
+    else
+        command gh $argv
+    end
+end
 {{- end }}
 
 set -gx EDITOR nvim

@@ -6,6 +6,14 @@ planning.avanterules
 docs
 docs/**
 
+{{ if not .is_work }}
+# gh-dash discovers private reactor-* repositories using the work machine's
+# SSO-authorized GitHub session, so neither the launcher nor its input config
+# is needed on personal machines.
+.config/gh-dash/work.yml.in
+.local/bin/gh-dash-work
+{{ end }}
+
 {{ if .is_work }}
 # The SSH config here points Host * at the 1Password agent and the signers file
 # holds the personal key. Managing them on a work machine would overwrite that

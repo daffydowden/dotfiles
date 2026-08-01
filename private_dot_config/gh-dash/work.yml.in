@@ -1,0 +1,26 @@
+include:
+  - ~/.config/gh-dash/config.yml
+
+# This file is input to gh-dash-work. GitHub issue/PR search has no repository
+# name-prefix qualifier, so the launcher replaces the marker below with an
+# exact OR-list discovered from the work machine's authenticated gh session.
+prSections:
+  - title: Reactor
+    filters: >-
+      is:open
+      label:reactor
+      (org:rvu-tech OR org:uswitch)
+    limit: 50
+  - title: My Work PRs
+    filters: >-
+      is:open
+      author:@me
+      (org:rvu-tech OR org:uswitch)
+    limit: 50
+  - title: Reactor Reviews
+    filters: >-
+      is:open
+      -is:draft
+      review:required
+      (__REACTOR_REPOS__)
+    limit: 50

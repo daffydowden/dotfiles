@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+config_dir="${XDG_CONFIG_HOME:-$HOME/.config}/gh-dash"
+cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}/gh-dash"
+input_config="$config_dir/work.yml.in"
+generated_config="$cache_dir/work.yml"
+
+mkdir -p "$cache_dir"
+
+if ! reactor_repos="$(
+  gh repo list rvu-tech \
+    --limit 1000 \
+    --json name,isArchived \
+    --jq '.[] | select(.isArchived == false and (.name | startswith("reactor-"))) | .name'
+)"; then
+  if [[ -f "$generated_config" ]]; then
+    printf 'gh-dash: repository refresh failed; using cached work filters\n' >&2
+    exec gh extension exec dash --config "$generated_config" "$@"
+  fi
+
+  printf 'gh-dash: could not discover rvu-tech/reactor-* repositories\n' >&2
+  printf 'Check gh auth status and organisation SSO authorization.\n' >&2
+  exit 1
+fi
+
+repo_filters=""
+while IFS= read -r repo_name; do
+  [[ -z "$repo_name" ]] && continue
+  qualifier="repo:rvu-tech/$repo_name"
+  if [[ -z "$repo_filters" ]]; then
+    repo_filters="$qualifier"
+  else
+    repo_filters="$repo_filters OR $qualifier"
+  fi
+done <<< "$reactor_repos"
+
+if [[ -z "$repo_filters" ]]; then
+  printf 'gh-dash: no active rvu-tech/reactor-* repositories were found\n' >&2
+  exit 1
+fi
+
+temporary_config="$(mktemp "$cache_dir/work.yml.XXXXXX")"
+trap 'rm -f "$temporary_config"' EXIT
+
+sed "s|__REACTOR_REPOS__|$repo_filters|" "$input_config" > "$temporary_config"
+mv "$temporary_config" "$generated_config"
+trap - EXIT
+
+exec gh extension exec dash --config "$generated_config" "$@"
