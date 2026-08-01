@@ -140,11 +140,72 @@ type = "shell"
 command = '"${HERDR_BIN_PATH}" plugin pane open --plugin official.browser --entrypoint browser --placement overlay --focus'
 description = "Browser: open overlay"
 
+[[keys.command]]
+key = "prefix+t"
+type = "plugin_action"
+command = "herdr-navigator.open"
+description = "Navigator: jump to anything"
+
+[[keys.command]]
+key = "prefix+tab"
+type = "plugin_action"
+command = "herdr-navigator.jump-back"
+description = "Navigator: jump to previous workspace"
+
+[[keys.command]]
+key = "prefix+i"
+type = "shell"
+command = '"${HERDR_BIN_PATH}" plugin pane open --plugin herdr-agent-inbox --entrypoint inbox'
+description = "Agent inbox: open"
+
+[[keys.command]]
+key = "prefix+m"
+type = "plugin_action"
+command = "herdr-agent-inbox.settle"
+description = "Agent inbox: settle agent"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "plugin_action"
+command = "herdr-agent-inbox.unread"
+description = "Agent inbox: mark unread"
+
+[[keys.command]]
+key = "prefix+f"
+type = "plugin_action"
+command = "herdr-file-viewer.open-file-viewer"
+description = "Files: open read-only viewer in split"
+
+[[keys.command]]
+key = "prefix+shift+f"
+type = "plugin_action"
+command = "herdr-file-viewer.open-file-viewer-tab"
+description = "Files: open read-only viewer in tab"
+
+[[keys.command]]
+key = "prefix+u"
+type = "plugin_action"
+command = "gh-pr.open-pr"
+description = "GitHub: open current branch PR"
+
+[[keys.command]]
+key = "prefix+space"
+type = "plugin_action"
+command = "ramarivera.pretty-which.open"
+description = "Keybindings: searchable training overlay"
+
 [ui.sidebar.agents]
 rows = [
-  ["state_icon", "agent", "state_text"],
+  ["state_icon", "$title", "$pr"],
+  [{ token = "$flag", fg = "#e0af68", bold = true }, "agent", "workspace", { token = "$age", dim = true }],
   ["$task"],
   ["$status"],
+]
+
+[ui.sidebar.spaces]
+rows = [
+  ["state_icon", "workspace", "$agents", { token = "$busy", dim = true }],
+  ["branch", "git_status"],
 ]
 # END CHEZMOI: herdr plugins
 EOF

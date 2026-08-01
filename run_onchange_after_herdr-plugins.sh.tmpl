@@ -8,9 +8,11 @@ if ! command -v herdr >/dev/null 2>&1; then
 fi
 
 {{ range .herdr_plugins -}}
+{{ if or (not (hasKey . "work_only")) (not .work_only) $.is_work -}}
 # {{ .id }} {{ .ref }}
 herdr plugin install "{{ .source }}" --ref "{{ .commit }}" --yes
 herdr plugin {{ if .enabled }}enable{{ else }}disable{{ end }} "{{ .id }}"
 
+{{ end -}}
 {{ end -}}
 {{- end -}}

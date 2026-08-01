@@ -19,7 +19,31 @@ herdr_plugins:
     ref: v2.2.0
     commit: 9469ab2abeea4d593906ff7eebb8af22cd22b8e0
     enabled: true
-
+  - id: herdr-navigator
+    source: thanhdat77/herdr-navigator
+    ref: v0.3.4
+    commit: ccacb217bccd509bd99c49c80fadd09f5cc3e354
+    enabled: true
+  - id: gh-pr
+    source: wyattjoh/herdr-plugin-gh-pr
+    ref: v0.4.0
+    commit: 6fe22de9a90c569f2186595cfddc3707f55ba1bd
+    enabled: true
+  - id: herdr-agent-inbox
+    source: douglascorrea/herdr-agent-inbox
+    ref: master
+    commit: 78b243279b4da55150b58dc2cc3cffcdc2fd6a04
+    enabled: true
+  - id: herdr-file-viewer
+    source: smarzban/herdr-file-viewer
+    ref: v1.14.0
+    commit: 96fcc0a2bdd2727ec88c38f8c8806f97b7ca0ea0
+    enabled: true
+  - id: ramarivera.pretty-which
+    source: ramarivera/herdr-pretty-which
+    ref: main
+    commit: c11c6e5af6f866b70f837bdd89157ba7441dc543
+    enabled: true
 herdr_integrations:
   - claude
   - codex

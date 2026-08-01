@@ -1,0 +1,10 @@
+[title]
+# Keep prompt-derived titles local and deterministic; no extra model call.
+source = "first"
+summarize = false
+
+[tab]
+rename_from_agent_title = true
+max_chars = 24
+ellipsis = "…"
+respect_manual = true
