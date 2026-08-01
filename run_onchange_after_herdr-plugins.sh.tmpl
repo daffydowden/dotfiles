@@ -10,9 +10,23 @@ fi
 {{ range .herdr_plugins -}}
 {{ if or (not (hasKey . "work_only")) (not .work_only) $.is_work -}}
 # {{ .id }} {{ .ref }}
+{{ if hasKey . "cargo_crate" -}}
+# The supported manifest for this plugin is locally linked after installation.
+# Unlink that registration before refreshing its pinned GitHub checkout.
+herdr plugin unlink "{{ .id }}" >/dev/null 2>&1 || true
+{{ end -}}
 herdr plugin install "{{ .source }}" --ref "{{ .commit }}" --yes
 herdr plugin {{ if .enabled }}enable{{ else }}disable{{ end }} "{{ .id }}"
 
+{{ if hasKey . "cargo_crate" -}}
+# The GitHub checkout provides the pinned plugin source, while its supported
+# Cargo manifest launches the installed binary by name. This avoids the root
+# manifest's broken path lookup (target/release/... without a ./ prefix).
+cargo install "{{ .cargo_crate }}" --version "{{ .cargo_version }}" --locked
+plugin_root="$(herdr plugin list --plugin "{{ .id }}" --json | jq -er '.result.plugins[0].plugin_root')"
+herdr plugin link "$plugin_root/{{ .manifest_subdir }}" --enabled
+
+{{ end -}}
 {{ end -}}
 {{ end -}}
 {{- end -}}

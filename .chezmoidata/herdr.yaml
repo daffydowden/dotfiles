@@ -44,6 +44,9 @@ herdr_plugins:
     ref: main
     commit: c11c6e5af6f866b70f837bdd89157ba7441dc543
     enabled: true
+    cargo_crate: herdr-pretty-which
+    cargo_version: 0.1.5
+    manifest_subdir: cargo
 herdr_integrations:
   - claude
   - codex
