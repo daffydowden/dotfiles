@@ -1,0 +1,11 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v ya >/dev/null 2>&1; then
+  echo "WARNING: Yazi is not installed; skipping flavor installation" >&2
+  exit 0
+fi
+
+ya pkg install
+{{- end -}}

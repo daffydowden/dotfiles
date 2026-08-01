@@ -4,6 +4,16 @@ herdr_plugins:
     ref: v0.5.0
     commit: a3107ca566bafcd463bc138007a0c01051970784
     enabled: true
+  - id: ray.file-explorer
+    source: speardragon/herdr-yazi
+    ref: main
+    commit: fb10e1c556c43f9a222591a1d398bacb563e8df6
+    enabled: true
+  - id: official.browser
+    source: ogulcancelik/herdr-browser
+    ref: main
+    commit: be6888b71cf4eb5939ee79a746bd1a1c22ade046
+    enabled: true
   - id: caioniehues.herdmates
     source: caioniehues/herdmates
     ref: v2.2.0

@@ -1,0 +1,17 @@
+{{- if .claude_plugins -}}
+#!/bin/bash
+set -euo pipefail
+
+if ! command -v claude >/dev/null 2>&1; then
+  echo "WARNING: claude is not installed; skipping plugin installation" >&2
+  exit 0
+fi
+
+plugin_list="$(claude plugin list 2>/dev/null || true)"
+
+{{ range .claude_plugins -}}
+if ! printf '%s\n' "$plugin_list" | grep -Fq "{{ . }}"; then
+  claude plugin install "{{ . }}" --scope user
+fi
+{{ end -}}
+{{- end -}}
