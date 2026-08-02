@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""Merge chezmoi-owned cmux defaults without discarding user customizations."""
+
+import json
+import re
+import sys
+
+
+def strip_jsonc_comments(source: str) -> str:
+    output: list[str] = []
+    index = 0
+    in_string = False
+    escaped = False
+    while index < len(source):
+        character = source[index]
+        following = source[index + 1] if index + 1 < len(source) else ""
+        if in_string:
+            output.append(character)
+            if escaped:
+                escaped = False
+            elif character == "\\":
+                escaped = True
+            elif character == '"':
+                in_string = False
+            index += 1
+            continue
+        if character == '"':
+            in_string = True
+            output.append(character)
+            index += 1
+            continue
+        if character == "/" and following == "/":
+            index += 2
+            while index < len(source) and source[index] not in "\r\n":
+                index += 1
+            continue
+        if character == "/" and following == "*":
+            index += 2
+            while index + 1 < len(source) and source[index : index + 2] != "*/":
+                index += 1
+            index += 2
+            continue
+        output.append(character)
+        index += 1
+    return "".join(output)
+
+
+raw = sys.stdin.read()
+if raw.strip():
+    uncommented = strip_jsonc_comments(raw)
+    uncommented = re.sub(r",(\s*[}\]])", r"\1", uncommented)
+    config = json.loads(uncommented)
+else:
+    config = {}
+
+config["$schema"] = "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json"
+config["schemaVersion"] = 1
+config.setdefault("app", {})["appearance"] = "dark"
+config.setdefault("sidebarAppearance", {})["matchTerminalBackground"] = True
+config.setdefault("automation", {})["socketControlMode"] = "automation"
+
+json.dump(config, sys.stdout, indent=2)
+sys.stdout.write("\n")

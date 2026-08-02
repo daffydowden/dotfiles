@@ -1,0 +1,17 @@
+{{- if and (eq .chezmoi.os "darwin") .is_work -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Launcher hash: {{ include "dot_local/bin/executable_cmux-work-dashboard" | sha256sum }}
+# LaunchAgent hash: {{ include "private_Library/LaunchAgents/com.richarddowden.cmux-work-dashboard.plist.tmpl" | sha256sum }}
+
+label="com.richarddowden.cmux-work-dashboard"
+domain="gui/$(id -u)"
+plist="$HOME/Library/LaunchAgents/$label.plist"
+
+# Refresh the login agent when either its plist or launcher changes. The agent
+# is short-lived and the launcher itself is idempotent.
+launchctl bootout "$domain/$label" >/dev/null 2>&1 || true
+launchctl bootstrap "$domain" "$plist"
+launchctl kickstart "$domain/$label"
+{{ end -}}

@@ -15,6 +15,12 @@ scripts/**
 # is needed on personal machines.
 .config/gh-dash/work.yml.in
 .local/bin/gh-dash-work
+
+# The work dashboard and its cmux defaults are intentionally absent from
+# personal machines.
+.config/cmux/cmux.json
+.local/bin/cmux-work-dashboard
+Library/LaunchAgents/com.richarddowden.cmux-work-dashboard.plist
 {{ end }}
 
 {{ if .is_work }}

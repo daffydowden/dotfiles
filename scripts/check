@@ -70,6 +70,7 @@ validate_rendered() {
     *.yaml.tmpl|*.yml.tmpl)
       ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV[0]), aliases: true)' "$rendered_file"
       ;;
+    *.plist.tmpl) plutil -lint "$rendered_file" >/dev/null ;;
   esac
 }
 
@@ -120,6 +121,14 @@ for profile in personal work; do
   printf '' | bash "$check_tmp/modifier.sh" >"$check_tmp/first"
   bash "$check_tmp/modifier.sh" <"$check_tmp/first" >"$check_tmp/second"
   cmp -s "$check_tmp/first" "$check_tmp/second"
+
+  modifier=private_dot_config/cmux/modify_private_cmux.json.tmpl
+  render_template "$profile" "$modifier" "$check_tmp/modifier.py"
+  printf '{\n// Existing JSONC is accepted.\n"actions":{"keep":{"type":"command"}},\n}\n' | \
+    python3 "$check_tmp/modifier.py" >"$check_tmp/first"
+  python3 "$check_tmp/modifier.py" <"$check_tmp/first" >"$check_tmp/second"
+  cmp -s "$check_tmp/first" "$check_tmp/second"
+  jq -e '.actions.keep.type == "command"' "$check_tmp/second" >/dev/null
 done
 
 if rg -n --hidden -g '!.git/**' -g '!docs/**' -g '!scripts/check' \

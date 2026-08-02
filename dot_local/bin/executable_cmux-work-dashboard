@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+
+workspace_name="Work dashboard"
+layout='{"pane":{"surfaces":[{"type":"terminal","name":"LTUI","env":{"CMUX_STARTUP_APP":"ltui"},"focus":true},{"type":"terminal","name":"GitHub","env":{"CMUX_STARTUP_APP":"gh-dash"}}]}}'
+
+cmux_bin="$(command -v cmux || true)"
+if [[ -z "$cmux_bin" ]]; then
+  printf 'cmux-work-dashboard: cmux is not installed\n' >&2
+  exit 1
+fi
+
+if ! "$cmux_bin" ping >/dev/null 2>&1; then
+  /usr/bin/open -gj -a cmux
+fi
+
+attempt=0
+until "$cmux_bin" ping >/dev/null 2>&1; do
+  attempt=$((attempt + 1))
+  if (( attempt >= 60 )); then
+    printf 'cmux-work-dashboard: cmux socket did not become ready\n' >&2
+    exit 1
+  fi
+  sleep 1
+done
+
+# Allow cmux's own session restoration to finish before deciding whether the
+# managed dashboard is missing.
+sleep 2
+
+tree_json="$("$cmux_bin" --json tree --all)"
+workspace_ref="$(
+  jq -r --arg name "$workspace_name" \
+    '[.windows[]?.workspaces[]? | select(.title == $name) | .ref][0] // empty' \
+    <<<"$tree_json"
+)"
+
+if [[ -z "$workspace_ref" ]]; then
+  create_output="$(
+    "$cmux_bin" --id-format refs new-workspace \
+      --name "$workspace_name" \
+      --description 'Linear and GitHub work queues' \
+      --cwd "$HOME" \
+      --layout "$layout" \
+      --focus false
+  )"
+  workspace_ref="$(sed -n 's/.*\(workspace:[0-9][0-9]*\).*/\1/p' <<<"$create_output")"
+fi
+
+if [[ -z "$workspace_ref" ]]; then
+  printf 'cmux-work-dashboard: could not determine workspace reference\n' >&2
+  exit 1
+fi
+
+"$cmux_bin" workspace-action --workspace "$workspace_ref" --action pin
+"$cmux_bin" workspace select "$workspace_ref"

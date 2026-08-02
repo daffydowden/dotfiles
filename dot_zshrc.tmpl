@@ -57,3 +57,17 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
 if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+{{ if .is_work -}}
+# cmux persists this per-surface marker in its session manifest. Clear it before
+# launching so a subshell opened from the TUI does not recursively relaunch it.
+if [[ -n "${CMUX_STARTUP_APP:-}" ]]; then
+    cmux_startup_app="$CMUX_STARTUP_APP"
+    unset CMUX_STARTUP_APP
+    case "$cmux_startup_app" in
+        ltui) command ltui ;;
+        gh-dash) gh dash ;;
+    esac
+    unset cmux_startup_app
+fi
+{{ end -}}

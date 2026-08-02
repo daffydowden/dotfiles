@@ -82,3 +82,19 @@ end
 zoxide init fish | source
 
 if command -v wt >/dev/null 2>&1; eval (command wt config shell init fish); end
+
+{{- if .is_work }}
+# cmux persists this per-surface marker in its session manifest. Clear it before
+# launching so a subshell opened from the TUI does not recursively relaunch it.
+if status is-interactive; and set -q CMUX_STARTUP_APP
+    set -l cmux_startup_app "$CMUX_STARTUP_APP"
+    set --erase CMUX_STARTUP_APP
+    switch "$cmux_startup_app"
+        case ltui
+            command ltui
+        case gh-dash
+            gh dash
+    end
+    set --erase cmux_startup_app
+end
+{{- end }}
