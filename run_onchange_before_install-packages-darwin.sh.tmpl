@@ -7,6 +7,20 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
+# Current Homebrew requires an explicit trust decision before loading formulae
+# from third-party taps. These are the same taps declared in the Brewfile below.
+for tap in \
+  trycua/lume \
+  d12frosted/emacs-plus \
+  charmbracelet/tap \
+  {{ if .is_work -}}
+  schpet/tap
+  {{- else -}}
+  openhue/cli
+  {{- end }}; do
+  brew trust "$tap"
+done
+
 # The rendered Brewfile is embedded so run_onchange tracks package/profile
 # changes, while ~/.Brewfile is also deployed for normal `brew bundle` use.
 brew bundle --no-upgrade --file=/dev/stdin <<'BREWFILE'
