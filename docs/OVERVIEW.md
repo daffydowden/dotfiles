@@ -1,107 +1,76 @@
-# Dotfiles Overview
+# Dotfiles overview
 
-A [chezmoi](https://chezmoi.io)-managed macOS dotfiles repo. `chezmoi init --apply`
-renders templates and runs the setup scripts to bring a fresh Mac to a known state.
-Source root: `~/.local/share/chezmoi`. Bootstrap a new machine with `bootstrap.sh`.
+This is a macOS-focused, chezmoi-managed environment. A fresh machine starts
+with `bootstrap.sh`; normal maintenance uses `chezmoi diff` and `chezmoi apply`.
 
-## Repo Layout
+## Design boundaries
 
-- **Top level** — single-file configs (`dot_gitconfig.tmpl`, `dot_zshrc.tmpl`,
-  `dot_vimrc`, `dot_bashrc`) and the `run_*` setup scripts.
-- **`private_dot_config/`** → `~/.config/` — most app configs (fish, nvim, ghostty,
-  kitty, tmux, bat, k9s, zed, starship, ccstatusline, worktrunk).
-- **`dot_local/`** → `~/.local/` — `bin/` helper scripts and `share/ai/` (the `ai`
-  suggester's env builder + system prompts).
-- **`private_dot_pi/`** → `~/.pi/` — pi coding-agent settings template.
-- **`.chezmoidata/`** — static data (`osx_default.yaml`) consumed by templates.
-- **`docs/`** — design notes & plans (chezmoi-ignored, not deployed).
+- **Managed state** lives in the repository and should be reproducible from a
+  clean account: shell/editor/terminal configuration, the Brewfile, Mise tools,
+  macOS defaults, and small helper commands.
+- **Runtime-owned state** is preserved with chezmoi `modify_` scripts where an
+  application also writes its own file. Claude, Pi, and Herdr settings use this
+  pattern and their modifiers are tested for idempotence.
+- **Secrets** are never committed or rendered into generated configuration.
+  Interactive Fish sessions load API credentials directly from 1Password on
+  personal machines or Keeper on work machines. `load-ai-secrets` forces a
+  refresh in the current shell.
 
-## chezmoi Naming Conventions
+## Layout
 
-- `dot_` → leading `.` (e.g. `dot_zshrc` → `~/.zshrc`).
-- `private_` → file/dir gets `0600`/`0700` perms.
-- `executable_` → file gets `+x`.
-- `empty_` → keep a zero-byte file; `*.keep` → keep an otherwise-empty dir.
-- `.tmpl` → Go-template rendered with chezmoi data (`.is_work`, `.chezmoi.os`,
-  secrets, etc.).
-- `run_once_` / `run_onchange_` + `before_`/`after_` → setup scripts (see below).
+- `.chezmoidata/` — non-secret shared data such as macOS defaults and pinned
+  Herdr plugin revisions.
+- `.chezmoitemplates/` — reusable internal templates, currently the Brewfile.
+- `dot_*` / `private_dot_*` — files deployed into the home directory.
+- `run_*` — convergent setup and migration scripts executed by chezmoi.
+- `scripts/check` — repository-only validation for both machine profiles.
+- `docs/` — design and troubleshooting notes; not deployed.
 
-## Config Domains
+## Bootstrap and packages
 
-- **Shell** — fish is primary (`private_fish/config.fish.tmpl` + `functions/`),
-  with zsh/bash mirrors. Shared: starship prompt, zoxide, `nvim` as `$EDITOR`,
-  `grep`→`ug` (ugrep), worktrunk shell init, and `claude` aliases that route
-  through `cmux claude-teams` when inside a cmux workspace.
-- **Editor** — Neovim on LazyVim (`nvim/lua/plugins/*`, heavy on AI plugins:
-  avante, claudecode, codecompanion, parrot, magenta). Zed and a minimal
-  `dot_vimrc` as backups.
-- **Terminal** — Ghostty (primary) and Kitty, both themed tokyonight; tmux config.
-- **Git** — `dot_gitconfig.tmpl`: delta pager, `gh` credential helper, rebase-pull,
-  autostash, rerere, zdiff3, histogram diff, and a set of short aliases.
-- **Tooling** — mise (runtime versions), k9s (+skin), bat (+vendored themes),
-  worktrunk (`wt`), ccstatusline. Work machines additionally get Sourcegraph,
-  Jira, LiteLLM, and k8s env vars from the `.is_work` template branch.
+`bootstrap.sh` installs Xcode Command Line Tools, Homebrew, chezmoi, and Keeper
+when the selected profile needs it. Package installation is declared once in
+`.chezmoitemplates/Brewfile.tmpl`; the same content is deployed as `~/.Brewfile`
+and embedded in the strict pre-apply package runner. A failed bundle therefore
+stops `chezmoi apply` and is retried on the next run.
 
-## The `ai` Suite (fish)
+Global runtimes are declared in `~/.config/mise/config.toml`. Major versions are
+fixed where compatibility matters; tools intentionally marked `latest` follow
+upstream. Neovim plugins likewise intentionally follow upstream rather than a
+committed lockfile.
 
-A pi-backed shell assistant under `private_fish/functions/` + `dot_local/share/ai/`:
+## Shell and AI helpers
 
-- **`halp` / `h`** — env-aware command suggester with `describe`, `tldr`, and a
-  no-arg "debug previous command" mode. Cycles through models, logs outcomes to
-  `~/.local/share/ai/history.jsonl`, and surfaces recent failures back to the model.
-- **`q`** — general one-shot question asker with follow-up/model-cycle.
-- **`build-env.sh`** — introspects the live system (brew, mise, versions) into
-  `~/.cache/ai/env.txt` so suggestions match the actual machine; self-heals on drift.
-- **`system-prompts/`** — the prompt text for each mode.
+Fish is the primary shell. Zsh is the fuller fallback; Bash receives only a
+minimal prompt/tool initialisation. Shell routing integrates Claude with cmux
+and Herdr while preventing inherited cmux variables from causing recursion.
 
-## Run Scripts
+The Fish AI helpers are split by responsibility:
 
-- **`bootstrap.sh`** — one-time manual bootstrap: Xcode CLT → Homebrew → keeper-cli →
-  chezmoi → `chezmoi init --apply daffydowden/dotfiles`.
-- **`run_onchange_before_install-packages-darwin.sh.tmpl`** — the Brewfile; installs
-  all formulas/casks/MAS apps via `brew bundle`.
-- **`run_once_after_mise.sh.tmpl`** — pins global mise runtimes (node, bun, python,
-  rust, ruby, java, uv).
-- **`run_onchange_darwin-defaults.sh.tmpl`** — applies `macos defaults` from
-  `.chezmoidata/osx_default.yaml` (Dock, Finder, key-repeat, hotkeys), gated by
-  macOS major version.
-- **`run_onchange_after_1password.sh.tmpl`** — (personal only) checks that the
-  1Password CLI is authenticated, then pulls API keys out of the `Personal` vault
-  into universal fish vars.
-- **`run_onchange_after_bat-cache.sh.tmpl`** — rebuilds bat theme cache when themes change.
-- **`run_onchange_after_ai-env-cache.sh.tmpl`** — rebuilds the `ai` env cache when
-  the Brewfile changes.
+- `halp` / `h` suggests, revises, explains, or debugs shell commands.
+- Enter places a suggestion back onto the normal Fish command line for review.
+  Explicit execution uses `e`; recognised destructive commands require typing
+  `EXECUTE` before they run.
+- `q` provides lightweight general Q&A.
+- `__ai_models`, `__ai_spin`, `__ai_log`, and the danger helpers are shared,
+  independently autoloaded implementation functions.
+- `build-env.sh` records installed tools and discovers work LiteLLM models.
 
-## Other Notable Pieces
+## Application configuration
 
-- **`dot_local/bin/wt-claude` / `wt-agent-marker`** — worktrunk wrappers that no-op
-  marker commands outside a git repo.
-- **`private_dot_ssh/config.tmpl`** — points SSH at the 1Password agent for all
-  hosts, and includes colima's generated host entries. Private keys live in the
-  vault, not on disk.
+- Neovim uses LazyVim with explicitly declared extras and focused files under
+  `lua/plugins/`.
+- Ghostty is primary. Kitty remains as a minimal fallback, using the same Tokyo
+  Night family without vendoring Kitty's full default configuration.
+- Git uses delta, SSH signing through 1Password on personal machines, rebased
+  pulls, autostash, rerere, and histogram diffs.
+- Herdr plugin sources are pinned to commits; Claude and Herdr integrations are
+  repaired idempotently after apply.
 
-## Gotchas
+## Validation
 
-Fragility risks flagged in the repo audit (task #1). Be aware when editing/applying:
-
-**Critical**
-
-- **Brew bundle fails silently** — `install-packages-darwin.sh.tmpl` lacks `set -e`,
-  and a failed `brew bundle` only warns to stderr while exiting `0`, so chezmoi sees
-  success despite partial package installs. Check brew output manually after apply.
-- **Bootstrap doesn't verify keeper** — `bootstrap.sh` doesn't confirm
-  `keeper-commander` installed before running `chezmoi init`, which needs it for work
-  secrets; a failed install surfaces as a confusing init error.
-- **Work secrets are unvalidated** — `.chezmoi.toml.tmpl`'s `keeperFindPassword`
-  calls (Sourcegraph/Jira/LiteLLM) have no error handling; empty values silently
-  break downstream tools.
-
-**High**
-
-- **Hardcoded model versions** — `private_dot_pi/.../modify_settings.json.tmpl` pins
-  exact model IDs (`claude-sonnet-4-6-…`, `gpt-5.4-nano`) that will drift/deprecate.
-- **Hardcoded `claude` CLI flags** — `worktrunk/config.toml`'s commit-message command
-  assumes a stable CLI API (`--model=haiku --tools='' --disable-slash-commands`);
-  no version guard if the CLI changes.
-
-Full file:line detail and suggested fixes live in task #1's description.
+Run `scripts/check` before committing. It renders every template against fake
+personal and work profiles, parses shell/Fish/Lua/JSON/TOML/YAML where relevant,
+checks modifier idempotence, scans for common secret formats, and runs
+`git diff --check`. It does not install packages, contact vaults, or mutate the
+home directory.

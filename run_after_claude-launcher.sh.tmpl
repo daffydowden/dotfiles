@@ -24,6 +24,8 @@ vdir="$HOME/.local/share/claude/versions"
 launcher="$HOME/.local/bin/claude"
 
 if [ -d "$vdir" ] && [ ! -e "$launcher" ]; then
+  # Version filenames are installer-controlled.
+  # shellcheck disable=SC2012
   latest="$(ls -1 "$vdir" 2>/dev/null | sort -V | tail -1)"
   if [ -n "$latest" ]; then
     mkdir -p "$(dirname "$launcher")"

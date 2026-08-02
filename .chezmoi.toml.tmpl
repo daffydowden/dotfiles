@@ -2,19 +2,16 @@
 {{- if (hasKey . "is_work") -}}
 {{-   $isWork = .is_work -}}
 {{- else -}}
-{{-   $isWork = promptBool "Is this a work machine (yes/no)" -}}
+{{-   $isWork = promptBool "Is this a work machine?" -}}
 {{- end -}}
 
 [data]
     is_work = {{ $isWork }}
 {{- if $isWork }}
-    src_endpoint = "{{ promptString "Sourcegraph endpoint URL" }}"
-    src_access_token = "{{ keeperFindPassword "sourcegraph_access_token" }}"
-    jira_user = "{{ promptString "Jira email address" }}"
-    jira_token = "{{ keeperFindPassword "jira_token" }}"
-    litellm_api_key = "{{ keeperFindPassword "LiteLLM API Key" }}"
-    work_bin_path = "{{ promptString "Work bin path (e.g. /opt/company/bin)" }}"
-    k8s_cluster_1 = "{{ promptString "Primary k8s cluster name" }}"
-    k8s_cluster_2 = "{{ promptString "Secondary k8s cluster name" }}"
-    k8s_namespace = "{{ promptString "Default k8s namespace" }}"
+    src_endpoint = {{ if hasKey . "src_endpoint" }}{{ .src_endpoint | quote }}{{ else }}{{ promptString "Sourcegraph endpoint URL" | quote }}{{ end }}
+    jira_user = {{ if hasKey . "jira_user" }}{{ .jira_user | quote }}{{ else }}{{ promptString "Jira email address" | quote }}{{ end }}
+    work_bin_path = {{ if hasKey . "work_bin_path" }}{{ .work_bin_path | quote }}{{ else }}{{ promptString "Work bin path (e.g. /opt/company/bin)" | quote }}{{ end }}
+    k8s_cluster_1 = {{ if hasKey . "k8s_cluster_1" }}{{ .k8s_cluster_1 | quote }}{{ else }}{{ promptString "Primary k8s cluster name" | quote }}{{ end }}
+    k8s_cluster_2 = {{ if hasKey . "k8s_cluster_2" }}{{ .k8s_cluster_2 | quote }}{{ else }}{{ promptString "Secondary k8s cluster name" | quote }}{{ end }}
+    k8s_namespace = {{ if hasKey . "k8s_namespace" }}{{ .k8s_namespace | quote }}{{ else }}{{ promptString "Default k8s namespace" | quote }}{{ end }}
 {{- end }}

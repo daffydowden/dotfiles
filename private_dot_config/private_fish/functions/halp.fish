@@ -119,18 +119,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
     mkdir -p $sess_dir
 
     # Models — env-overridable (resolved before describe early-exit so model cycling works)
-    set -l models openai-codex/gpt-5.6-terra openai-codex/gpt-5.6-sol anthropic/claude-haiku-4-5 anthropic/claude-sonnet-5
-    # On work machines, build-env.sh refreshes this from LiteLLM's live model list
-    # (see ~/.local/share/ai/executable_build-env.sh) — prefer it over the static
-    # defaults above when present.
-    set -l litellm_models_file ~/.cache/ai/litellm-models.txt
-    if test -r $litellm_models_file
-        set -l lm (string match -rv '^\s*$' -- (cat $litellm_models_file))
-        test (count $lm) -gt 0; and set models (string replace -r '^' 'litellm/' -- $lm)
-    end
-    if set -q AI_MODELS
-        set models (string split ',' -- $AI_MODELS)
-    end
+    set -l models (__ai_models)
     # Bare id, matched by suffix so it resolves under any provider prefix
     # (openai-codex/, anthropic/, litellm/) — matching the full "provider/model"
     # string would silently miss on work machines where litellm/ replaces
@@ -430,10 +419,23 @@ Clarification: $clarification"
         echo
         printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $cmd) (set_color normal)
         set_color brblack; echo "  ($models[$mi] · $elapsed"s")"; set_color normal
-        read --nchars 1 --prompt-str "[e]xec [r]evise [m]odel [d]escribe [c]opy [t]alk [q]uit: " choice
+        read --nchars 1 --prompt-str "[enter]review [e]xec [r]evise [m]odel [d]escribe [c]opy [t]alk [q]uit: " choice
         echo
         switch $choice
-            case e ''
+            case '' i
+                # Put the candidate back at a normal prompt. Fish will then
+                # record and execute it exactly like a user-written command.
+                commandline --replace -- "$cmd"
+                __ai_log "$task" "$cmd" $models[$mi] r $session
+                return 0
+            case e
+                if __halp_is_dangerous "$cmd"
+                    read --prompt-str "potentially destructive; type EXECUTE to continue: " confirmation
+                    if test "$confirmation" != EXECUTE
+                        echo "not executed"
+                        continue
+                    end
+                end
                 # halp ran this, not the user at the prompt, so fish's normal
                 # history capture never sees it — inject it explicitly so it's
                 # available for up-arrow / ctrl-r like anything else.
@@ -504,94 +506,4 @@ Let's discuss."
                 return
         end
     end
-end
-
-function __ai_pick_model -d "Prompt to choose from a list of models; prints the chosen model name, or nothing if cancelled"
-    set -l models $argv[1..-2]
-    set -l current $argv[-1]
-    set -l picked ""
-    if command -q fzf
-        set picked (printf '%s\n' $models | fzf --prompt='model> ' --height=~40% --reverse --header="current: $current")
-    else
-        for i in (seq (count $models))
-            set -l marker ' '
-            test "$models[$i]" = "$current"; and set marker '*'
-            printf ' %s%d) %s\n' $marker $i $models[$i] >&2
-        end
-        read --prompt-str 'model #: ' num
-        if string match -qr '^[0-9]+$' -- $num; and test $num -ge 1 -a $num -le (count $models)
-            set picked $models[$num]
-        end
-    end
-    printf '%s' $picked
-end
-
-function __ai_spin -d "Run argv as a background job, show a spinner on stderr until it exits, print its stdout"
-    set -l tmp (mktemp -t ai-spin.XXXXXX)
-    $argv >$tmp 2>/dev/null &
-    set -l pid $last_pid
-    set -l frames ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
-    set -l i 1
-    while kill -0 $pid 2>/dev/null
-        printf '\r%s thinking…' $frames[$i] >&2
-        set i (math $i % (count $frames) + 1)
-        sleep 0.08
-    end
-    wait $pid 2>/dev/null
-    printf '\r\033[K' >&2
-    cat $tmp
-    rm -f $tmp
-end
-
-function __ai_log
-    set -l task $argv[1]
-    set -l cmd $argv[2]
-    set -l model $argv[3]
-    set -l outcome $argv[4]
-    set -l session $argv[5]
-    set -l rc $argv[6]
-    set -l error $argv[7]
-    set -l hist ~/.local/share/ai/history.jsonl
-    if not command -q jq
-        return 0
-    end
-    set -l ok true
-    test -n "$rc"; and test $rc -ne 0; and set ok false
-    set -l rc_arg
-    test -n "$rc"; and set rc_arg --argjson rc $rc
-    jq -cn \
-        --arg ts (date -u +%Y-%m-%dT%H:%M:%SZ) \
-        --arg cwd (pwd) \
-        --arg task "$task" \
-        --arg cmd "$cmd" \
-        --arg model "$model" \
-        --arg outcome "$outcome" \
-        --arg session "$session" \
-        --argjson ok $ok \
-        --arg error "$error" \
-        '{ts:$ts, cwd:$cwd, task:$task, cmd:$cmd, model:$model, outcome:$outcome, session:$session, ok:$ok, error:$error}' \
-        >> $hist
-end
-
-function __halp_highlight_dangerous
-    set -l r (set_color red)
-    set -l c (set_color cyan)
-    set -l h $argv[1]
-
-    # Dangerous commands (word-boundary safe — \b prevents matching substrings)
-    for w in rm rmdir dd mkfs fdisk parted gdisk shred truncate wipefs kill killall pkill sudo
-        set h (string replace --regex --all "\\b$w\\b" "$r$w$c" -- $h)
-    end
-
-    # Dangerous flags (literal substring — - is not a word char so \b doesn't help)
-    for f in '-rf' '-fr' '-Rf' '-fR' '-rF' '-Fr' '--force' '--hard' '--no-preserve-root' '--force-with-lease'
-        set h (string replace --all -- $f "$r$f$c" $h)
-    end
-
-    # Pipe to shell
-    for s in sh bash fish zsh ksh
-        set h (string replace --regex --all "\\|\\s*$s\\b" "$r| $s$c" -- $h)
-    end
-
-    printf '%s' $h
 end

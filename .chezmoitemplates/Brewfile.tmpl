@@ -1,0 +1,118 @@
+# Homebrew bundle shared by the deployed ~/.Brewfile and the bootstrap runner.
+# Keep this file declarative: setup and error handling belong in the run script.
+cask_args require_sha: true
+
+# Environment
+brew "docker"
+brew "colima"
+brew "git"
+brew "gh"
+brew "tig"
+brew "lazygit"
+brew "git-delta"
+cask "kitty"
+cask "ghostty"
+cask "cmux"
+brew "jq"
+brew "miller"
+brew "fish"
+brew "nushell"
+brew "starship"
+brew "zoxide"
+cask "utm"
+tap "trycua/lume"
+brew "trycua/lume/lume"
+
+# Browsers
+cask "google-chrome", args: { require_sha: false }
+cask "brave-browser"
+
+# Databases
+brew "postgresql"
+brew "redis"
+brew "memcached"
+cask "datagrip"
+
+# Editors and development tools
+brew "neovim"
+tap "d12frosted/emacs-plus"
+brew "d12frosted/emacs-plus/emacs-plus"
+cask "visual-studio-code"
+brew "pandoc"
+brew "shellcheck"
+cask "sublime-text"
+cask "obsidian"
+cask "bruno"
+brew "fzf"
+brew "yazi"
+brew "ripgrep"
+brew "ugrep"
+brew "fd"
+
+# Fonts
+cask "font-meslo-lg-nerd-font"
+cask "font-mononoki-nerd-font"
+cask "font-inconsolata-nerd-font"
+cask "font-fira-code-nerd-font"
+cask "font-fira-mono-nerd-font"
+cask "font-symbols-only-nerd-font"
+
+# Runtime manager dependencies
+brew "coreutils"
+brew "curl"
+brew "mise"
+brew "gpg"
+
+# Utilities
+cask "rectangle"
+mas "Lungo", id: 1263070803
+{{ if not .is_work -}}
+cask "1password"
+cask "1password-cli"
+{{ end -}}
+cask "jordanbaird-ice"
+mas "Kindle", id: 302584613
+{{ if .is_work -}}
+cask "slack"
+tap "schpet/tap"
+brew "schpet/tap/linear"
+{{ else -}}
+mas "Slack", id: 803453959
+{{ end -}}
+mas "Bear", id: 1091189122
+mas "iA Writer", id: 775737590
+brew "bat"
+brew "glow"
+brew "tldr"
+brew "eza"
+brew "cbonsai"
+brew "openvpn"
+{{ if not .is_work -}}
+mas "Windows App", id: 1295203466
+{{ end -}}
+
+# Applications
+cask "spotify", args: { require_sha: false }
+cask "lm-studio"
+brew "aichat"
+cask "positron"
+
+# AI and agent tooling
+cask "zed"
+cask "codex"
+cask "codex-app"
+brew "gemini-cli"
+cask "claude"
+brew "opencode"
+brew "repomix"
+brew "llm"
+brew "herdr"
+brew "worktrunk"
+tap "charmbracelet/tap"
+brew "charmbracelet/tap/crush"
+
+{{ if not .is_work -}}
+# Personal
+tap "openhue/cli"
+brew "openhue/cli/openhue-cli"
+{{ end -}}

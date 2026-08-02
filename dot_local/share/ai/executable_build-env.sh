@@ -147,10 +147,14 @@ Preferences (universal — apply regardless of what's installed):
 EOF
 
     if [ -n "$formulas" ]; then
+        # Backticks are documentation, not expansion.
+        # shellcheck disable=SC2016
         printf 'Brew formulas installed (top-level — `brew leaves`):\n%s\n\n' "$formulas"
     fi
 
     if [ -n "$mise_tools" ]; then
+        # Backticks are documentation, not expansion.
+        # shellcheck disable=SC2016
         printf 'Active mise runtimes (`mise ls --current`):\n%s\n\n' "$mise_tools"
     fi
 

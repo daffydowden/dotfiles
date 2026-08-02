@@ -1,0 +1,14 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+# mise config hash: {{ include "private_dot_config/mise/config.toml" | sha256sum }}
+if ! command -v mise >/dev/null 2>&1; then
+  printf 'chezmoi: mise is not installed; package setup may have failed\n' >&2
+  exit 1
+fi
+
+# This script is prefixed 00 because later after-scripts may need Cargo, Pi,
+# Node, or another runtime supplied by Mise on a fresh machine.
+mise install
+{{ end -}}

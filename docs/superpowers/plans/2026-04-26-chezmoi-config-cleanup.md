@@ -1,5 +1,8 @@
 # Chezmoi Config Cleanup Implementation Plan
 
+> Historical implementation record. Some paths, model names, and setup steps
+> have since changed; use `docs/OVERVIEW.md` for the current architecture.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Tighten the chezmoi-managed dotfiles — remove cruft, modernise tooling, align colour palette to tokyonight, and make `vim`/`zsh` paths usable as secondary tools without conflicting with Neovim/fish.

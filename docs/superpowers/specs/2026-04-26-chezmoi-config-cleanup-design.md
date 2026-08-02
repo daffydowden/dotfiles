@@ -1,5 +1,8 @@
 # Chezmoi Config Cleanup — Design
 
+> Historical design record. Some paths, model names, and setup steps have
+> since changed; use `docs/OVERVIEW.md` for the current architecture.
+
 Date: 2026-04-26
 Scope: Tighten the chezmoi-managed dotfiles (excluding the already-modernised
 Neovim config). Remove dead/legacy config, modernise where defaults have

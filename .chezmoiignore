@@ -5,6 +5,8 @@ planning.avanterules
 .DS_Store
 docs
 docs/**
+scripts
+scripts/**
 
 {{ if not .is_work }}
 # gh-dash discovers private reactor-* repositories using the work machine's

@@ -45,7 +45,7 @@
       {
         "id": "wt-agent-marker",
         "type": "custom-command",
-        "commandPath": "/Users/richarddowden/.local/bin/wt-agent-marker",
+        "commandPath": "{{ .chezmoi.homeDir }}/.local/bin/wt-agent-marker",
         "color": "black",
         "backgroundColor": "bgGreen",
         "merge": true,
@@ -69,18 +69,10 @@
   "globalBold": false,
   "powerline": {
     "enabled": true,
-    "separators": [
-      ""
-    ],
-    "separatorInvertBackground": [
-      false
-    ],
-    "startCaps": [
-      ""
-    ],
-    "endCaps": [
-      ""
-    ],
+    "separators": [""],
+    "separatorInvertBackground": [false],
+    "startCaps": [""],
+    "endCaps": [""],
     "autoAlign": false,
     "theme": ""
   },

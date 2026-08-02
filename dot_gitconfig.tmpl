@@ -1,3 +1,4 @@
+{{- $brewPrefix := output "brew" "--prefix" | trim -}}
 [user]
 	name = Richard Dowden
 	email = rd@richarddowden.com
@@ -8,8 +9,8 @@
 {{- end }}
 
 [core]
-	excludesfile = /Users/{{ .chezmoi.username }}/.gitignore_global
-	editor = /opt/homebrew/bin/nvim
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+	editor = {{ $brewPrefix }}/bin/nvim
 	autocrlf = input
 	safecrlf = true
 	pager = delta
@@ -22,11 +23,11 @@
 
 [credential "https://github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !{{ $brewPrefix }}/bin/gh auth git-credential
 
 [credential "https://gist.github.com"]
 	helper =
-	helper = !/opt/homebrew/bin/gh auth git-credential
+	helper = !{{ $brewPrefix }}/bin/gh auth git-credential
 
 [help]
 	autocorrect = 10
@@ -98,7 +99,7 @@
 	format = ssh
 [gpg "ssh"]
 	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-	allowedSignersFile = /Users/{{ .chezmoi.username }}/.config/git/allowed_signers
+	allowedSignersFile = {{ .chezmoi.homeDir }}/.config/git/allowed_signers
 [commit]
 	gpgsign = true
 {{- end }}

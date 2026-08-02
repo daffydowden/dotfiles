@@ -32,7 +32,7 @@ common='{
 
 {{ if .is_work -}}
 layer='{
-  "env": { "WORKTRUNK_BIN": "/Users/richarddowden/.local/bin/wt-claude" },
+  "env": { "WORKTRUNK_BIN": "{{ .chezmoi.homeDir }}/.local/bin/wt-claude" },
   "enabledMcpjsonServers": ["Ref"],
   "statusLine": { "type": "command", "command": "bunx ccstatusline@latest" },
   "extraKnownMarketplaces": { "worktrunk": { "source": { "source": "github", "repo": "max-sixty/worktrunk" } } },
@@ -61,7 +61,7 @@ layer='{
 layer='{
   "autoCompactEnabled": false,
   "todoFeatureEnabled": true,
-  "statusLine": { "type": "command", "command": "bash /Users/richarddowden/.claude/statusline-command.sh" },
+  "statusLine": { "type": "command", "command": "bash {{ .chezmoi.homeDir }}/.claude/statusline-command.sh" },
   "extraKnownMarketplaces": { "humanizer": { "source": { "source": "github", "repo": "blader/humanizer" } } },
   "enabledPlugins": {
     "pyright-lsp@claude-plugins-official": true,

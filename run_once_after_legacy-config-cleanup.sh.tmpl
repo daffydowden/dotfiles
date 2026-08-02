@@ -1,0 +1,9 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+# These were formerly managed but are no longer referenced by an active config.
+rm -f \
+  "$HOME/.config/kitty/themes/dracula.conf" \
+  "$HOME/.config/tmux/powerline"
+{{ end -}}

@@ -1,4 +1,6 @@
-# 💤 LazyVim
+# Neovim configuration
 
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+LazyVim is the base distribution. `lua/config/lazy.lua` declares enabled extras,
+`lua/config/` contains core overrides, and `lua/plugins/` contains focused plugin
+customisations. Plugin versions intentionally follow upstream rather than a
+committed lockfile; run `:Lazy update` to refresh an existing installation.

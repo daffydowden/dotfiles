@@ -1,0 +1,135 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
+cd "$repo_root"
+
+for command_name in chezmoi shellcheck fish jq python3 ruby nvim rg; do
+  command -v "$command_name" >/dev/null 2>&1 || {
+    printf 'check: required command not found: %s\n' "$command_name" >&2
+    exit 1
+  }
+done
+
+check_tmp="$(mktemp -d "${TMPDIR:-/tmp}/dotfiles-check.XXXXXX")"
+trap 'rm -rf "$check_tmp"' EXIT
+mkdir -p "$check_tmp/home"
+
+cat >"$check_tmp/personal.toml" <<'EOF'
+[data]
+is_work = false
+EOF
+
+cat >"$check_tmp/work.toml" <<'EOF'
+[data]
+is_work = true
+src_endpoint = "https://source.example/$edge"
+jira_user = "person@example.com"
+work_bin_path = "/opt/company tools/bin"
+k8s_cluster_1 = "cluster-one"
+k8s_cluster_2 = "cluster-two"
+k8s_namespace = "default"
+EOF
+
+render_template() {
+  local profile="$1"
+  local source_file="$2"
+  local output_file="$3"
+  if [[ "$source_file" == .chezmoi.toml.tmpl ]]; then
+    chezmoi -S "$repo_root" -D "$check_tmp/home" -c "$check_tmp/$profile.toml" \
+      execute-template --init --promptBool "Is this a work machine?=$([[ $profile == work ]] && printf true || printf false)" \
+      --file "$source_file" >"$output_file"
+  else
+    chezmoi -S "$repo_root" -D "$check_tmp/home" -c "$check_tmp/$profile.toml" \
+      execute-template --file "$source_file" >"$output_file"
+  fi
+}
+
+validate_rendered() {
+  local source_file="$1"
+  local rendered_file="$2"
+  [[ -s "$rendered_file" ]] || return 0
+
+  case "$(head -n 1 "$rendered_file")" in
+    '#!'*bash*) shellcheck "$rendered_file" ;;
+    '#!'*fish*) fish -n "$rendered_file" ;;
+  esac
+
+  case "$source_file" in
+    *.fish.tmpl) fish -n "$rendered_file" ;;
+    *.json.tmpl)
+      if [[ "$(head -n 1 "$rendered_file")" != '#!'* ]]; then
+        jq -e . "$rendered_file" >/dev/null
+      fi
+      ;;
+    *.toml.tmpl)
+      if [[ "$(head -n 1 "$rendered_file")" != '#!'* ]]; then
+        python3 -c 'import sys,tomllib; tomllib.load(open(sys.argv[1], "rb"))' "$rendered_file"
+      fi
+      ;;
+    *.yaml.tmpl|*.yml.tmpl)
+      ruby -e 'require "yaml"; YAML.safe_load(File.read(ARGV[0]), aliases: true)' "$rendered_file"
+      ;;
+  esac
+}
+
+for profile in personal work; do
+  for template in $(rg --files --hidden -g '*.tmpl' -g '!.git/**'); do
+    rendered="$check_tmp/${profile}-$(printf '%s' "$template" | tr '/.' '__')"
+    render_template "$profile" "$template" "$rendered"
+    validate_rendered "$template" "$rendered"
+  done
+  render_template "$profile" .chezmoiignore "$check_tmp/${profile}-chezmoiignore"
+done
+
+# Validate non-template scripts and Fish functions.
+while IFS= read -r source_file; do
+  [[ "$source_file" == *.tmpl ]] && continue
+  case "$(head -n 1 "$source_file")" in
+    '#!'*bash*) shellcheck "$source_file" ;;
+    '#!'*fish*) fish -n "$source_file" ;;
+  esac
+done < <(rg --files --hidden -g '!.git/**')
+fish -n private_dot_config/private_fish/functions/*.fish
+
+# Parse strict JSON and TOML sources. Zed settings are JSONC and are excluded.
+jq -e . private_dot_config/nvim/dot_neoconf.json >/dev/null
+while IFS= read -r toml_file; do
+  python3 -c 'import sys,tomllib; tomllib.load(open(sys.argv[1], "rb"))' "$toml_file"
+done < <(rg --files --hidden -g '*.toml' -g '!.git/**')
+
+# Compile every Lua file without loading the user's Neovim state.
+NVIM_LOG_FILE="$check_tmp/nvim.log" nvim --headless -u NONE -i NONE --cmd 'set shadafile=NONE' \
+  "+lua for _,file in ipairs(vim.fn.glob('private_dot_config/nvim/lua/**/*.lua', false, true)) do assert(loadfile(file)) end" \
+  +qa
+
+# Modifier scripts must converge after one application.
+for profile in personal work; do
+  for modifier in \
+    dot_claude/modify_private_settings.json.tmpl \
+    private_dot_pi/agent/modify_settings.json.tmpl; do
+    rendered="$check_tmp/modifier.sh"
+    render_template "$profile" "$modifier" "$rendered"
+    printf '{}\n' | bash "$rendered" >"$check_tmp/first"
+    bash "$rendered" <"$check_tmp/first" >"$check_tmp/second"
+    cmp -s "$check_tmp/first" "$check_tmp/second"
+  done
+
+  modifier=private_dot_config/herdr/modify_private_config.toml.tmpl
+  render_template "$profile" "$modifier" "$check_tmp/modifier.sh"
+  printf '' | bash "$check_tmp/modifier.sh" >"$check_tmp/first"
+  bash "$check_tmp/modifier.sh" <"$check_tmp/first" >"$check_tmp/second"
+  cmp -s "$check_tmp/first" "$check_tmp/second"
+done
+
+if rg -n --hidden -g '!.git/**' -g '!docs/**' -g '!scripts/check' \
+  -e 'AKIA[0-9A-Z]{16}' \
+  -e 'sk-[A-Za-z0-9_-]{20,}' \
+  -e 'gh[pousr]_[A-Za-z0-9_]{20,}' \
+  -e '-----BEGIN .*PRIVATE KEY-----'; then
+  printf 'check: possible committed secret detected\n' >&2
+  exit 1
+fi
+
+git diff --check
+printf 'check: all validations passed\n'
