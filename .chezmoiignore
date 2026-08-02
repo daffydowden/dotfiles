@@ -5,6 +5,7 @@ planning.avanterules
 .DS_Store
 docs
 docs/**
+README.md
 scripts
 scripts/**
 
