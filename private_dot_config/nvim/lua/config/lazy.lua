@@ -17,7 +17,7 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.ai.claudecode" },
     { import = "lazyvim.plugins.extras.ai.avante" },
     -- Coding
-    { import = "lazyvim.plugins.extras.coding.blink" },
+    { import = "lazyvim.plugins.extras.coding.luasnip" },
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
     -- Formatting & Linting
     { import = "lazyvim.plugins.extras.formatting.prettier" },
@@ -32,9 +32,8 @@ require("lazy").setup({
     { import = "lazyvim.plugins.extras.lang.svelte" },
     { import = "lazyvim.plugins.extras.lang.terraform" },
     { import = "lazyvim.plugins.extras.lang.typescript" },
-    -- UI & Editor
+    -- UI
     { import = "lazyvim.plugins.extras.ui.mini-animate" },
-    { import = "lazyvim.plugins.extras.editor.snacks_explorer"},
     -- import/override with your plugins
     { import = "plugins" },
   },
