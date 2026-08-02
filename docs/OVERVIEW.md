@@ -34,6 +34,12 @@ when the selected profile needs it. Package installation is declared once in
 and embedded in the strict pre-apply package runner. A failed bundle therefore
 stops `chezmoi apply` and is retried on the next run.
 
+Homebrew cask apps use the standard `/Applications` directory. Before each
+bundle run, the package runner detects managed apps whose historical Homebrew
+receipt still selects `~/Applications` and reinstalls only those apps into the
+standard location. User-scoped artifacts such as fonts remain in their normal
+Library directories.
+
 Global runtimes are declared in `~/.config/mise/config.toml` and follow latest.
 Homebrew packages, GitHub extensions, Herdr plugins, LTUI, the Yazi flavor, and
 Mise tools are refreshed by recurring scripts on every apply. Neovim plugins

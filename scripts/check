@@ -116,6 +116,11 @@ fi
   printf 'check: Yazi package.toml pins package revisions; install via run_after instead\n' >&2
   exit 1
 }
+rg -q '^cask_args appdir: "/Applications", require_sha: true$' \
+  .chezmoitemplates/Brewfile.tmpl || {
+  printf 'check: Homebrew cask apps must use the standard /Applications directory\n' >&2
+  exit 1
+}
 
 # Compile every Lua file without loading the user's Neovim state.
 NVIM_LOG_FILE="$check_tmp/nvim.log" nvim --headless -u NONE -i NONE --cmd 'set shadafile=NONE' \

@@ -19,6 +19,7 @@ trap stop_sudo_keepalive EXIT
 if [[ -t 0 && -t 1 ]]; then
   printf '%s\n' \
     'chezmoi: Homebrew may need administrator access to upgrade macOS apps.' \
+    'chezmoi: Legacy Homebrew apps in ~/Applications will move to /Applications.' \
     'chezmoi: If you continue, the next prompt asks for your macOS login password' \
     'chezmoi: (not a GitHub, 1Password, or work credential).'
   read -r -p 'Pre-authorize Homebrew updates now? [y/N] ' authorize_homebrew
@@ -41,6 +42,52 @@ else
     'chezmoi: non-interactive Homebrew run; privileged cask updates may require' \
     'chezmoi: a pre-existing sudo credential.' >&2
 fi
+
+# Homebrew remembers the cask options used for each original installation, so
+# removing the old global ~/Applications option from the Brewfile did not move
+# existing apps. Reinstall only apps managed by this Brewfile whose receipts
+# still explicitly select that legacy directory. This preserves application
+# data and leaves user-scoped cask artifacts such as fonts alone.
+legacy_appdir="$HOME/Applications"
+managed_app_casks=(
+  kitty
+  ghostty
+  cmux
+  utm
+  google-chrome
+  brave-browser
+  datagrip
+  visual-studio-code
+  sublime-text
+  obsidian
+  bruno
+  rectangle
+  {{ if not .is_work -}}
+  1password
+  {{- end }}
+  spotify
+  lm-studio
+  positron
+  zed
+  codex
+  codex-app
+  claude
+  {{ if .is_work -}}
+  slack
+  {{- end }}
+)
+caskroom="$(brew --caskroom)"
+for cask in "${managed_app_casks[@]}"; do
+  cask_config="$caskroom/$cask/.metadata/config.json"
+  [[ -f "$cask_config" ]] || continue
+  installed_appdir="$(
+    /usr/bin/plutil -extract explicit.appdir raw -o - "$cask_config" 2>/dev/null || true
+  )"
+  [[ "$installed_appdir" == "$legacy_appdir" ]] || continue
+
+  printf 'chezmoi: migrating Homebrew cask %s to /Applications\n' "$cask"
+  brew reinstall --cask --appdir=/Applications --no-ask "$cask"
+done
 
 # Current Homebrew requires an explicit trust decision before loading formulae
 # from third-party taps. These are the same taps declared in the Brewfile below.
