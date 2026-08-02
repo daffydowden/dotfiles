@@ -9,6 +9,7 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 
 # This script is prefixed 00 because later after-scripts may need Cargo, Pi,
-# Node, or another runtime supplied by Mise on a fresh machine.
+# Node, or another runtime supplied by Mise on a fresh machine. Every configured
+# tool follows latest, so check for upstream releases on every apply.
 mise install
 {{ end -}}

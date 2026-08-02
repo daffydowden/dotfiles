@@ -7,6 +7,6 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 0
 fi
 
-# Pin extensions so a new machine gets the same tested release.
-gh extension install dlvhdr/gh-dash --pin v4.25.2 --force
+# With no --pin, --force installs or upgrades to the latest release.
+gh extension install dlvhdr/gh-dash --force
 {{- end -}}

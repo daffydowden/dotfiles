@@ -18,8 +18,8 @@ with `bootstrap.sh`; normal maintenance uses `chezmoi diff` and `chezmoi apply`.
 
 ## Layout
 
-- `.chezmoidata/` — non-secret shared data such as macOS defaults and pinned
-  Herdr plugin revisions.
+- `.chezmoidata/` — non-secret shared data such as macOS defaults and
+  integration metadata.
 - `.chezmoitemplates/` — reusable internal templates, currently the Brewfile.
 - `dot_*` / `private_dot_*` — files deployed into the home directory.
 - `run_*` — convergent setup and migration scripts executed by chezmoi.
@@ -34,10 +34,10 @@ when the selected profile needs it. Package installation is declared once in
 and embedded in the strict pre-apply package runner. A failed bundle therefore
 stops `chezmoi apply` and is retried on the next run.
 
-Global runtimes are declared in `~/.config/mise/config.toml`. Major versions are
-fixed where compatibility matters; tools intentionally marked `latest` follow
-upstream. Neovim plugins likewise intentionally follow upstream rather than a
-committed lockfile.
+Global runtimes are declared in `~/.config/mise/config.toml` and follow latest.
+Homebrew packages, GitHub extensions, Herdr plugins, LTUI, the Yazi flavor, and
+Mise tools are refreshed by recurring scripts on every apply. Neovim plugins
+likewise follow upstream rather than a committed lockfile.
 
 ## Shell and AI helpers
 
@@ -64,8 +64,8 @@ The Fish AI helpers are split by responsibility:
   Night family without vendoring Kitty's full default configuration.
 - Git uses delta, SSH signing through 1Password on personal machines, rebased
   pulls, autostash, rerere, and histogram diffs.
-- Herdr plugin sources are pinned to commits; Claude and Herdr integrations are
-  repaired idempotently after apply.
+- Herdr plugin sources follow their default branches; Claude and Herdr
+  integrations are repaired idempotently after apply.
 
 ## Validation
 

@@ -2,7 +2,7 @@
 #!/bin/bash
 set -e
 
-# Brewfile hash: {{ include "run_onchange_before_install-packages-darwin.sh.tmpl" | sha256sum }}
+# Brewfile hash: {{ include "run_before_install-packages-darwin.sh.tmpl" | sha256sum }}
 #
 # Triggers a rebuild of ~/.cache/ai/env.txt when the Brewfile script changes.
 # The actual builder lives at ~/.local/share/ai/build-env.sh so it can also be

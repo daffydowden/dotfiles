@@ -99,6 +99,24 @@ while IFS= read -r toml_file; do
   python3 -c 'import sys,tomllib; tomllib.load(open(sys.argv[1], "rb"))' "$toml_file"
 done < <(rg --files --hidden -g '*.toml' -g '!.git/**')
 
+# Update policy: managed runtimes and integrations follow upstream rather than
+# recording exact revisions. Keep this check close to the data that drives the
+# recurring installers so a future pin fails validation.
+python3 -c '
+import tomllib
+with open("private_dot_config/mise/config.toml", "rb") as config_file:
+    tools = tomllib.load(config_file)["tools"]
+assert all(version == "latest" for version in tools.values()), tools
+'
+if rg -n -e '^[[:space:]]+(ref|commit|cargo_version):' .chezmoidata/herdr.yaml; then
+  printf 'check: Herdr plugins must follow their upstream default branches\n' >&2
+  exit 1
+fi
+[[ ! -e private_dot_config/yazi/package.toml ]] || {
+  printf 'check: Yazi package.toml pins package revisions; install via run_after instead\n' >&2
+  exit 1
+}
+
 # Compile every Lua file without loading the user's Neovim state.
 NVIM_LOG_FILE="$check_tmp/nvim.log" nvim --headless -u NONE -i NONE --cmd 'set shadafile=NONE' \
   "+lua for _,file in ipairs(vim.fn.glob('private_dot_config/nvim/lua/**/*.lua', false, true)) do assert(loadfile(file)) end" \

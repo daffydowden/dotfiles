@@ -7,5 +7,8 @@ if ! command -v ya >/dev/null 2>&1; then
   exit 0
 fi
 
-ya pkg install
+if ! ya pkg list 2>/dev/null | grep -Fq 'BennyOe/tokyo-night'; then
+  ya pkg add BennyOe/tokyo-night
+fi
+ya pkg upgrade BennyOe/tokyo-night
 {{- end -}}

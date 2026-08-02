@@ -121,7 +121,7 @@ and this README are repository-only and are excluded from deployment.
 
 ## Repository map
 
-- `.chezmoidata/` — non-secret shared data and pinned integration revisions.
+- `.chezmoidata/` — non-secret shared integration and operating-system data.
 - `.chezmoitemplates/` — reusable templates, including the canonical Brewfile.
 - `dot_*` and `private_dot_*` — files rendered into the home directory.
 - `run_*` — package setup, cache rebuilds, integrations, and migrations.
@@ -133,8 +133,8 @@ and this README are repository-only and are excluded from deployment.
 
 ## Version policy
 
-This setup deliberately follows upstream for selected tools and Neovim plugins.
-Entries marked `latest` and the absence of a committed Lazy lockfile are
-intentional; use normal update commands when you want to pull newer versions.
-Herdr plugin sources and the Yazi theme remain pinned where exact revisions are
-useful for integration stability.
+This setup deliberately follows upstream for tools, runtimes, extensions, and
+Neovim plugins. Version managers use `latest`, integrations install from their
+default branches or latest releases, and there is no committed Lazy lockfile.
+The recurring chezmoi scripts refresh these dependencies on every apply, making
+upstream compatibility problems visible instead of leaving stale pins in place.

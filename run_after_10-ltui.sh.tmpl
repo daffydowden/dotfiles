@@ -1,0 +1,14 @@
+{{- if and (eq .chezmoi.os "darwin") .is_work -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v mise >/dev/null 2>&1; then
+  printf 'chezmoi: mise is required to install ltui\n' >&2
+  exit 1
+fi
+
+# Follow the latest upstream default branch on every apply. Using mise here also
+# works during a fresh apply, before a new shell has added its shims to PATH.
+mise exec -- uv tool install --upgrade --force \
+  'git+https://github.com/runpantheon/ltui#subdirectory=ltui'
+{{ end -}}

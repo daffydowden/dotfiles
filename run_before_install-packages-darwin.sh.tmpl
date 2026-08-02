@@ -27,9 +27,9 @@ if brew list --formula emacs-mac@29 >/dev/null 2>&1; then
   brew unlink emacs-mac@29
 fi
 
-# The rendered Brewfile is embedded so run_onchange tracks package/profile
-# changes, while ~/.Brewfile is also deployed for normal `brew bundle` use.
-brew bundle --no-upgrade --file=/dev/stdin <<'BREWFILE'
+# Brew Bundle installs and upgrades by default. Run it on every apply so the
+# unversioned formulae and casks continue following their latest releases.
+brew bundle --file=/dev/stdin <<'BREWFILE'
 {{ template "Brewfile.tmpl" . -}}
 BREWFILE
 {{ end -}}
