@@ -89,15 +89,19 @@ credentials until they are restarted.
 
 ## Secrets
 
-Interactive Fish sessions load credentials directly into the current process:
+Fish loads credentials into the current process only when an AI command needs
+them:
 
 - Personal machines use API Credential items in the `Personal` 1Password vault.
 - Work machines use the configured Keeper records.
-- `load-ai-secrets` clears and refreshes credentials in the current Fish shell.
+- `pi`, `halp`, and `q` request only the selected provider's credential.
+- OAuth-backed providers do not contact the password manager.
+- `load-ai-secrets` clears and refreshes every credential in the current Fish shell.
 
 Credentials are not rendered into managed shell configuration and are not
-stored as Fish universal variables. A newly opened terminal may therefore need
-the relevant password-manager application or CLI session to be unlocked.
+stored as Fish universal variables. Opening a terminal does not contact a
+password manager; the first credential-backed AI command may require its vault
+application or CLI session to be unlocked.
 
 ## Updating dotfiles
 

@@ -18,10 +18,6 @@ set -gx SRC_ENDPOINT (string decode base64 '{{ .src_endpoint | b64enc }}')
 set -gx JIRA_USER (string decode base64 '{{ .jira_user | b64enc }}')
 fish_add_path (string decode base64 '{{ .work_bin_path | b64enc }}')
 
-if status is-interactive
-    __load_ai_secrets --quiet
-end
-
 eval (ai-env)
 
 # Refresh the work-only, repository-prefix filters before launching gh-dash.
@@ -33,12 +29,6 @@ function gh --wraps gh
     else
         command gh $argv
     end
-end
-{{- end }}
-
-{{- if not .is_work }}
-if status is-interactive
-    __load_ai_secrets --quiet
 end
 {{- end }}
 

@@ -12,4 +12,12 @@ fi
 # Node, or another runtime supplied by Mise on a fresh machine. Every configured
 # tool follows latest, so check for upstream releases on every apply.
 mise install
+
+# Mise's Pi backend changed its archive layout from pi to pi/pi without a
+# version bump. An existing installation can therefore satisfy `mise install`
+# while its executable no longer matches current backend metadata.
+if ! mise exec -- pi --version >/dev/null 2>&1; then
+  printf 'chezmoi: repairing Pi installation after a Mise layout change\n'
+  mise install --force pi@latest
+fi
 {{ end -}}

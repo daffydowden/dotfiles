@@ -116,6 +116,10 @@ fi
   printf 'check: Yazi package.toml pins package revisions; install via run_after instead\n' >&2
   exit 1
 }
+rg -q 'mise exec -- pi --version' run_after_00-mise.sh.tmpl || {
+  printf 'check: Mise setup must detect stale Pi archive layouts\n' >&2
+  exit 1
+}
 rg -q '^cask_args appdir: "/Applications", require_sha: true$' \
   .chezmoitemplates/Brewfile.tmpl || {
   printf 'check: Homebrew cask apps must use the standard /Applications directory\n' >&2

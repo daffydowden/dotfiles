@@ -19,6 +19,7 @@ function q -d "Ask a general question via pi (multi-turn lite, one-shot pricing)
             break
         end
     end
+    __ensure_ai_secret_for_model $models[$mi]; or return
 
     set -l convo ""
     set -l answer (__q_ask "$sys_prompt" "$convo" "$question" $models[$mi])
@@ -46,6 +47,7 @@ A: $answer"
             case m
                 if test $mi -lt (count $models)
                     set mi (math $mi + 1)
+                    __ensure_ai_secret_for_model $models[$mi]; or return
                     echo "→ retrying with $models[$mi]"
                     set answer (__q_ask "$sys_prompt" "$convo" "$question" $models[$mi])
                 else

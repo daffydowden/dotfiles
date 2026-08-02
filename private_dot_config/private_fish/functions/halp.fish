@@ -133,6 +133,7 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
             break
         end
     end
+    __ensure_ai_secret_for_model $models[$mi]; or return
 
     # Describe mode: explain a pasted command — exits before env cache (no env context needed)
     if test $describe_mode -eq 1
@@ -269,6 +270,7 @@ New question: $cur_q"
                                 break
                             end
                         end
+                        __ensure_ai_secret_for_model $models[$mi]; or return
                         echo "→ retrying with $models[$mi]"
                         set -l ctx_msg $cur_q
                         test -n "$convo"; and set ctx_msg "Prior conversation:$convo
@@ -476,6 +478,7 @@ Output ONLY the revised command." </dev/null \
                             break
                         end
                     end
+                    __ensure_ai_secret_for_model $models[$mi]; or return
                     echo "→ retrying with $models[$mi]"
                     set t0 (date +%s)
                     set cmd (__ai_spin pi -p $common --model $models[$mi] \

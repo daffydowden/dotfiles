@@ -12,9 +12,9 @@ with `bootstrap.sh`; normal maintenance uses `chezmoi diff` and `chezmoi apply`.
   application also writes its own file. Claude, Pi, and Herdr settings use this
   pattern and their modifiers are tested for idempotence.
 - **Secrets** are never committed or rendered into generated configuration.
-  Interactive Fish sessions load API credentials directly from 1Password on
-  personal machines or Keeper on work machines. `load-ai-secrets` forces a
-  refresh in the current shell.
+  Fish loads only the provider credential needed by `pi`, `halp`, or `q`, from
+  1Password on personal machines or Keeper on work machines.
+  `load-ai-secrets` remains the explicit full-refresh command.
 
 ## Layout
 
