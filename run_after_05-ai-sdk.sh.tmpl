@@ -1,0 +1,19 @@
+{{- if eq .chezmoi.os "darwin" -}}
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v mise >/dev/null 2>&1; then
+  printf 'chezmoi: mise is required to install the AI helper dependencies\n' >&2
+  exit 1
+fi
+
+ai_dir="${HOME}/.local/share/ai"
+if [[ ! -f "$ai_dir/package.json" ]]; then
+  printf 'chezmoi: AI helper package manifest is missing: %s\n' "$ai_dir/package.json" >&2
+  exit 1
+fi
+
+# Resolve `latest` afresh on every apply without rewriting the managed manifest
+# or recording a lockfile. Installed modules remain local runtime state.
+mise exec -- bun install --force --no-save --production --cwd="$ai_dir"
+{{ end -}}

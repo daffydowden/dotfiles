@@ -1,6 +1,7 @@
 function __ai_spin -d "Run a command with a spinner and print its stdout"
     set -l tmp (mktemp -t ai-spin.XXXXXX)
-    $argv >$tmp 2>/dev/null &
+    set -l err (mktemp -t ai-spin-err.XXXXXX)
+    $argv >$tmp 2>$err &
     set -l pid $last_pid
     set -l frames ⠋ ⠙ ⠹ ⠸ ⠼ ⠴ ⠦ ⠧ ⠇ ⠏
     set -l i 1
@@ -10,7 +11,12 @@ function __ai_spin -d "Run a command with a spinner and print its stdout"
         sleep 0.08
     end
     wait $pid 2>/dev/null
+    set -l rc $status
     printf '\r\033[K' >&2
     cat $tmp
-    rm -f $tmp
+    if test $rc -ne 0
+        cat $err >&2
+    end
+    rm -f $tmp $err
+    return $rc
 end

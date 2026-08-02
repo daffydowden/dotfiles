@@ -1,4 +1,4 @@
-function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replacement). Alias: h"
+function halp -d "Env-aware shell command suggester with Pi chat handoff. Alias: h"
     set -l task ""
     set -l debug_mode 0
     set -l describe_mode 0
@@ -137,19 +137,17 @@ function halp -d "Env-aware shell command suggester (pi-backed, aichat -e replac
 
     # Describe mode: explain a pasted command — exits before env cache (no env context needed)
     if test $describe_mode -eq 1
-        set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
         set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain what this shell command does in 2-3 concise lines.")
         echo
         printf '%s> %s%s\n' (set_color cyan) (__halp_highlight_dangerous $describe_target) (set_color normal)
         set_color brblack; echo "  ($models[$mi])"; set_color normal
         echo
-        set -l description (__ai_spin pi -p $common --model $models[$mi] \
-            --system-prompt "$dprompt" "$describe_target" </dev/null)
+        set -l description (__ai_oneshot --preview --model $models[$mi] \
+            --system-prompt "$dprompt" --max-tokens 256 -- "$describe_target" </dev/null)
         if test -z "$description"
-            echo "(no description returned — try \`pi -p --model $models[$mi] hi\` to debug)" >&2
+            echo "(no description returned — try \`q 'hello'\` to test direct model access)" >&2
             return 1
         end
-        printf '%s\n' $description
         echo
         read --nchars 1 --prompt-str "[e]xec [c]opy cmd [t]alk [q]uit: " choice
         echo
@@ -169,8 +167,6 @@ $describe_target"
 
     # tldr mode: man-page-backed interactive Q&A — exits before env cache
     if test $tldr_mode -eq 1
-        set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
-
         # Parse 'cmd' or 'cmd: context'
         set -l tldr_cmd (string replace -r ':.*' '' -- $tldr_input | string trim)
         set -l tldr_ctx (string replace -r '^[^:]*:?\s*' '' -- $tldr_input | string trim)
@@ -234,14 +230,15 @@ $mantext"
         echo
 
         set -l convo ""
-        set -l answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$cur_q" </dev/null)
+        set -l history_args
+        set -l answer (__ai_oneshot --preview --model $models[$mi] \
+            --system-prompt "$sys_with_man" --max-tokens 512 $history_args -- "$cur_q" </dev/null)
 
         while true
             if test -z "$answer"
-                echo "(no answer returned — try \`pi -p --model $models[$mi] hi\` to debug)" >&2
+                echo "(no answer returned — try \`q 'hello'\` to test direct model access)" >&2
                 return 1
             end
-            printf '%s\n' $answer
             echo
             set_color brblack; echo "  ($models[$mi])"; set_color normal
             read --nchars 1 --prompt-str "[f]ollow-up [m]odel [c]opy [t]alk [q]uit: " choice
@@ -253,12 +250,10 @@ $mantext"
                     set convo "$convo
 Q: $cur_q
 A: $answer"
+                    set -a history_args --message user "$cur_q" --message assistant "$answer"
                     set cur_q $followup
-                    set -l ctx_msg $cur_q
-                    test -n "$convo"; and set ctx_msg "Prior conversation:$convo
-
-New question: $cur_q"
-                    set answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null)
+                    set answer (__ai_oneshot --preview --model $models[$mi] \
+                        --system-prompt "$sys_with_man" --max-tokens 512 $history_args -- "$cur_q" </dev/null)
                 case m
                     set -l picked (__ai_pick_model $models $models[$mi])
                     if test -z "$picked"
@@ -272,11 +267,8 @@ New question: $cur_q"
                         end
                         __ensure_ai_secret_for_model $models[$mi]; or return
                         echo "→ retrying with $models[$mi]"
-                        set -l ctx_msg $cur_q
-                        test -n "$convo"; and set ctx_msg "Prior conversation:$convo
-
-New question: $cur_q"
-                        set answer (__ai_spin pi -p $common --model $models[$mi] --system-prompt "$sys_with_man" "$ctx_msg" </dev/null)
+                        set answer (__ai_oneshot --preview --model $models[$mi] \
+                            --system-prompt "$sys_with_man" --max-tokens 512 $history_args -- "$cur_q" </dev/null)
                     end
                 case c
                     printf '%s' "$answer" | pbcopy
@@ -377,7 +369,6 @@ $envctx
 $dyn$fail_block"
 
     set -l session "ai-shell-"(date +%s)
-    set -l common --no-tools --no-context-files --no-extensions --no-session --thinking off
 
     # Build the user message: debug mode sends structured context; normal mode sends the task
     set -l user_msg "$task"
@@ -391,8 +382,8 @@ Error: $debug_err"
     end
 
     set -l t0 (date +%s)
-    set -l cmd (__ai_spin pi -p $common --model $models[$mi] \
-        --system-prompt "$sys_prompt" "$user_msg" </dev/null \
+    set -l cmd (__ai_spin __ai_oneshot --model $models[$mi] \
+        --system-prompt "$sys_prompt" --max-tokens 256 -- "$user_msg" </dev/null \
         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
     set -l elapsed (math (date +%s) - $t0)
 
@@ -406,8 +397,8 @@ Error: $debug_err"
             set user_msg "$user_msg
 Clarification: $clarification"
             set t0 (date +%s)
-            set cmd (__ai_spin pi -p $common --model $models[$mi] \
-                --system-prompt "$sys_prompt" "$user_msg" </dev/null \
+            set cmd (__ai_spin __ai_oneshot --model $models[$mi] \
+                --system-prompt "$sys_prompt" --max-tokens 256 -- "$user_msg" </dev/null \
                 | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
             set elapsed (math (date +%s) - $t0)
         end
@@ -415,7 +406,7 @@ Clarification: $clarification"
 
     while true
         if test -z "$cmd"
-            echo "(no command returned — try `pi -p --model $models[$mi] hi` to debug)" >&2
+            echo "(no command returned — try `q 'hello'` to test direct model access)" >&2
             return 1
         end
         echo
@@ -456,8 +447,8 @@ Clarification: $clarification"
                 read --prompt-str "revision: " rev
                 test -z "$rev"; and continue
                 set t0 (date +%s)
-                set cmd (__ai_spin pi -p $common --model $models[$mi] \
-                    --system-prompt "$sys_prompt" "Original task: $user_msg
+                set cmd (__ai_spin __ai_oneshot --model $models[$mi] \
+                    --system-prompt "$sys_prompt" --max-tokens 256 -- "Original task: $user_msg
 
 Current candidate:
 $cmd
@@ -481,15 +472,16 @@ Output ONLY the revised command." </dev/null \
                     __ensure_ai_secret_for_model $models[$mi]; or return
                     echo "→ retrying with $models[$mi]"
                     set t0 (date +%s)
-                    set cmd (__ai_spin pi -p $common --model $models[$mi] \
-                        --system-prompt "$sys_prompt" "$user_msg" </dev/null \
+                    set cmd (__ai_spin __ai_oneshot --model $models[$mi] \
+                        --system-prompt "$sys_prompt" --max-tokens 256 -- "$user_msg" </dev/null \
                         | string replace -ra '^```[a-z]*\n?|\n?```\s*$' '' | string trim)
                     set elapsed (math (date +%s) - $t0)
                 end
             case d
                 set -l dprompt (cat $sys_dir/shell-describe.md 2>/dev/null; or echo "Explain in 2-3 short lines.")
-                __ai_spin pi -p --no-tools --no-context-files --no-extensions --no-session \
-                    --model $models[$mi] --system-prompt "$dprompt" "$cmd" </dev/null
+                set -l description (__ai_oneshot --preview --model $models[$mi] \
+                    --system-prompt "$dprompt" --max-tokens 256 -- "$cmd" </dev/null)
+                test -n "$description"; and echo
             case c
                 printf '%s' "$cmd" | pbcopy
                 echo "copied"

@@ -95,6 +95,8 @@ them:
 - Personal machines use API Credential items in the `Personal` 1Password vault.
 - Work machines use the configured Keeper records.
 - `pi`, `halp`, and `q` request only the selected provider's credential.
+- `halp` and `q` call the provider SDK directly for bounded one-shot requests;
+  their `t` action hands the accumulated context to interactive Pi.
 - OAuth-backed providers do not contact the password manager.
 - `load-ai-secrets` clears and refreshes every credential in the current Fish shell.
 
@@ -138,7 +140,8 @@ and this README are repository-only and are excluded from deployment.
 ## Version policy
 
 This setup deliberately follows upstream for tools, runtimes, extensions, and
-Neovim plugins. Version managers use `latest`, integrations install from their
-default branches or latest releases, and there is no committed Lazy lockfile.
-The recurring chezmoi scripts refresh these dependencies on every apply, making
-upstream compatibility problems visible instead of leaving stale pins in place.
+Neovim plugins. Version managers and the direct AI helper's SDK dependencies
+use `latest`, integrations install from their default branches or latest
+releases, and there is no committed Lazy or Bun lockfile. The recurring chezmoi
+scripts refresh these dependencies on every apply, making upstream compatibility
+problems visible instead of leaving stale pins in place.

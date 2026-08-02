@@ -64,8 +64,13 @@ The Fish AI helpers are split by responsibility:
   Explicit execution uses `e`; recognised destructive commands require typing
   `EXECUTE` before they run.
 - `q` provides lightweight general Q&A.
-- `__ai_models`, `__ai_spin`, `__ai_log`, and the danger helpers are shared,
-  independently autoloaded implementation functions.
+- `halp` and `q` use a bounded, streaming Bun helper built on Pi's provider SDK
+  for one-shot work. This reuses Pi authentication and custom models without
+  paying for the interactive coding-agent CLI path.
+- Their `t` action passes the accumulated context to interactive Pi when the
+  lightweight exchange needs to become a full chat.
+- `__ai_models`, `__ai_oneshot`, `__ai_spin`, `__ai_log`, and the danger helpers
+  are shared, independently autoloaded implementation functions.
 - `build-env.sh` records installed tools and discovers work LiteLLM models.
 
 ## Application configuration

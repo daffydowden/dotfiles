@@ -4,7 +4,7 @@ set -euo pipefail
 repo_root="$(cd -- "$(dirname -- "$0")/.." && pwd -P)"
 cd "$repo_root"
 
-for command_name in chezmoi shellcheck fish jq python3 ruby nvim rg; do
+for command_name in chezmoi shellcheck fish jq python3 ruby nvim rg mise; do
   command -v "$command_name" >/dev/null 2>&1 || {
     printf 'check: required command not found: %s\n' "$command_name" >&2
     exit 1
@@ -92,9 +92,13 @@ while IFS= read -r source_file; do
   esac
 done < <(rg --files --hidden -g '!.git/**')
 fish -n private_dot_config/private_fish/functions/*.fish
+mise exec -- bun build --no-bundle --target=bun \
+  --outfile="$check_tmp/ai-one-shot.js" \
+  dot_local/share/ai/executable_ai-one-shot.ts >/dev/null
 
 # Parse strict JSON and TOML sources. Zed settings are JSONC and are excluded.
 jq -e . private_dot_config/nvim/dot_neoconf.json >/dev/null
+jq -e . dot_local/share/ai/package.json >/dev/null
 while IFS= read -r toml_file; do
   python3 -c 'import sys,tomllib; tomllib.load(open(sys.argv[1], "rb"))' "$toml_file"
 done < <(rg --files --hidden -g '*.toml' -g '!.git/**')
@@ -118,6 +122,29 @@ fi
 }
 rg -q 'mise exec -- pi --version' run_after_00-mise.sh.tmpl || {
   printf 'check: Mise setup must detect stale Pi archive layouts\n' >&2
+  exit 1
+}
+jq -e '.dependencies | length > 0 and all(.[]; . == "latest")' \
+  dot_local/share/ai/package.json >/dev/null || {
+  printf 'check: AI helper dependencies must follow latest\n' >&2
+  exit 1
+}
+if rg --files dot_local/share/ai | rg -q '(^|/)bun\.lockb?$'; then
+  printf 'check: AI helper lockfiles are runtime-owned and must not be committed\n' >&2
+  exit 1
+fi
+if rg -n '(^|[[:space:]])pi[[:space:]]+-p([[:space:]]|$)' \
+  private_dot_config/private_fish/functions/halp.fish \
+  private_dot_config/private_fish/functions/q.fish; then
+  printf 'check: halp/q one-shot requests must use the direct SDK helper\n' >&2
+  exit 1
+fi
+rg -q '__ai_oneshot' private_dot_config/private_fish/functions/halp.fish || {
+  printf 'check: halp must use the direct SDK helper\n' >&2
+  exit 1
+}
+rg -q '__ai_oneshot' private_dot_config/private_fish/functions/q.fish || {
+  printf 'check: q must use the direct SDK helper\n' >&2
   exit 1
 }
 rg -q '^cask_args appdir: "/Applications", require_sha: true$' \
