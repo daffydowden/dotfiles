@@ -7,6 +7,41 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
+sudo_keepalive_pid=""
+stop_sudo_keepalive() {
+  if [[ -n "$sudo_keepalive_pid" ]]; then
+    kill "$sudo_keepalive_pid" >/dev/null 2>&1 || true
+    wait "$sudo_keepalive_pid" 2>/dev/null || true
+  fi
+}
+trap stop_sudo_keepalive EXIT
+
+if [[ -t 0 && -t 1 ]]; then
+  printf '%s\n' \
+    'chezmoi: Homebrew may need administrator access to upgrade macOS apps.' \
+    'chezmoi: If you continue, the next prompt asks for your macOS login password' \
+    'chezmoi: (not a GitHub, 1Password, or work credential).'
+  read -r -p 'Pre-authorize Homebrew updates now? [y/N] ' authorize_homebrew
+  case "$authorize_homebrew" in
+    y|Y|yes|YES)
+      export SUDO_PROMPT='chezmoi/Homebrew needs your macOS login password for privileged app updates: '
+      sudo -v
+      while sudo -n true 2>/dev/null; do
+        sleep 50
+      done &
+      sudo_keepalive_pid=$!
+      ;;
+    *)
+      printf 'chezmoi: Homebrew updates cancelled before package changes\n' >&2
+      exit 1
+      ;;
+  esac
+else
+  printf '%s\n' \
+    'chezmoi: non-interactive Homebrew run; privileged cask updates may require' \
+    'chezmoi: a pre-existing sudo credential.' >&2
+fi
+
 # Current Homebrew requires an explicit trust decision before loading formulae
 # from third-party taps. These are the same taps declared in the Brewfile below.
 for tap in \
