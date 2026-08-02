@@ -40,6 +40,12 @@ receipt still selects `~/Applications` and reinstalls only those apps into the
 standard location. User-scoped artifacts such as fonts remain in their normal
 Library directories.
 
+The runner installs missing Brewfile entries without upgrading, then upgrades
+managed formulae and casks in separate batches. Keeping all cask upgrades in a
+single Homebrew process lets macOS reuse one sudo credential when more than one
+cask needs to remove a privileged launch service; no password is stored and the
+system sudo policy is not weakened.
+
 Global runtimes are declared in `~/.config/mise/config.toml` and follow latest.
 Homebrew packages, GitHub extensions, Herdr plugins, LTUI, the Yazi flavor, and
 Mise tools are refreshed by recurring scripts on every apply. Neovim plugins

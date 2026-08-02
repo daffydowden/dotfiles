@@ -121,6 +121,16 @@ rg -q '^cask_args appdir: "/Applications", require_sha: true$' \
   printf 'check: Homebrew cask apps must use the standard /Applications directory\n' >&2
   exit 1
 }
+rg -q 'brew bundle --no-upgrade --file="\$brewfile_path"' \
+  run_before_install-packages-darwin.sh.tmpl || {
+  printf 'check: Brew Bundle must leave recurring upgrades to batched commands\n' >&2
+  exit 1
+}
+rg -q 'brew upgrade --cask --appdir=/Applications --no-ask' \
+  run_before_install-packages-darwin.sh.tmpl || {
+  printf 'check: managed casks must upgrade in one /Applications batch\n' >&2
+  exit 1
+}
 
 # Compile every Lua file without loading the user's Neovim state.
 NVIM_LOG_FILE="$check_tmp/nvim.log" nvim --headless -u NONE -i NONE --cmd 'set shadafile=NONE' \

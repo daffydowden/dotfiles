@@ -7,31 +7,15 @@ if ! command -v brew >/dev/null 2>&1; then
   exit 1
 fi
 
-sudo_keepalive_pid=""
-stop_sudo_keepalive() {
-  if [[ -n "$sudo_keepalive_pid" ]]; then
-    kill "$sudo_keepalive_pid" >/dev/null 2>&1 || true
-    wait "$sudo_keepalive_pid" 2>/dev/null || true
-  fi
-}
-trap stop_sudo_keepalive EXIT
-
 if [[ -t 0 && -t 1 ]]; then
   printf '%s\n' \
-    'chezmoi: Homebrew may need administrator access to upgrade macOS apps.' \
+    'chezmoi: Some Homebrew casks remove privileged macOS launch services.' \
     'chezmoi: Legacy Homebrew apps in ~/Applications will move to /Applications.' \
-    'chezmoi: If you continue, the next prompt asks for your macOS login password' \
-    'chezmoi: (not a GitHub, 1Password, or work credential).'
-  read -r -p 'Pre-authorize Homebrew updates now? [y/N] ' authorize_homebrew
+    'chezmoi: If Homebrew prints "Password:", enter your macOS login password' \
+    'chezmoi: (not a GitHub, 1Password, Apple Account, or work credential).'
+  read -r -p 'Run Homebrew installs, migrations, and updates now? [y/N] ' authorize_homebrew
   case "$authorize_homebrew" in
-    y|Y|yes|YES)
-      export SUDO_PROMPT='chezmoi/Homebrew needs your macOS login password for privileged app updates: '
-      sudo -v
-      while sudo -n true 2>/dev/null; do
-        sleep 50
-      done &
-      sudo_keepalive_pid=$!
-      ;;
+    y|Y|yes|YES) ;;
     *)
       printf 'chezmoi: Homebrew updates cancelled before package changes\n' >&2
       exit 1
@@ -39,8 +23,8 @@ if [[ -t 0 && -t 1 ]]; then
   esac
 else
   printf '%s\n' \
-    'chezmoi: non-interactive Homebrew run; privileged cask updates may require' \
-    'chezmoi: a pre-existing sudo credential.' >&2
+    'chezmoi: non-interactive Homebrew run; a cask that removes privileged' \
+    'chezmoi: launch services may require an existing sudo credential.' >&2
 fi
 
 # Homebrew remembers the cask options used for each original installation, so
@@ -77,6 +61,7 @@ managed_app_casks=(
   {{- end }}
 )
 caskroom="$(brew --caskroom)"
+legacy_app_casks=()
 for cask in "${managed_app_casks[@]}"; do
   cask_config="$caskroom/$cask/.metadata/config.json"
   [[ -f "$cask_config" ]] || continue
@@ -84,10 +69,15 @@ for cask in "${managed_app_casks[@]}"; do
     /usr/bin/plutil -extract explicit.appdir raw -o - "$cask_config" 2>/dev/null || true
   )"
   [[ "$installed_appdir" == "$legacy_appdir" ]] || continue
-
-  printf 'chezmoi: migrating Homebrew cask %s to /Applications\n' "$cask"
-  brew reinstall --cask --appdir=/Applications --no-ask "$cask"
+  legacy_app_casks+=("$cask")
 done
+if ((${#legacy_app_casks[@]})); then
+  printf 'chezmoi: migrating Homebrew casks to /Applications: %s\n' \
+    "${legacy_app_casks[*]}"
+  # Keep every migration in one Homebrew process so sudo can reuse a single
+  # credential when multiple casks remove privileged launch services.
+  brew reinstall --cask --appdir=/Applications --no-ask "${legacy_app_casks[@]}"
+fi
 
 # Current Homebrew requires an explicit trust decision before loading formulae
 # from third-party taps. These are the same taps declared in the Brewfile below.
@@ -109,9 +99,33 @@ if brew list --formula emacs-mac@29 >/dev/null 2>&1; then
   brew unlink emacs-mac@29
 fi
 
-# Brew Bundle installs and upgrades by default. Run it on every apply so the
-# unversioned formulae and casks continue following their latest releases.
-brew bundle --file=/dev/stdin <<'BREWFILE'
+# Install missing dependencies declaratively, then upgrade the managed formulae
+# and casks in type-specific batches. A single cask upgrade process can reuse
+# one sudo credential across privileged launch-service cleanup operations.
+brewfile_path="$(mktemp "${TMPDIR:-/tmp}/chezmoi-brewfile.XXXXXX")"
+cleanup_brewfile() {
+  rm -f "$brewfile_path"
+}
+trap cleanup_brewfile EXIT
+cat >"$brewfile_path" <<'BREWFILE'
 {{ template "Brewfile.tmpl" . -}}
 BREWFILE
+
+brew bundle --no-upgrade --file="$brewfile_path"
+
+managed_formulae=()
+while IFS= read -r formula; do
+  [[ -n "$formula" ]] && managed_formulae+=("$formula")
+done < <(brew bundle list --formula --file="$brewfile_path")
+if ((${#managed_formulae[@]})); then
+  brew upgrade --formula --no-ask "${managed_formulae[@]}"
+fi
+
+managed_casks=()
+while IFS= read -r cask; do
+  [[ -n "$cask" ]] && managed_casks+=("$cask")
+done < <(brew bundle list --cask --file="$brewfile_path")
+if ((${#managed_casks[@]})); then
+  brew upgrade --cask --appdir=/Applications --no-ask "${managed_casks[@]}"
+fi
 {{ end -}}
