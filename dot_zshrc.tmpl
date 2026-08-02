@@ -23,15 +23,25 @@ gh() {
 }
 {{ end -}}
 
+# A Herdr session can be launched from cmux and inherit its CMUX_* variables.
+# Once Herdr has established its own pane context, treat that as authoritative:
+# otherwise both Pi integrations can fire and the Claude shim can re-enter cmux.
+if [[ "${HERDR_ENV:-}" == 1 ]]; then
+    for variable in ${(M)${(k)parameters}:#CMUX_*}; do
+        unset "$variable"
+    done
+    unset variable
+fi
+
 # Claude Code aliases — mirror config.fish.tmpl
-if [ -n "$CMUX_WORKSPACE_ID" ]; then
+if [[ "${HERDR_ENV:-}" == 1 && -n "${HERDR_PANE_ID:-}" ]] && command -v herdmates >/dev/null 2>&1; then
+    claude() { herdmates teammux-launch "$@"; }
+    alias c='claude --dangerously-skip-permissions'
+elif [ -n "${CMUX_WORKSPACE_ID:-}" ]; then
     alias c='cmux claude-teams --dangerously-skip-permissions'
     alias claude='cmux claude-teams --dangerously-skip-permissions'
     alias claude-teams='cmux claude-teams'
     alias cy='command claude --dangerously-skip-permissions'
-elif [ -n "$HERDR_PANE_ID" ] && command -v herdmates >/dev/null 2>&1; then
-    claude() { herdmates teammux-launch "$@"; }
-    alias c='claude --dangerously-skip-permissions'
 else
     alias c='command claude --dangerously-skip-permissions'
     alias claude='command claude --dangerously-skip-permissions'

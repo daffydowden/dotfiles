@@ -42,17 +42,27 @@ set -gx EDITOR nvim
 
 alias grep 'ug'
 
+# A Herdr session can be launched from cmux and inherit its CMUX_* variables.
+# Once Herdr has established its own pane context, treat that as authoritative:
+# otherwise both Pi integrations can fire and the Claude shim can re-enter cmux.
+if set -q HERDR_ENV; and test "$HERDR_ENV" = 1
+    for variable in (set --names | string match 'CMUX_*')
+        set --erase "$variable"
+    end
+    set --erase variable
+end
+
 # Claude Code
-if set -q CMUX_WORKSPACE_ID
-    alias c 'cmux claude-teams --dangerously-skip-permissions'
-    alias claude 'cmux claude-teams --dangerously-skip-permissions'
-    alias claude-teams 'cmux claude-teams'
-    alias cy 'command claude --dangerously-skip-permissions'
-else if set -q HERDR_PANE_ID; and command -q herdmates
+if set -q HERDR_ENV; and test "$HERDR_ENV" = 1; and set -q HERDR_PANE_ID; and command -q herdmates
     function claude
         herdmates teammux-launch $argv
     end
     alias c 'claude --dangerously-skip-permissions'
+else if set -q CMUX_WORKSPACE_ID
+    alias c 'cmux claude-teams --dangerously-skip-permissions'
+    alias claude 'cmux claude-teams --dangerously-skip-permissions'
+    alias claude-teams 'cmux claude-teams'
+    alias cy 'command claude --dangerously-skip-permissions'
 else
     alias c 'command claude --dangerously-skip-permissions'
     alias claude 'command claude --dangerously-skip-permissions'

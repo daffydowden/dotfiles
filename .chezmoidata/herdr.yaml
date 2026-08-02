@@ -50,4 +50,5 @@ herdr_plugins:
 herdr_integrations:
   - claude
   - codex
+  - opencode
   - pi
