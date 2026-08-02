@@ -15,7 +15,6 @@ require("lazy").setup({
     -- import any extras modules here
     -- AI
     { import = "lazyvim.plugins.extras.ai.claudecode" },
-    { import = "lazyvim.plugins.extras.ai.avante" },
     -- Coding
     { import = "lazyvim.plugins.extras.coding.luasnip" },
     { import = "lazyvim.plugins.extras.coding.mini-surround" },
