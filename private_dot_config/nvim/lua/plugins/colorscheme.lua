@@ -1,10 +1,10 @@
 return {
-  { "catppuccin/nvim" },
-  { "neanias/everforest-nvim" },
-  { "navarasu/onedark.nvim" },
-  { "sainnhe/sonokai" },
-  { "ellisonleao/gruvbox.nvim" },
-  { "shaunsingh/nord.nvim" },
+  { "catppuccin/nvim", lazy = true },
+  { "neanias/everforest-nvim", lazy = true },
+  { "navarasu/onedark.nvim", lazy = true },
+  { "sainnhe/sonokai", lazy = true },
+  { "ellisonleao/gruvbox.nvim", lazy = true },
+  { "shaunsingh/nord.nvim", lazy = true },
   {
     "EdenEast/nightfox.nvim",
     priority = 1000, -- Make sure it loads first
@@ -27,5 +27,5 @@ return {
       },
     },
   },
-  { "rose-pine/neovim", name = "rose-pine" },
+  { "rose-pine/neovim", name = "rose-pine", lazy = true },
 }

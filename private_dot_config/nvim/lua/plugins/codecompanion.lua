@@ -2,7 +2,7 @@ local prefix = "<leader>ac"
 return {
   {
     "olimorris/codecompanion.nvim",
-    event = "VeryLazy", -- Load after startup to ensure proper initialization
+    cmd = { "CodeCompanion", "CodeCompanionActions", "CodeCompanionChat" },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
@@ -196,7 +196,7 @@ return {
     keys = {
       { prefix .. "a", "<cmd>CodeCompanionActions<cr>", mode = { "n", "v" }, desc = "Action Palette" },
       { prefix .. "c", "<cmd>CodeCompanionChat<cr>", mode = { "n", "v" }, desc = "New Chat" },
-      { prefix .. "A", "<cmd>CodeCompanionAdd<cr>", mode = "v", desc = "Add Code" },
+      { prefix .. "A", "<cmd>CodeCompanionChat Add<cr>", mode = "v", desc = "Add Code" },
       { prefix .. "i", "<cmd>CodeCompanion<cr>", mode = "n", desc = "Inline Prompt" },
       { prefix .. "C", "<cmd>CodeCompanionChat Toggle<cr>", mode = "n", desc = "Toggle Chat" },
     },
