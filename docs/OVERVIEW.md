@@ -37,8 +37,9 @@ stops `chezmoi apply` and is retried on the next run.
 Homebrew cask apps use the standard `/Applications` directory. Before each
 bundle run, the package runner detects managed apps whose historical Homebrew
 receipt still selects `~/Applications` and reinstalls only those apps into the
-standard location. User-scoped artifacts such as fonts remain in their normal
-Library directories.
+standard location. Empty legacy app directories left by Homebrew are removed
+only when the same managed app exists in `/Applications`; user-installed
+bundles and user-scoped artifacts such as fonts remain untouched.
 
 The runner installs missing Brewfile entries without upgrading, then upgrades
 managed formulae and casks in separate batches. Keeping all cask upgrades in a

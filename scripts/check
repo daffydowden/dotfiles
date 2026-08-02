@@ -162,6 +162,10 @@ rg -q 'brew upgrade --cask --appdir=/Applications --no-ask' \
   printf 'check: managed casks must upgrade in one /Applications batch\n' >&2
   exit 1
 }
+rg -q 'rmdir "\$legacy_path"' run_before_install-packages-darwin.sh.tmpl || {
+  printf 'check: Homebrew migration must remove empty legacy app bundles\n' >&2
+  exit 1
+}
 
 # Compile every Lua file without loading the user's Neovim state.
 NVIM_LOG_FILE="$check_tmp/nvim.log" nvim --headless -u NONE -i NONE --cmd 'set shadafile=NONE' \

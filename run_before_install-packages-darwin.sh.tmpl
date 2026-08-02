@@ -126,6 +126,27 @@ while IFS= read -r cask; do
   [[ -n "$cask" ]] && managed_casks+=("$cask")
 done < <(brew bundle list --cask --file="$brewfile_path")
 if ((${#managed_casks[@]})); then
+  # A cask reinstallation can leave its former app bundle as an empty
+  # directory in ~/Applications. Derive app names from Homebrew metadata and
+  # remove only empty legacy paths that have a live counterpart in
+  # /Applications; user-installed bundles and non-empty directories are left
+  # untouched.
+  legacy_app_names=()
+  while IFS= read -r app_name; do
+    [[ -n "$app_name" ]] && legacy_app_names+=("$app_name")
+  done < <(
+    brew info --json=v2 --cask "${managed_casks[@]}" |
+      jq -r '.casks[].artifacts[]? | .app? // empty | .[0]'
+  )
+  for app_name in "${legacy_app_names[@]}"; do
+    legacy_path="$legacy_appdir/$app_name"
+    current_path="/Applications/$app_name"
+    if [[ -d "$current_path" && -d "$legacy_path" && ! -L "$legacy_path" ]] &&
+      rmdir "$legacy_path" 2>/dev/null; then
+      printf 'chezmoi: removed empty legacy app bundle: %s\n' "$legacy_path"
+    fi
+  done
+
   brew upgrade --cask --appdir=/Applications --no-ask "${managed_casks[@]}"
 fi
 {{ end -}}
