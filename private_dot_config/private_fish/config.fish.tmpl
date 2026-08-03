@@ -14,11 +14,11 @@ fish_add_path ~/.krew/bin
 
 {{- if .is_work }}
 
-set -gx SRC_ENDPOINT (string decode base64 '{{ .src_endpoint | b64enc }}')
-set -gx JIRA_USER (string decode base64 '{{ .jira_user | b64enc }}')
-fish_add_path (string decode base64 '{{ .work_bin_path | b64enc }}')
+set -gx SRC_ENDPOINT (echo '{{ .src_endpoint | b64enc }}' | base64 --decode)
+set -gx JIRA_USER (echo '{{ .jira_user | b64enc }}' | base64 --decode)
+fish_add_path (echo '{{ .work_bin_path | b64enc }}' | base64 --decode)
 
-eval (ai-env)
+eval (ai-env --shell fish)
 
 # Refresh the work-only, repository-prefix filters before launching gh-dash.
 # --wraps keeps gh's normal Fish completions while all other gh commands pass
