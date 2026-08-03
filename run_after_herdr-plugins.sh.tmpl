@@ -7,6 +7,27 @@ if ! command -v herdr >/dev/null 2>&1; then
   exit 0
 fi
 
+# `herdr plugin enable`/`disable` talk to a running herdr server over its
+# socket, so start one headlessly if none is running. Stop it again on exit
+# if we were the one that started it, so this script doesn't leave a
+# persistent daemon behind.
+herdr_server_started=0
+if ! herdr status server 2>/dev/null | grep -q "^status: running$"; then
+  herdr server >/dev/null 2>&1 &
+  disown
+  herdr_server_started=1
+  for _ in $(seq 1 20); do
+    herdr status server 2>/dev/null | grep -q "^status: running$" && break
+    sleep 0.5
+  done
+fi
+cleanup_herdr_server() {
+  if [ "$herdr_server_started" -eq 1 ]; then
+    herdr session stop default >/dev/null 2>&1 || true
+  fi
+}
+trap cleanup_herdr_server EXIT
+
 {{ range .herdr_plugins -}}
 {{ if or (not (hasKey . "work_only")) (not .work_only) $.is_work -}}
 # {{ .id }}
@@ -16,7 +37,7 @@ fi
 herdr plugin unlink "{{ .id }}" >/dev/null 2>&1 || true
 {{ end -}}
 herdr plugin install "{{ .source }}" --yes
-herdr plugin {{ if .enabled }}enable{{ else }}disable{{ end }} "{{ .id }}"
+herdr plugin {{ if .enabled }}enable{{ else }}disable{{ end }} "{{ .id }}" || echo "WARNING: failed to {{ if .enabled }}enable{{ else }}disable{{ end }} plugin {{ .id }}" >&2
 
 {{ if hasKey . "cargo_crate" -}}
 # The GitHub checkout provides the plugin source, while its supported Cargo
