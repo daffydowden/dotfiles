@@ -38,7 +38,9 @@ managed_app_casks=(
   ghostty
   cmux
   utm
+  {{ if not .is_work -}}
   google-chrome
+  {{- end }}
   brave-browser
   datagrip
   visual-studio-code

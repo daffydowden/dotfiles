@@ -24,7 +24,9 @@ tap "trycua/lume"
 brew "trycua/lume/lume"
 
 # Browsers
+{{ if not .is_work -}}
 cask "google-chrome", args: { require_sha: false }
+{{ end -}}
 cask "brave-browser"
 
 # Databases
