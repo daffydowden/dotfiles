@@ -1,6 +1,6 @@
 sourceDir = "{{ .chezmoi.homeDir }}/projects/dotfiles"
 
-{{- $isWork := false -}}
+{{ $isWork := false -}}
 {{- if (hasKey . "is_work") -}}
 {{-   $isWork = .is_work -}}
 {{- else -}}
