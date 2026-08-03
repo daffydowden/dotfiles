@@ -49,6 +49,6 @@ if ! command -v chezmoi &>/dev/null; then
 fi
 
 echo "==> Applying dotfiles..."
-chezmoi init --apply --promptBool "Is this a work machine?=$is_work" daffydowden/dotfiles
+chezmoi init --apply --source "$HOME/projects/dotfiles" --promptBool "Is this a work machine?=$is_work" daffydowden/dotfiles
 
 echo "==> Done!"
